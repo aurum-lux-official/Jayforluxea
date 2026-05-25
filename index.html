@@ -1973,6 +1973,13 @@ section .max-w-xl {
 #canvas-container { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 #aurum-glitter-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
 .view-section, nav, section, footer { position: relative; z-index: 10; }
+/* ビュー遷移: opacity フェードを全 view-section に統一適用 (チラつき防止) */
+.view-section {
+  transition: opacity 0.5s ease;
+}
+.view-section.hidden {
+  display: none !important;
+}
 
 .btn-cta { position: relative; overflow: hidden; z-index: 1; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 0 2px 12px -2px rgba(197, 160, 89, 0.15); border-radius: 2px; }
 .btn-cta:hover { box-shadow: 0 4px 20px -2px rgba(197, 160, 89, 0.35); transform: translateY(-1px) scale(1.02); }
@@ -9479,12 +9486,31 @@ window.systemDetailData = {
 
 window.switchView = (target, noScroll = false) => {
   const sections = document.querySelectorAll(".view-section");
+  const next = document.getElementById(target);
+  if (!next) return;
+
+  // 現在表示中のビューをフェードアウト
   sections.forEach((sec) => {
-    if (sec.id !== target) { sec.style.opacity = "0"; setTimeout(() => { sec.classList.add("hidden"); }, 500); }
+    if (sec.id !== target) {
+      sec.style.opacity = "0";
+    }
   });
+
+  // フェードアウト完了後に切替 (重なり表示を防ぐ)
   setTimeout(() => {
-    const next = document.getElementById(target);
-    if (next) { next.classList.remove("hidden"); setTimeout(() => { next.style.opacity = "1"; }, 50); if (!noScroll) window.scrollTo({ top: 0, behavior: "smooth" }); }
+    sections.forEach((sec) => {
+      if (sec.id !== target) sec.classList.add("hidden");
+    });
+    // 対象を hidden 解除するが opacity は 0 のまま (チラ見え防止)
+    next.classList.remove("hidden");
+    next.style.opacity = "0";
+    // 次のフレームで opacity を上げる (DOM反映後に確実にフェードイン)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        next.style.opacity = "1";
+      });
+    });
+    if (!noScroll) window.scrollTo({ top: 0, behavior: "smooth" });
   }, 500);
 };
 
@@ -11053,27 +11079,15 @@ setTimeout(initAurumAtmosphere, 1500);
 })();
 
 /* ============================================================
-   View Transitions API: ページ遷移をクロスフェード+ズーム
+   View Transitions API: 無効化
+   理由: 内部 switchView が setTimeout で opacity 制御するため、
+   startViewTransition の同期スナップショットと競合し、遷移時に
+   裏のビュー(フォーム等)が一瞬チラ見えする不具合があった。
+   標準の opacity フェード遷移のみを使用する。
    ============================================================ */
 (function initAurumViewTransitions(){
-  if (!document.startViewTransition) {
-    console.log("[AURUM] View Transitions not supported, skipping");
-    return;
-  }
-
-  // 既存 switchView をラップ
-  const original = window.switchView;
-  if (typeof original !== "function") return;
-
-  window.switchView = function(viewId, noScroll) {
-    if (!document.startViewTransition) {
-      return original(viewId, noScroll);
-    }
-    document.startViewTransition(() => {
-      original(viewId, noScroll);
-    });
-  };
-  console.log("[AURUM] View Transitions initialized");
+  // View Transitions は使わない (チラつき防止のため)
+  return;
 })();
 
 /* ============================================================
