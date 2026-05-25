@@ -73,8 +73,8 @@ img, svg, video, canvas, iframe { max-width: 100%; height: auto; }
   /* ヒーロー: 上部余白削減 / 中央寄せやめて上寄せ */
   .hero-section {
     min-height: auto !important;
-    padding-top: 20px !important;    /* ナビ + ティッカーは fixed なので最小限のみ */
-    padding-bottom: 30px !important;
+    padding-top: 110px !important;   /* fixed ナビ(約60px)+ティッカー(約30px)分を確保 */
+    padding-bottom: 40px !important;
     justify-content: flex-start !important;
   }
   /* スマホで min-h-screen も無効化 (Tailwindの上書き) */
@@ -4589,7 +4589,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   font-family: 'Noto Serif JP', serif;
 }
 .aurum-disc-reply-submit:hover { background: #F3D078; }
-</style>
+
 #aurum-curtain {
   position: fixed;
   inset: 0;
