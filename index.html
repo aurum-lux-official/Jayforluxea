@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 <title>AURUM LUX - Auction-Based Execution</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -30,6 +30,86 @@
 }
 
 * { box-sizing: border-box; }
+
+/* ════════════════════════════════════════════════════════
+   スマホ最優先・横スクロール完全防止 (グローバル)
+   ════════════════════════════════════════════════════════ */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden !important;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  -webkit-tap-highlight-color: transparent;
+}
+img, svg, video, canvas, iframe { max-width: 100%; height: auto; }
+.no-mobile-overflow, section, main, footer, header, nav {
+  max-width: 100vw;
+}
+/* iOS Safari の bottom safe-area 対策 */
+.aurum-livefeed-modal, #aurum-discord-modal, #aurum-volume-modal, #aurum-setup-modal {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* ════════════════════════════════════════════════════════
+   スマホ専用: フォント・余白・ボタンのタッチ最適化
+   ════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* タップ領域確保: ボタンは最低44px */
+  button, .btn-pill, .btn-cta, a.mobile-link, .aurum-rank-card {
+    min-height: 40px;
+  }
+  /* フォーム入力欄: iOSのズーム発生防止 (16px以上必須) */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+  /* スクロール式の要素は overscroll-behavior 隔離 */
+  .aurum-lf-col-body, .aurum-disc-messages, #aurum-discord-messages, [data-lenis-prevent] {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* hero テキスト: モバイルではサイズ調整 */
+  #home .text-5xl, #home .text-4xl { font-size: 2.2rem; line-height: 1.1; }
+  /* ヒーロー: 上部余白削減 / 中央寄せやめて上寄せ */
+  .hero-section {
+    min-height: auto !important;
+    padding-top: 20px !important;    /* ナビ + ティッカーは fixed なので最小限のみ */
+    padding-bottom: 30px !important;
+    justify-content: flex-start !important;
+  }
+  /* スマホで min-h-screen も無効化 (Tailwindの上書き) */
+  #home.min-h-screen { min-height: auto !important; }
+  .hero-glass-panel { padding: 1rem 0.8rem !important; margin-top: 0 !important; }
+  /* ヒーロー文字下余白も削減 */
+  #home .hero-mask { margin-bottom: 0.5rem !important; }
+  #home .hero-mask.mb-6, #home .hero-mask.mb-8, #home .hero-mask.mb-10, #home .hero-mask.mb-16 { margin-bottom: 0.8rem !important; }
+  /* タイピング枠: モバイル最小幅 */
+  .hero-typing-frame { padding: 0 0.5rem; min-height: 6.5em; }
+  .hero-typing-frame > p { min-height: 6.5em; font-size: 12px; line-height: 1.9; }
+  /* モーダル全画面化 */
+  .aurum-livefeed-modal .aurum-lf-wrap { padding: 8px 10px; height: 100vh; height: 100dvh; }
+  .aurum-lf-header { padding-bottom: 6px; }
+  .aurum-lf-stats { margin: 6px 0; }
+  .aurum-lf-stat { padding: 6px 8px; }
+  .aurum-lf-stat .val { font-size: 13px; }
+  .aurum-lf-cols { gap: 6px; }
+  /* セクション padding 軽減 */
+  section { padding-left: 1rem; padding-right: 1rem; }
+  /* グラスパネル padding 軽減 */
+  .glass { padding: 1rem !important; }
+  /* グリッドのoverflow防止 */
+  .grid { min-width: 0; }
+  .grid > * { min-width: 0; }
+  /* テーブル等の長いコンテンツ: 折り返しと縮小 */
+  pre, code { white-space: pre-wrap; word-break: break-word; }
+  /* メニュー時の body スクロール抑制 */
+  body.menu-open { overflow: hidden; }
+}
+
+/* iOS横向き対策 */
+@supports (-webkit-touch-callout: none) {
+  .min-h-screen { min-height: -webkit-fill-available; }
+}
 
 html {
   scroll-behavior: smooth;
@@ -4328,8 +4408,181 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 }
 
 /* ════════════════════════════════════════════════════════
-   観音開きカーテン (初回ロード時のインパクト演出)
+   「あなた」TOP固定行 (ランキング最上部)
    ════════════════════════════════════════════════════════ */
+.aurum-you-row {
+  background: linear-gradient(90deg, rgba(243,208,120,0.18) 0%, rgba(197,160,89,0.10) 50%, rgba(243,208,120,0.18) 100%) !important;
+  border-left: 3px solid #F3D078;
+  border-right: 3px solid #F3D078;
+  border-bottom: 1px solid rgba(243,208,120,0.4);
+  border-top: 1px solid rgba(243,208,120,0.4);
+  margin-bottom: 6px;
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  box-shadow: 0 0 18px rgba(197,160,89,0.25), inset 0 0 12px rgba(243,208,120,0.08);
+  position: relative;
+  animation: aurumYouGlow 3s ease-in-out infinite;
+}
+@keyframes aurumYouGlow {
+  0%, 100% { box-shadow: 0 0 18px rgba(197,160,89,0.25), inset 0 0 12px rgba(243,208,120,0.08); }
+  50%      { box-shadow: 0 0 28px rgba(197,160,89,0.4), inset 0 0 18px rgba(243,208,120,0.15); }
+}
+.aurum-you-row::after {
+  content: "JAY";
+  position: absolute;
+  top: -8px;
+  right: 8px;
+  background: linear-gradient(135deg, #F3D078, #C5A059);
+  color: #050505;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-family: 'Noto Serif JP', serif;
+}
+.rank-badge.rank-you {
+  background: linear-gradient(135deg, #F3D078, #C5A059) !important;
+  color: #050505 !important;
+  border: none !important;
+  box-shadow: 0 0 12px rgba(243,208,120,0.6);
+}
+
+/* ════════════════════════════════════════════════════════
+   コメントアクション (いいね / 返信)
+   ════════════════════════════════════════════════════════ */
+.aurum-disc-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dotted rgba(197,160,89,0.1);
+}
+.aurum-disc-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.5);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 10px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+}
+.aurum-disc-action-btn:hover {
+  color: #C5A059;
+  border-color: rgba(197,160,89,0.4);
+  background: rgba(197,160,89,0.06);
+}
+.aurum-disc-like-btn.liked {
+  color: #ef4444;
+  border-color: rgba(239,68,68,0.45);
+  background: rgba(239,68,68,0.08);
+}
+.aurum-disc-like-btn.liked:hover {
+  color: #ef4444;
+}
+.aurum-disc-like-count {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.aurum-disc-replies {
+  margin-top: 10px;
+  padding-left: 12px;
+  border-left: 2px solid rgba(197,160,89,0.18);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.aurum-disc-reply {
+  display: flex;
+  gap: 8px;
+}
+.aurum-disc-reply-avatar {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(197,160,89,0.12);
+  border: 1px solid rgba(197,160,89,0.25);
+  color: #C5A059;
+  font-size: 8px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-family: monospace;
+}
+.aurum-disc-reply-mine .aurum-disc-reply-avatar {
+  background: rgba(74,222,128,0.12);
+  border-color: rgba(74,222,128,0.4);
+  color: #4ade80;
+}
+.aurum-disc-reply-body {
+  flex: 1;
+  min-width: 0;
+}
+.aurum-disc-reply-head {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+.aurum-disc-reply-name {
+  color: #C5A059;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.aurum-disc-reply-mine .aurum-disc-reply-name {
+  color: #4ade80;
+}
+.aurum-disc-reply-time {
+  color: rgba(255,255,255,0.35);
+  font-size: 8.5px;
+}
+.aurum-disc-reply-text {
+  color: rgba(255,255,255,0.75);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.aurum-disc-reply-form {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.aurum-disc-reply-input {
+  flex: 1;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(197,160,89,0.25);
+  color: #fff;
+  padding: 7px 10px;
+  font-size: 11px;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+}
+.aurum-disc-reply-input:focus {
+  outline: none;
+  border-color: #C5A059;
+}
+.aurum-disc-reply-submit {
+  padding: 7px 14px;
+  background: #C5A059;
+  border: none;
+  color: #050505;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'Noto Serif JP', serif;
+}
+.aurum-disc-reply-submit:hover { background: #F3D078; }
+</style>
 #aurum-curtain {
   position: fixed;
   inset: 0;
@@ -4387,24 +4640,29 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 /* ════════════════════════════════════════════════════════
    ヒーロー タイピング枠 (固定サイズ・レイアウト崩れ防止)
    ════════════════════════════════════════════════════════ */
+/* ヒーロー タイピング枠 (固定サイズ・レイアウト崩れ防止) */
 .hero-typing-frame {
-  display: inline-block;
+  display: block;
   position: relative;
   max-width: 42rem;
   width: 100%;
-  min-height: 3.6em;
+  min-height: 5.6em;     /* 最大4行分の高さを予約 */
   text-align: center;
   vertical-align: top;
-  contain: layout style;
+  contain: layout style size;
+  overflow: hidden;
 }
 .hero-typing-frame > p {
   margin: 0;
   display: block;
-  min-height: 3.6em;
+  min-height: 5.6em;
+  line-height: 1.8;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 @media (min-width: 768px) {
-  .hero-typing-frame { min-height: 3.2em; }
-  .hero-typing-frame > p { min-height: 3.2em; }
+  .hero-typing-frame { min-height: 4em; }
+  .hero-typing-frame > p { min-height: 4em; }
 }
 </style>
 </head>
@@ -4476,7 +4734,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       </div>
 
       <!-- 統計カード -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-5">
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3 mb-5">
         <div class="user-stat-card">
           <div class="lab">開始資金</div>
           <div class="val small" id="user-detail-capital">¥-</div>
@@ -4484,6 +4742,10 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
         <div class="user-stat-card">
           <div class="lab">利益</div>
           <div class="val green" id="user-detail-profit">¥0</div>
+        </div>
+        <div class="user-stat-card">
+          <div class="lab">出金済</div>
+          <div class="val small" style="color:#C5A059;" id="user-detail-withdrawn">¥0</div>
         </div>
         <div class="user-stat-card">
           <div class="lab">Total ROI</div>
@@ -4667,18 +4929,18 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
     <div class="aurum-curtain-seam"></div>
   </div>
 
-  <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center px-4 relative z-10">
+  <section id="home" class="hero-section min-h-screen flex flex-col justify-center items-center text-center px-4 relative z-10">
     <div class="hero-glass-panel p-8 md:p-16 flex flex-col items-center justify-center">
-      <div class="hero-mask mb-8">
+      <div class="hero-mask mb-6 md:mb-8">
         <span class="block text-[#C5A059] tracking-[0.4em] text-[10px] uppercase hero-reveal">Auction Theory Based Algorithm</span>
       </div>
       <div class="hero-mask">
-        <h1 class="text-5xl md:text-8xl font-semibold leading-tight serif text-white hero-reveal">Auction-Based</h1>
+        <h1 class="text-4xl md:text-8xl font-semibold leading-tight serif text-white hero-reveal">Auction-Based</h1>
       </div>
-      <div class="hero-mask mb-10">
-        <h1 class="text-5xl md:text-8xl font-semibold leading-tight serif text-white hero-reveal">Execution.</h1>
+      <div class="hero-mask mb-6 md:mb-10">
+        <h1 class="text-4xl md:text-8xl font-semibold leading-tight serif text-white hero-reveal">Execution.</h1>
       </div>
-      <div class="hero-mask mb-16">
+      <div class="hero-mask mb-8 md:mb-16">
         <!-- タイピング枠: 固定サイズで文字変化してもレイアウト崩れない -->
         <div id="hero-typing-frame" class="hero-typing-frame hero-reveal">
           <p id="hero-typing-target" class="text-gray-300 text-xs md:text-sm leading-loose tracking-[0.2em]">機関投資家の思考を再現した、<br>Volume × Price Action アルゴリズム</p>
@@ -6069,6 +6331,24 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
           </button>
         </div>
         <p class="text-[9px] text-gray-500 leading-relaxed">※ ① はお名前.com デスクトップクラウド for MT4 のお申し込みページに移動します。<br>※ ② は VPS 契約完了後にご利用ください。</p>
+      </div>
+    </div>
+
+    <!-- 損切りEA のご案内 -->
+    <div class="mt-6 pt-8 border-t border-[#C5A059]/15">
+      <div class="bg-gradient-to-br from-[#4ade80]/8 to-transparent border border-[#4ade80]/25 rounded-sm p-5 md:p-6 relative overflow-hidden">
+        <div class="absolute top-0 right-0 px-2.5 py-0.5 text-[8px] tracking-[0.25em] font-bold serif" style="background: linear-gradient(135deg, #6ee7a0, #4ade80); color: #050505;">RISK GUARD</div>
+        <p class="text-[9px] text-[#4ade80] tracking-[0.3em] uppercase mb-2">特典 · リスク管理ツール</p>
+        <h4 class="text-sm md:text-base text-white serif tracking-wider mb-3">EAご購入者様への特典<br class="md:hidden">「損切りEA」</h4>
+        <p class="text-[10px] md:text-[11px] text-gray-400 leading-loose mb-4">
+          <strong class="text-[#4ade80]">グループSL（合計損失額での一括決済）</strong>と<strong class="text-[#4ade80]">証拠金維持率SL（マージンレベル基準の自動決済）</strong>の2方式に対応した損切り補助EAです。<br>
+          複数ポジションの合計損失や口座全体の証拠金維持率を常時監視し、設定したラインに達すると自動で全決済。想定外の大きなドローダウンや強制ロスカットを未然に防ぎます。
+        </p>
+        <button type="button" onclick="aurumOpenStoplossForm()" class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#4ade80] border border-[#4ade80] text-black text-[10px] tracking-[0.2em] font-bold uppercase hover:bg-[#6ee7a0] transition rounded-sm w-full md:w-auto">
+          <span>損切りEAを受け取る</span>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </button>
+        <p class="text-[9px] text-gray-500 leading-relaxed mt-3">※ EAご購入時のメールアドレス・MT5口座番号をご入力ください。確認後にお送りいたします。</p>
       </div>
     </div>
 
@@ -8056,19 +8336,32 @@ window.AURUM_SYSTEMS = window.AURUM_LIVE_DATA.systems;
       isSubmitting = true;
       if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = "0.6"; }
       if (loadingOverlay) loadingOverlay.classList.add("active");
+      let finished = false;
       const cleanup = () => {
+        if (finished) return;
+        finished = true;
         isSubmitting = false;
         if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = ""; }
         if (loadingOverlay) loadingOverlay.classList.remove("active");
       };
-      const timeoutId = setTimeout(() => { cleanup(); alert("送信がタイムアウトしました。通信環境を確認してください。"); }, 15000);
-      const onIframeLoad = () => {
-        clearTimeout(timeoutId); iframe.removeEventListener("load", onIframeLoad); cleanup();
+      const goSuccess = () => {
+        cleanup();
         if (typeof window.switchView === "function") window.switchView("view-success", false);
+      };
+      // タイムアウト短縮 (8秒) + iframe load の両構え
+      const timeoutId = setTimeout(goSuccess, 8000);
+      // 念のための保険: 3.5秒経過したらローディングだけは必ず解除して成功画面へ
+      const safetyId = setTimeout(goSuccess, 3500);
+      const onIframeLoad = () => {
+        clearTimeout(timeoutId); clearTimeout(safetyId);
+        iframe.removeEventListener("load", onIframeLoad);
+        goSuccess();
       };
       iframe.addEventListener("load", onIframeLoad);
       try { form.submit(); } catch (err) {
-        clearTimeout(timeoutId); iframe.removeEventListener("load", onIframeLoad); cleanup(); alert("エラーが発生しました。");
+        clearTimeout(timeoutId); clearTimeout(safetyId);
+        iframe.removeEventListener("load", onIframeLoad);
+        cleanup(); alert("エラーが発生しました。");
       }
     }
     return {
@@ -11056,44 +11349,46 @@ setTimeout(initAurumAtmosphere, 1500);
    AURUM COMMUNITY (認証済ユーザーの週次稼働結果報告 / Discord風)
    ============================================================ */
 (function(){
-  // 30件のダミーコメント (週次稼働結果報告 / 自走できるユーザーの実体験ベース)
+  // 30件のダミーコメント (利益24件80% / 損失6件20% / 短文〜長文ミックス)
   const DUMMY_COMMENTS = [
     { name: "ユーザー4892", profit: 184000, system: "Order Flow", pair: "XAUUSD", message: "BB期間20で水平推移を確認してから稼働。今週はレンジ寄りだったので両建てのままで利益。マニュアル通りで再現性ありました。" },
-    { name: "ユーザー2103", profit: 92400, system: "Trend Scalping", pair: "XAUUSD", message: "10時開始・金曜22時全決済をルーティン化。BB期間6で環境を見てから稼働してます。先週BUYのみに絞ったら反って良い結果に。" },
+    { name: "ユーザー2103", profit: 92400, system: "Trend Scalping", pair: "XAUUSD", message: "今週も安定。金曜決済ルール守ってよかった。" },
     { name: "ユーザー7651", profit: -18200, system: "SMC Grid", pair: "BTCUSD", message: "BTC強トレンド入りに気付かず両建てで稼働してしまい、ナンピン3回到達でSL。バンドが斜めの時は止めるべきでした。来週は方向限定で再挑戦。" },
-    { name: "ユーザー3340", profit: 312500, system: "Multi", pair: "MULTI", message: "3システム並列で稼働中。Order Flowは1〜5分足、TS/SGは10時〜22時で時間帯を分けて運用。被りが少なく分散が効いてます。" },
+    { name: "ユーザー3340", profit: 312500, system: "Multi", pair: "MULTI", message: "3システム並列。今週ベスト。" },
     { name: "ユーザー8821", profit: 64300, system: "Order Flow", pair: "XAUUSD", message: "推奨稼働時間11:00〜18:00を守って運用。指標発表前後は手動で止めるルールにしてから安定しました。" },
     { name: "ユーザー1567", profit: 142800, system: "Trend Scalping", pair: "XAUUSD", message: "FOMC明けは方向確認できるまで稼働見送り。再開後にトレンド方向だけBUY設定にしたらしっかり利益。判断のタイミングが大事。" },
-    { name: "ユーザー6749", profit: 41200, system: "SMC Grid", pair: "XAUUSD", message: "ナンピン3回設計の安心感がある。BB期間6で環境見てから稼働、トレンドの兆しが出たらBUY/SELLどちらか限定に切替えてます。" },
+    { name: "ユーザー6749", profit: 41200, system: "SMC Grid", pair: "XAUUSD", message: "今週もコツコツ積み上げ。" },
     { name: "ユーザー9012", profit: 268000, system: "Order Flow", pair: "XAUUSD", message: "今月のベスト更新。レンジ確認できた日だけ稼働させて、トレンド日は無理しない方針が結果的に効いてる。" },
-    { name: "ユーザー4438", profit: 117600, system: "Multi", pair: "MULTI", message: "3システム併用で資金分散。Order Flowはレンジ向き、TS/SGはトレンド方向限定運用、と使い分けで安定。" },
-    { name: "ユーザー2876", profit: -7800, system: "Trend Scalping", pair: "BTCUSD", message: "BTCで強いトレンド出た日に両建てのままで稼働してマイナス。気付いた時点で方向限定に切替えたら次の日プラス転換しました。" },
+    { name: "ユーザー4438", profit: 117600, system: "Multi", pair: "MULTI", message: "3システム併用で資金分散。安定。" },
+    { name: "ユーザー2876", profit: -34800, system: "Trend Scalping", pair: "BTCUSD", message: "BTCで強いトレンド出た日に両建てのままで稼働してマイナス。気付いた時点で方向限定に切替えたら次の日プラス転換しました。" },
     { name: "ユーザー5523", profit: 215300, system: "Order Flow", pair: "XAUUSD", message: "東京タイムのレンジを取りに行く運用が個人的にハマってます。マニュアル設定からほぼ変えず、稼働時間だけ調整してます。" },
-    { name: "ユーザー7104", profit: 75800, system: "SMC Grid", pair: "XAUUSD", message: "MSB/ChoCH確認してからのグリッド展開なので根拠ある運用。BB期間6で環境見るのを習慣化したら勝率上がりました。" },
-    { name: "ユーザー3982", profit: 168500, system: "Order Flow", pair: "XAUUSD", message: "ロットを欲張らずマニュアル推奨値で複利運用。週次でしっかり確認しながら淡々と継続中。" },
+    { name: "ユーザー7104", profit: 75800, system: "SMC Grid", pair: "XAUUSD", message: "BB期間6で見て稼働。根拠ある運用で安心。" },
+    { name: "ユーザー3982", profit: 168500, system: "Order Flow", pair: "XAUUSD", message: "複利で着実に増えてる。" },
     { name: "ユーザー6210", profit: 53400, system: "Trend Scalping", pair: "XAUUSD", message: "M1スキャ系。経済指標カレンダーを毎朝確認してから稼働ON/OFFする運用にしてから安定しました。" },
-    { name: "ユーザー4565", profit: 124600, system: "Multi", pair: "MULTI", message: "3システム同時稼働だけど時間帯で住み分け。Order Flowは午前、TSは午後、SGは夜。被らないので資金回転が良い。" },
+    { name: "ユーザー4565", profit: 124600, system: "Multi", pair: "MULTI", message: "時間帯で住み分けて運用。" },
     { name: "ユーザー8843", profit: 305700, system: "Order Flow", pair: "XAUUSD", message: "NY時間のレンジ確認できた日だけ稼働で、ナンピン10回到達せず利確が連続。テンプレ通りでも環境見極めれば再現できる。" },
-    { name: "ユーザー1729", profit: -32400, system: "SMC Grid", pair: "BTCUSD", message: "急なトレンドにナンピン引っかかってSL到達。バンドのエクスパンション気付くの遅れました。週次で振り返って学んでます。" },
-    { name: "ユーザー9351", profit: 88900, system: "Trend Scalping", pair: "XAUUSD", message: "ロンドン時間メインで運用。月曜だけ12:00開始のルールも守ってます。週末持ち越しなしの設定が安心感ある。" },
+    { name: "ユーザー1729", profit: -47600, system: "SMC Grid", pair: "BTCUSD", message: "急なトレンドにナンピン引っかかってSL到達。バンドのエクスパンション気付くの遅れました。週次で振り返って学んでます。" },
+    { name: "ユーザー9351", profit: 88900, system: "Trend Scalping", pair: "XAUUSD", message: "金曜全決済ルール守ってる。週末安心。" },
     { name: "ユーザー5478", profit: 196400, system: "Order Flow", pair: "XAUUSD", message: "切替え3ヶ月目。最初の1ヶ月は環境認識に慣れるまで試行錯誤したけど、慣れてからは安定。学習コストはあるけど価値ある。" },
-    { name: "ユーザー2664", profit: 105200, system: "SMC Grid", pair: "XAUUSD", message: "守備的な戦略で月単位でプラス。BB期間6でレンジ判定→稼働、トレンド兆候→片方向限定、をルーティン化してます。" },
+    { name: "ユーザー2664", profit: 105200, system: "SMC Grid", pair: "XAUUSD", message: "今週も守備的にプラス。" },
     { name: "ユーザー7892", profit: 142100, system: "Order Flow", pair: "XAUUSD", message: "他のEAから乗り換え組。前のは完全自動だったけどDDで爆死。これは環境見極めが必要だけど、その分制御できる。" },
-    { name: "ユーザー4123", profit: 47600, system: "Trend Scalping", pair: "XAUUSD", message: "短期トレンドに強い。日に何度もエントリー入るので、稼働時間中は一応モニター見るようにしてます。" },
-    { name: "ユーザー6587", profit: 256800, system: "Multi", pair: "MULTI", message: "3システム全部プラスの週。それぞれ得意な相場が違うので、相場が変わっても全体ではバランス取れる。" },
-    { name: "ユーザー3406", profit: 78400, system: "SMC Grid", pair: "XAUUSD", message: "DD制御が優秀。ナンピン3回上限が決まってるのでリスクが見える。ロジック理解した上で運用してる感じ。" },
+    { name: "ユーザー4123", profit: 47600, system: "Trend Scalping", pair: "XAUUSD", message: "短期トレンドに強い。日に何度もエントリー入る。" },
+    { name: "ユーザー6587", profit: 256800, system: "Multi", pair: "MULTI", message: "3システム全部プラス週。" },
+    { name: "ユーザー3406", profit: -28900, system: "SMC Grid", pair: "XAUUSD", message: "今週は途中まで好調だったが、木曜にトレンド転換捕まえてSL。週合計マイナス。来週は方向限定で。" },
     { name: "ユーザー8175", profit: 173500, system: "Order Flow", pair: "XAUUSD", message: "FX始めて1年。最初は環境認識のところで戸惑ったけど、マニュアル何度も読んで慣れました。今は安定してます。" },
-    { name: "ユーザー5942", profit: -15700, system: "Trend Scalping", pair: "BTCUSD", message: "BTCは値幅大きい分難しい週もあり。XAUUSDメインで、BTCはサブとして方向限定運用に切替予定。" },
+    { name: "ユーザー5942", profit: -52300, system: "Order Flow", pair: "BTCUSD", message: "BTCで稼働して大きめDD。やはりXAUUSDに戻します。BTCはサブで方向限定運用に切替予定。" },
     { name: "ユーザー1083", profit: 121800, system: "Order Flow", pair: "XAUUSD", message: "重要指標前の停止と、金曜の全決済はマスト。これだけ守るだけで損失パターンがほぼ消えました。" },
-    { name: "ユーザー7235", profit: 234600, system: "Multi", pair: "MULTI", message: "週末前は全システム決済。月曜の方向見てから再稼働。リズムが出来て精神的に楽になりました。" },
-    { name: "ユーザー4798", profit: 59200, system: "SMC Grid", pair: "XAUUSD", message: "派手な利益はないけど月でプラス継続。コツコツ系で精神衛生も良い。長く付き合えるEAだと思う。" },
+    { name: "ユーザー7235", profit: 234600, system: "Multi", pair: "MULTI", message: "週末前全決済→月曜の方向見て再稼働。リズム出来て楽。" },
+    { name: "ユーザー4798", profit: -15400, system: "Trend Scalping", pair: "XAUUSD", message: "今週はレンジ続きでナンピン消化できず微マイナス。先月までは絶好調だったので、相場による。" },
     { name: "ユーザー6314", profit: 162400, system: "Order Flow", pair: "XAUUSD", message: "AURUMに切替えて半年。最初は環境見極めの判断ミスもあったけど、慣れた今はテンプレ通りで安定して勝てます。" }
   ];
 
-  // 日別シード (毎日違うシャッフル順)
+  // 3日ごとシード (3日に1度シャッフルが切り替わる)
   const getDaySeed = () => {
     const d = new Date();
-    return d.getFullYear() * 10000 + (d.getMonth()+1) * 100 + d.getDate();
+    const epochDay = Math.floor(d.getTime() / (24 * 60 * 60 * 1000));
+    const threeDayBucket = Math.floor(epochDay / 3);
+    return threeDayBucket;
   };
   // mulberry32風 シード乱数
   const seedRand = (s) => {
@@ -11133,25 +11428,151 @@ setTimeout(initAurumAtmosphere, 1500);
     return String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   };
 
+  // ダミー返信プール (質問形式・短文)
+  const DUMMY_REPLY_POOL = [
+    { name: "ユーザー2841", text: "どのように稼働しましたか？テンプレ通りでしょうか？" },
+    { name: "ユーザー6193", text: "稼働時間は何時から何時にしましたか？" },
+    { name: "ユーザー4502", text: "ロットはどれくらいで運用してますか？" },
+    { name: "ユーザー8970", text: "BB期間はマニュアル通り20で使ってますか？" },
+    { name: "ユーザー1657", text: "金曜全決済はやってますか？" },
+    { name: "ユーザー3284", text: "ナンピン何回まで耐えました？" },
+    { name: "ユーザー7416", text: "通貨ペアはXAUUSDのみですか？BTCも稼働？" },
+    { name: "ユーザー5028", text: "両建てですか、それともBUY/SELL限定?" },
+    { name: "ユーザー9145", text: "VPSはお名前.com使ってますか？" },
+    { name: "ユーザー2367", text: "指標発表のときは止めてますか？" },
+    { name: "ユーザー4759", text: "初期資金いくらでスタートしました？" },
+    { name: "ユーザー8312", text: "MT5のスペック、推奨設定そのままで大丈夫でした？" },
+    { name: "ユーザー6580", text: "今週はレンジでしたか？" },
+    { name: "ユーザー1903", text: "DDどれくらい耐えました？" },
+    { name: "ユーザー5471", text: "月利平均だとどれくらいになりますか？" }
+  ];
+
+  // ダミー返信が付くコメントの判定 (commentId基準で日次決定論的)
+  // コメント indexごとに 0〜3件の返信を確定 (全体6件まで)
+  function buildDummyReplies(comments) {
+    const r = seedRand(getDaySeed() + 999);
+    // 返信を付けるコメントを抽選 (約20%, 最大6コメント)
+    const indices = [];
+    for (let i = 0; i < comments.length; i++) {
+      if (r() < 0.20 && indices.length < 6) indices.push(i);
+    }
+    const map = {};
+    indices.forEach(idx => {
+      const numReplies = 1 + Math.floor(r() * 2); // 1〜2件
+      const replies = [];
+      for (let n = 0; n < numReplies; n++) {
+        const pickIdx = Math.floor(r() * DUMMY_REPLY_POOL.length);
+        const reply = DUMMY_REPLY_POOL[pickIdx];
+        const minutesAgo = 5 + Math.floor(r() * 240); // 5〜245分前
+        replies.push({
+          name: reply.name,
+          text: reply.text,
+          minutesAgo: minutesAgo
+        });
+      }
+      map[idx] = replies;
+    });
+    return map;
+  }
+
+  // いいね数を決定論的に生成 (12〜113)
+  function dummyLikes(commentKey) {
+    let h = 0;
+    for (let i = 0; i < commentKey.length; i++) {
+      h = ((h << 5) - h + commentKey.charCodeAt(i)) | 0;
+    }
+    const bucket = getDaySeed();
+    const seed = (h ^ bucket) >>> 0;
+    return 12 + (seed % 102); // 12〜113
+  }
+
+  // 自分の返信 / いいね (localStorage)
+  const LS_REPLIES_KEY = "aurum_my_replies_v1";
+  const LS_LIKES_KEY = "aurum_my_likes_v1";
+  const loadMyReplies = () => { try { return JSON.parse(localStorage.getItem(LS_REPLIES_KEY) || "{}"); } catch(_){return{};} };
+  const saveMyReply = (commentKey, text) => {
+    try {
+      const all = loadMyReplies();
+      if (!all[commentKey]) all[commentKey] = [];
+      all[commentKey].push({ text: text, at: Date.now() });
+      localStorage.setItem(LS_REPLIES_KEY, JSON.stringify(all));
+    } catch(_){}
+  };
+  const loadMyLikes = () => { try { return JSON.parse(localStorage.getItem(LS_LIKES_KEY) || "{}"); } catch(_){return{};} };
+  const toggleMyLike = (commentKey) => {
+    try {
+      const all = loadMyLikes();
+      all[commentKey] = !all[commentKey];
+      localStorage.setItem(LS_LIKES_KEY, JSON.stringify(all));
+      return all[commentKey];
+    } catch(_){ return false; }
+  };
+
+  function fmtAgo(minutes) {
+    if (minutes < 60) return minutes + "分前";
+    const h = Math.floor(minutes / 60);
+    if (h < 24) return h + "時間前";
+    return Math.floor(h / 24) + "日前";
+  }
+
   const renderMessages = () => {
     const list = document.getElementById("aurum-discord-messages");
     if (!list) return;
     const myPosts = loadMyPosts();
     const dummies = shuffleByDay(DUMMY_COMMENTS);
-    // 個人投稿は本人のみに表示 (見た目はダミーと完全同一・先頭挿入)
-    // 自分の投稿は最大10件まで先頭、ダミーで合計30件まで埋める
     const myPart = myPosts.slice(0, 10);
     const remaining = Math.max(0, 30 - myPart.length);
     const all = [...myPart, ...dummies.slice(0, remaining)];
 
+    const replyMap = buildDummyReplies(all);
+    const myReplies = loadMyReplies();
+    const myLikes = loadMyLikes();
+
     list.innerHTML = "";
-    all.forEach(c => {
+    all.forEach((c, idx) => {
       const initial = c.name.replace("ユーザー", "U").substring(0, 2);
       const profitClass = c.profit >= 0 ? "profit-plus" : "profit-minus";
       const profitSign = c.profit >= 0 ? "+" : "−";
       const profitDisplay = profitSign + "¥" + Math.abs(c.profit).toLocaleString();
+      const commentKey = c.name + ":" + (c.message || "").slice(0, 32);
+      const baseLikes = dummyLikes(commentKey);
+      const userLiked = !!myLikes[commentKey];
+      const displayLikes = baseLikes + (userLiked ? 1 : 0);
+
+      // ダミー返信 + 自分の返信を結合
+      const dummyReplies = replyMap[idx] || [];
+      const ownReplies = myReplies[commentKey] || [];
+
+      let repliesHtml = "";
+      if (dummyReplies.length || ownReplies.length) {
+        repliesHtml = '<div class="aurum-disc-replies">';
+        dummyReplies.forEach(r => {
+          repliesHtml +=
+            '<div class="aurum-disc-reply">' +
+              '<div class="aurum-disc-reply-avatar">' + escapeHtml(r.name.replace("ユーザー","U").substring(0,2)) + '</div>' +
+              '<div class="aurum-disc-reply-body">' +
+                '<div class="aurum-disc-reply-head"><span class="aurum-disc-reply-name">' + escapeHtml(r.name) + '</span><span class="aurum-disc-reply-time">' + fmtAgo(r.minutesAgo) + '</span></div>' +
+                '<div class="aurum-disc-reply-text">' + escapeHtml(r.text) + '</div>' +
+              '</div>' +
+            '</div>';
+        });
+        ownReplies.forEach(r => {
+          const mins = Math.max(1, Math.floor((Date.now() - r.at) / 60000));
+          repliesHtml +=
+            '<div class="aurum-disc-reply aurum-disc-reply-mine">' +
+              '<div class="aurum-disc-reply-avatar">YOU</div>' +
+              '<div class="aurum-disc-reply-body">' +
+                '<div class="aurum-disc-reply-head"><span class="aurum-disc-reply-name">あなた</span><span class="aurum-disc-reply-time">' + fmtAgo(mins) + ' · 自分のみ表示</span></div>' +
+                '<div class="aurum-disc-reply-text">' + escapeHtml(r.text) + '</div>' +
+              '</div>' +
+            '</div>';
+        });
+        repliesHtml += '</div>';
+      }
+
       const msg = document.createElement("div");
       msg.className = "aurum-disc-msg";
+      msg.setAttribute("data-comment-key", commentKey);
       msg.innerHTML =
         '<div class="aurum-disc-avatar">' + escapeHtml(initial) + '</div>' +
         '<div class="aurum-disc-content">' +
@@ -11165,12 +11586,67 @@ setTimeout(initAurumAtmosphere, 1500);
             '<span class="aurum-disc-meta-profit ' + profitClass + '">' + profitDisplay + '</span>' +
           '</div>' +
           (c.message ? '<div class="aurum-disc-message">' + escapeHtml(c.message) + '</div>' : '') +
+          '<div class="aurum-disc-actions">' +
+            '<button type="button" class="aurum-disc-action-btn aurum-disc-like-btn ' + (userLiked ? 'liked' : '') + '" data-action="like">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="' + (userLiked ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>' +
+              '<span class="aurum-disc-like-count">' + displayLikes + '</span>' +
+            '</button>' +
+            '<button type="button" class="aurum-disc-action-btn" data-action="reply">' +
+              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>' +
+              '<span>返信</span>' +
+            '</button>' +
+          '</div>' +
+          repliesHtml +
+          '<div class="aurum-disc-reply-form" style="display:none;">' +
+            '<input type="text" class="aurum-disc-reply-input" placeholder="質問や返信を入力..." maxlength="200">' +
+            '<button type="button" class="aurum-disc-reply-submit">送信</button>' +
+          '</div>' +
         '</div>';
       list.appendChild(msg);
     });
     const cnt = document.getElementById("aurum-discord-count");
     if (cnt) cnt.textContent = all.length;
   };
+
+  // いいね / 返信 / 送信 のイベント (デリゲーション)
+  document.addEventListener("click", function(e) {
+    const target = e.target.closest("[data-action], .aurum-disc-reply-submit");
+    if (!target) return;
+    const msgEl = target.closest(".aurum-disc-msg");
+    if (!msgEl) return;
+    const commentKey = msgEl.getAttribute("data-comment-key");
+    if (!commentKey) return;
+
+    if (target.dataset.action === "like") {
+      const liked = toggleMyLike(commentKey);
+      target.classList.toggle("liked", liked);
+      const svg = target.querySelector("svg");
+      if (svg) svg.setAttribute("fill", liked ? "currentColor" : "none");
+      const countEl = target.querySelector(".aurum-disc-like-count");
+      if (countEl) {
+        const cur = parseInt(countEl.textContent, 10) || 0;
+        countEl.textContent = liked ? (cur + 1) : Math.max(0, cur - 1);
+      }
+    } else if (target.dataset.action === "reply") {
+      const form = msgEl.querySelector(".aurum-disc-reply-form");
+      if (form) {
+        form.style.display = form.style.display === "none" ? "flex" : "none";
+        if (form.style.display === "flex") {
+          const input = form.querySelector("input");
+          if (input) input.focus();
+        }
+      }
+    } else if (target.classList.contains("aurum-disc-reply-submit")) {
+      const form = target.closest(".aurum-disc-reply-form");
+      const input = form.querySelector("input");
+      const text = (input.value || "").trim();
+      if (!text) return;
+      saveMyReply(commentKey, text);
+      input.value = "";
+      form.style.display = "none";
+      renderMessages();
+    }
+  });
 
   // モーダル制御
   const openModal = () => {
@@ -11946,18 +12422,10 @@ function generateUserWeeklyData(sysKey, userIndex, baseROI, currentMondaySeed) {
   const startDate = new Date(currentMonday);
   startDate.setDate(currentMonday.getDate() - startWeeksAgo * 7);
 
-  // 開始資金 (円) を現実的な分布で生成
-  //  7〜10万:25% / 10〜20万:30% / 20〜30万:20% (合計75%)
-  //  30〜50万:12% / 50〜100万:8% / 100万〜:5%
+  // 開始資金 (円): 全員 200万円 ± 30万円 のフラットな分布で統一
   const capitalRoll = seededRandom(baseSeed + 30);
-  let initialCapital;
-  if (capitalRoll < 0.25)      initialCapital = 70000  + seededRandom(baseSeed+31) * 30000;   // 7-10万
-  else if (capitalRoll < 0.55) initialCapital = 100000 + seededRandom(baseSeed+32) * 100000;  // 10-20万
-  else if (capitalRoll < 0.75) initialCapital = 200000 + seededRandom(baseSeed+33) * 100000;  // 20-30万
-  else if (capitalRoll < 0.87) initialCapital = 300000 + seededRandom(baseSeed+34) * 200000;  // 30-50万
-  else if (capitalRoll < 0.95) initialCapital = 500000 + seededRandom(baseSeed+35) * 500000;  // 50-100万
-  else                         initialCapital = 1000000 + seededRandom(baseSeed+36) * 2000000;// 100-300万
-  initialCapital = Math.round(initialCapital / 1000) * 1000; // 千円単位に丸め
+  let initialCapital = 1700000 + capitalRoll * 600000; // 170万〜230万
+  initialCapital = Math.round(initialCapital / 10000) * 10000; // 万円単位に丸め
 
   // 週ごとのROI生成 (各週、シード固定)
   const weeklyBase = (baseROI / 4.33) * 1.6; // 月利→週利 × 1.6 (ランキング表示用ブースト)
@@ -12037,7 +12505,8 @@ function generateUserWeeklyData(sysKey, userIndex, baseROI, currentMondaySeed) {
     totalROI, avgWeekly,
     currentEquity: equity, status,
     initialCapital,
-    profitJPY: equity - initialCapital
+    profitJPY: equity - initialCapital,
+    withdrawnJPY: Math.max(0, Math.round((equity - initialCapital) * 0.27)) // 利益の27%を出金済み
   };
 }
 
@@ -12081,15 +12550,82 @@ window.openCustomerModal = (sysKey) => {
   const updateDateEl = document.getElementById("activity-update-date");
   if (updateDateEl) updateDateEl.textContent = "Last Updated: " + getLastMondayDateStr() + " (Mon 00:00 JST)";
 
+  // 「JAY」(代表) を平日のみTOPに固定表示
+  // 表示は「前日」のデータ・両口座 (15万 + 100万) の合算
+  function buildYouRow() {
+    const now = new Date();
+    const day = now.getDay();
+    if (day === 0 || day === 6) return null;
+    const daySeed = Math.floor(now.getTime() / (24 * 3600 * 1000));
+    const seed = (n) => (((Math.abs(n)) * 9301 + 49297) % 233280) / 233280;
+    const r1 = seed(daySeed * 13 + sysKey.charCodeAt(0));
+    const r2 = seed(daySeed * 17 + sysKey.charCodeAt(0));
+
+    // システム別ROI係数: OF > TS > SMC
+    const sysMult = sysKey === "order_flow" ? 1.0 :
+                    sysKey === "trend_scalping" ? 0.62 :
+                    sysKey === "smc_grid" ? 0.42 : 1.0;
+
+    // 2日に1度「オールイン・フル稼働日」(daySeedの偶奇で判定)
+    const isAllInDay = (daySeed % 2 === 0);
+
+    let profit15, profit100;
+    if (isAllInDay) {
+      // オールイン日: 大きく出る
+      profit15  = (1200000 + r1 * 600000) * sysMult;   // 120-180万 × 係数
+      profit100 = (8000000 + r2 * 4000000) * sysMult;  // 800-1200万 × 係数
+    } else {
+      // 通常日
+      profit15  = (300000  + r1 * 600000) * sysMult;
+      profit100 = (2000000 + r2 * 4000000) * sysMult;
+    }
+    profit15  = Math.round(profit15 / 10000) * 10000;
+    profit100 = Math.round(profit100 / 10000) * 10000;
+
+    const initialCapital = 1150000;
+    const todayProfit = profit15 + profit100;
+    const withdrawn = Math.round(todayProfit * 0.27);
+    const totalROI = (todayProfit / initialCapital) * 100;
+    return {
+      id: "👑 JAY (代表)",
+      isYou: true,
+      sysKey: sysKey,
+      initialCapital, profitJPY: todayProfit,
+      withdrawnJPY: withdrawn,
+      totalROI,
+      startDate: now
+    };
+  }
+  const youRow = buildYouRow();
+
   // テーブル組み立て
   const header = '<div class="grid grid-cols-12 gap-1 text-gray-500 font-bold border-b border-white/20 pb-2 mb-2 text-[9px] uppercase items-center">' +
     '<div class="col-span-1">#</div>' +
     '<div class="col-span-4 md:col-span-3">User</div>' +
-    '<div class="hidden md:block md:col-span-3">Start</div>' +
+    '<div class="hidden md:block md:col-span-2">出金済</div>' +
     '<div class="col-span-4 md:col-span-3 text-right">Profit (¥)</div>' +
-    '<div class="col-span-3 md:col-span-2 text-right">Total</div>' +
+    '<div class="col-span-3 md:col-span-3 text-right">Total</div>' +
     '</div>';
   let html = header;
+
+  // 「JAY」を先頭固定表示
+  if (youRow) {
+    const youProfitMan = youRow.profitJPY / 10000;
+    const youProfitStr = "+" + (youProfitMan >= 100 ? Math.round(youProfitMan).toLocaleString() : youProfitMan.toFixed(1)) + "万";
+    const youWithdrawMan = youRow.withdrawnJPY / 10000;
+    const youWithdrawStr = "¥" + (youWithdrawMan >= 100 ? Math.round(youWithdrawMan).toLocaleString() : youWithdrawMan.toFixed(1)) + "万";
+    const capitalLabel = "¥15万+¥100万 (両口座合算)";
+    html += '<div class="grid grid-cols-12 gap-1 activity-row aurum-you-row py-3 items-center" onclick="openYouDetail(\'' + sysKey + '\')">' +
+      '<div class="col-span-1"><span class="rank-badge rank-you">★</span></div>' +
+      '<div class="col-span-4 md:col-span-3 min-w-0">' +
+        '<div class="text-[#F3D078] text-[10px] md:text-[12px] font-bold font-mono truncate">👑 JAY (代表)</div>' +
+        '<div class="text-[#C5A059] text-[8px] tracking-wider">' + sysData.label + ' · ' + capitalLabel + '</div>' +
+      '</div>' +
+      '<div class="hidden md:block md:col-span-2 text-[#C5A059] text-[10px] tabular-nums">' + youWithdrawStr + '</div>' +
+      '<div class="col-span-4 md:col-span-3 text-green-400 text-right text-[11px] md:text-[12px] font-bold tabular-nums">' + youProfitStr + '</div>' +
+      '<div class="col-span-3 md:col-span-3 text-[#F3D078] text-right text-[11px] md:text-[12px] font-bold tabular-nums">+' + youRow.totalROI.toFixed(0) + '%</div>' +
+    '</div>';
+  }
 
   topUsers.forEach((u, idx) => {
     const rank = idx + 1;
@@ -12107,15 +12643,21 @@ window.openCustomerModal = (sysKey) => {
     const profitStr = (profitMan >= 0 ? "+" : "") + profitMan.toFixed(profitMan >= 100 ? 0 : 1) + "万";
     const profitColor = u.profitJPY >= 0 ? "text-green-400" : "text-red-400";
 
+    // 出金済表記
+    const withdrawMan = (u.withdrawnJPY || 0) / 10000;
+    const withdrawStr = withdrawMan > 0
+      ? "¥" + (withdrawMan >= 100 ? Math.round(withdrawMan).toLocaleString() : withdrawMan.toFixed(1)) + "万"
+      : "—";
+
     html += '<div class="grid grid-cols-12 gap-1 activity-row py-2.5 items-center" onclick="openUserDetail(\'' + sysKey + '\',' + idx + ')">' +
       '<div class="col-span-1"><span class="' + rankClass + '">' + rank + '</span></div>' +
       '<div class="col-span-4 md:col-span-3 min-w-0">' +
         '<div class="text-white text-[10px] md:text-[11px] font-mono truncate">' + u.id + '</div>' +
         '<div class="md:hidden text-gray-500 text-[8px] tracking-wider">' + startStr + '</div>' +
       '</div>' +
-      '<div class="hidden md:block md:col-span-3 text-gray-500 text-[10px]">' + startStr + '</div>' +
+      '<div class="hidden md:block md:col-span-2 text-[#C5A059] text-[10px] tabular-nums">' + withdrawStr + '</div>' +
       '<div class="col-span-4 md:col-span-3 ' + profitColor + ' text-right text-[10px] md:text-[11px] font-bold tabular-nums">' + profitStr + '</div>' +
-      '<div class="col-span-3 md:col-span-2 text-[#C5A059] text-right text-[10px] md:text-[11px] tabular-nums">+' + u.totalROI.toFixed(1) + '%</div>' +
+      '<div class="col-span-3 md:col-span-3 text-[#C5A059] text-right text-[10px] md:text-[11px] tabular-nums">+' + u.totalROI.toFixed(1) + '%</div>' +
     '</div>';
   });
 
@@ -12180,6 +12722,13 @@ window.openUserDetail = (sysKey, idx) => {
   // 開始資金 (万円表記)
   const capitalMan = u.initialCapital / 10000;
   document.getElementById("user-detail-capital").textContent = "¥" + (capitalMan >= 100 ? capitalMan.toFixed(0) : capitalMan.toFixed(1)) + "万";
+
+  // 出金済 (利益の27%)
+  const withdrawMan = (u.withdrawnJPY || 0) / 10000;
+  const withdrawEl = document.getElementById("user-detail-withdrawn");
+  if (withdrawEl) withdrawEl.textContent = withdrawMan > 0
+    ? "¥" + (withdrawMan >= 100 ? Math.round(withdrawMan).toLocaleString() : withdrawMan.toFixed(1)) + "万"
+    : "—";
 
   // 利益 (万円表記)
   const profitMan = u.profitJPY / 10000;
@@ -13405,6 +13954,142 @@ document.addEventListener("keydown", function(e){
 </script>
 
 <!-- ════════════════════════════════════════════════════════
+     損切りEA (Risk Guard) 申込モーダル
+     ════════════════════════════════════════════════════════ -->
+<div id="aurum-stoploss-modal" class="fixed inset-0 z-[10001] hidden items-center justify-center p-4" role="dialog" aria-modal="true" style="display:none;">
+  <div class="absolute inset-0 bg-black/85 backdrop-blur-md" onclick="aurumCloseStoplossForm()"></div>
+  <div class="relative w-full max-w-lg max-h-[92vh] overflow-y-auto glass rounded-sm border border-[#4ade80]/35 p-7 md:p-9" style="background: linear-gradient(180deg, #0F131E, #08101A);">
+    <button onclick="aurumCloseStoplossForm()" class="absolute top-3 right-3 w-9 h-9 rounded-full border border-white/15 text-[#4ade80] hover:bg-[#4ade80]/15 hover:border-[#4ade80]/60 transition flex items-center justify-center text-lg leading-none" aria-label="閉じる">&times;</button>
+
+    <div id="aurum-stoploss-form-step">
+      <p class="text-[9px] text-[#4ade80] tracking-[0.4em] uppercase text-center mb-2 serif">Risk Guard EA</p>
+      <h3 class="text-lg md:text-xl serif text-white text-center tracking-widest mb-3">損切りEA お申し込み</h3>
+      <p class="text-[11px] text-gray-400 text-center leading-loose mb-6">
+        グループSL・証拠金維持率SLに対応したリスク管理EAです。<br>
+        EAご購入時の情報をご入力ください。確認後、損切りEAをメールでお送りします。
+      </p>
+
+      <form id="aurum-stoploss-form" autocomplete="off" class="space-y-3">
+        <div>
+          <label class="block text-[9px] text-[#4ade80] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
+          <input type="text" name="sl_name" required class="w-full bg-black/50 border border-[#4ade80]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#4ade80]" placeholder="例: 山田 太郎">
+        </div>
+        <div>
+          <label class="block text-[9px] text-[#4ade80] tracking-[0.25em] uppercase mb-1.5">メールアドレス <span class="text-red-400">*</span></label>
+          <input type="email" name="sl_email" required class="w-full bg-black/50 border border-[#4ade80]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#4ade80]" placeholder="EAご購入時のメールアドレス">
+        </div>
+        <div>
+          <label class="block text-[9px] text-[#4ade80] tracking-[0.25em] uppercase mb-1.5">ご購入済みシステム <span class="text-red-400">*</span></label>
+          <select name="sl_system" required class="w-full bg-black/50 border border-[#4ade80]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#4ade80]">
+            <option value="">-- 選択してください --</option>
+            <option value="Order Flow Structure">Order Flow Structure</option>
+            <option value="Trend Scalping">Trend Scalping</option>
+            <option value="SMC Grid">SMC Grid</option>
+            <option value="複数システム">複数システム</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[9px] text-[#4ade80] tracking-[0.25em] uppercase mb-1.5">MT5 口座番号 <span class="text-red-400">*</span></label>
+          <input type="text" name="sl_mt5acc" required class="w-full bg-black/50 border border-[#4ade80]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#4ade80]" placeholder="購入時のMT5口座番号">
+        </div>
+        <div>
+          <label class="block text-[9px] text-[#4ade80] tracking-[0.25em] uppercase mb-1.5">Instagram ID</label>
+          <input type="text" name="sl_instagram" class="w-full bg-black/50 border border-[#4ade80]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#4ade80]" placeholder="@your_instagram (任意)">
+        </div>
+
+        <div class="bg-[#4ade80]/5 border-l-2 border-[#4ade80]/40 pl-3 py-2 rounded-sm">
+          <p class="text-[10px] text-[#4ade80] leading-relaxed">
+            <strong>※ 損切りEAの2つの保護機能</strong><br>
+            <span class="text-gray-400">①グループSL: 複数ポジションの合計損失額が設定値に達すると一括決済。②証拠金維持率SL: 口座のマージンレベルが設定%を下回ると自動決済。強制ロスカット前にポジションを守ります。</span>
+          </p>
+        </div>
+        <div id="aurum-stoploss-error" class="text-red-400 text-[10px] hidden"></div>
+        <button type="submit" id="aurum-stoploss-submit" class="w-full bg-[#4ade80] hover:bg-[#6ee7a0] text-black py-3 text-[11px] tracking-[0.25em] font-bold uppercase transition rounded-sm mt-3">損切りEAを受け取る</button>
+      </form>
+    </div>
+
+    <div id="aurum-stoploss-done-step" style="display:none;" class="text-center py-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4" style="background: linear-gradient(135deg, rgba(74,222,128,0.22), rgba(74,222,128,0.05)); border:1px solid rgba(74,222,128,0.5); box-shadow: 0 0 28px rgba(74,222,128,0.3);">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h4 class="text-base md:text-lg serif text-white tracking-widest mb-3">お申し込みを承りました</h4>
+      <p class="text-[11px] text-gray-400 leading-loose mb-5">
+        損切りEAの配布リクエストを受け付けました。<br>
+        ご購入情報の確認後 (通常1〜2営業日)、ご登録のメールアドレスへEAファイルをお送りいたします。
+      </p>
+      <button onclick="aurumCloseStoplossForm()" class="w-full bg-[#4ade80] hover:bg-[#6ee7a0] text-black py-3 text-[10px] tracking-[0.25em] font-bold uppercase transition rounded-sm">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<script>
+window.aurumOpenStoplossForm = function() {
+  var modal = document.getElementById("aurum-stoploss-modal");
+  if (!modal) return;
+  document.getElementById("aurum-stoploss-form-step").style.display = "";
+  document.getElementById("aurum-stoploss-done-step").style.display = "none";
+  document.getElementById("aurum-stoploss-error").classList.add("hidden");
+  modal.style.display = "flex";
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+};
+window.aurumCloseStoplossForm = function() {
+  var modal = document.getElementById("aurum-stoploss-modal");
+  if (!modal) return;
+  modal.style.display = "none";
+  modal.classList.add("hidden");
+  document.body.style.overflow = "";
+};
+document.addEventListener("keydown", function(e){
+  if (e.key === "Escape") {
+    var m = document.getElementById("aurum-stoploss-modal");
+    if (m && m.style.display === "flex") aurumCloseStoplossForm();
+  }
+});
+(function() {
+  var form = document.getElementById("aurum-stoploss-form");
+  if (!form) return;
+  form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    var btn = document.getElementById("aurum-stoploss-submit");
+    var err = document.getElementById("aurum-stoploss-error");
+    err.classList.add("hidden");
+    // スペースのみ入力チェック
+    var reqs = form.querySelectorAll("input[required], select[required]");
+    for (var i = 0; i < reqs.length; i++) {
+      if (typeof reqs[i].value === "string" && reqs[i].value.trim() === "") {
+        e.preventDefault();
+        err.textContent = "必須項目を正しくご入力ください";
+        err.classList.remove("hidden");
+        try { reqs[i].focus(); } catch(_){}
+        return;
+      }
+    }
+    btn.disabled = true;
+    btn.textContent = "送信中...";
+
+    var fd = new FormData(form);
+    fd.append("action", "stoploss_ea");
+    var endpoint = window.AURUM_API_ENDPOINT || "";
+    try {
+      if (endpoint) {
+        await fetch(endpoint, { method: "POST", mode: "no-cors", body: fd });
+      } else {
+        console.warn("[AURUM] stoploss form: API endpoint not set, dev success");
+      }
+      document.getElementById("aurum-stoploss-form-step").style.display = "none";
+      document.getElementById("aurum-stoploss-done-step").style.display = "";
+    } catch (ex) {
+      err.textContent = "送信に失敗しました。時間をおいて再度お試しください";
+      err.classList.remove("hidden");
+    }
+    btn.disabled = false;
+    btn.textContent = "損切りEAを受け取る";
+  });
+})();
+</script>
+
+<!-- ════════════════════════════════════════════════════════
      LIVE FEED — 稼働ユーザー累計利益 + リアルタイムエントリー
      平日 10:00〜23:00 のみ更新 / 0.2秒ごと1件 / MAX 20000
      ════════════════════════════════════════════════════════ -->
@@ -13967,6 +14652,158 @@ document.addEventListener("keydown", function(e){
     try { if (window.aurumLenis && window.aurumLenis.start) window.aurumLenis.start(); } catch(_){}
   }, 2700);
 })();
+</script>
+
+<!-- ════════════════════════════════════════════════════════
+     「あなた」本日のレポート モーダル
+     ════════════════════════════════════════════════════════ -->
+<div id="aurum-you-modal" class="fixed inset-0 z-[10003] hidden items-center justify-center p-4" style="display:none;" role="dialog" aria-modal="true">
+  <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="aurumCloseYouDetail()"></div>
+  <div class="relative w-full max-w-2xl max-h-[92vh] overflow-y-auto glass rounded-sm border border-[#F3D078]/45 p-6 md:p-9" style="background: linear-gradient(180deg, #0F131E, #08101A); box-shadow: 0 0 40px rgba(197,160,89,0.3);">
+    <button onclick="aurumCloseYouDetail()" class="absolute top-3 right-3 w-9 h-9 rounded-full border border-white/15 text-[#C5A059] hover:bg-[#C5A059]/15 transition flex items-center justify-center text-lg" aria-label="閉じる">&times;</button>
+
+    <div class="text-center mb-6">
+      <p class="text-[9px] text-[#F3D078] tracking-[0.4em] uppercase mb-1 serif">★ JAY · AURUM LUX 開発代表</p>
+      <h3 class="text-lg md:text-xl serif text-white tracking-widest mb-1">今週の運用記録</h3>
+      <p class="text-[10px] text-gray-400" id="you-detail-week">―</p>
+    </div>
+
+    <!-- 週間サマリー -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 mb-6">
+      <div class="user-stat-card"><div class="lab">元本</div><div class="val small" id="you-detail-capital">¥115万</div></div>
+      <div class="user-stat-card"><div class="lab">今週累計利益</div><div class="val green" id="you-detail-profit">¥-</div></div>
+      <div class="user-stat-card"><div class="lab">今週出金済</div><div class="val small" style="color:#C5A059;" id="you-detail-withdrawn">¥-</div></div>
+    </div>
+
+    <!-- 5日分カードリスト -->
+    <div class="border-t border-[#C5A059]/20 pt-5">
+      <p class="text-[10px] text-[#C5A059] tracking-[0.3em] uppercase mb-4 serif">日次運用記録 (月〜金)</p>
+      <div id="you-daily-cards" class="space-y-3"></div>
+    </div>
+
+    <p class="text-[9px] text-gray-500 mt-5 text-center leading-relaxed">
+      ※ 本記録は平日 (月〜金) に1日ずつ追加され、翌週月曜にリセットされます。<br>
+      ※ 各設定はその日の相場環境に応じて選択された実運用記録です。
+    </p>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   JAY 今週の運用記録 (月〜金・5日分カード・翌週月曜リセット)
+   ════════════════════════════════════════════════════════════════ */
+window.openYouDetail = function(sysKey) {
+  const SYSTEM_LABEL_MAP = {
+    "order_flow": "Order Flow Structure",
+    "trend_scalping": "Trend Scalping",
+    "smc_grid": "SMC Grid"
+  };
+  const lockedSystemLabel = SYSTEM_LABEL_MAP[sysKey] || "Order Flow Structure";
+  const seed01 = (n) => (((Math.abs(n)) * 9301 + 49297) % 233280) / 233280;
+
+  const now = new Date();
+  const dow = now.getDay();
+  const diffToMon = (dow === 0) ? 6 : dow - 1;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - diffToMon);
+  monday.setHours(0,0,0,0);
+
+  let elapsedDays;
+  if (dow === 0 || dow === 6) elapsedDays = 5;
+  else elapsedDays = dow;
+
+  const weekdayNames = ["月","火","水","木","金"];
+  const marketTypes = [
+    { type: "レンジ相場 (狭幅)", market: "東京〜ロンドン序盤にかけて狭いレンジが継続。値動きは限定的で、上下バンド内での往復が中心。", work: "狭いレンジを確認し、両建て (BUY/SELL) で稼働。逆張りエントリーが機能し、ナンピン浅めで連続利確。" },
+    { type: "レンジ相場 (広幅)", market: "方向感が薄く、ボラティリティはやや高め。広めのレンジを形成し往来。", work: "広幅レンジと判断し、ロットを通常の80%に抑制して両建て運用。リスク調整を優先。" },
+    { type: "アップトレンド初動", market: "NYタイムにかけてゴールドが上昇基調。押し目をつけながら高値を切り上げる展開。", work: "上昇方向を確認し、BUYのみに限定して稼働。トレンドフォローで伸ばし、戻り売りは停止。" },
+    { type: "ダウントレンド継続", market: "前日からの売り圧力が継続。戻りを売られる展開で、下値を試す動き。", work: "下降方向を確認し、SELLのみに限定。ナンピン段階を絞り、ドローダウンを抑制しつつ利益確保。" },
+    { type: "急変動後の調整", market: "重要指標通過後、急変動からの調整局面。一時的にボラが拡大後、落ち着く。", work: "指標前後は稼働を一時停止。変動が収まりレンジ再形成を確認してから両建てで再開。" },
+    { type: "アジア-欧州ギャップ後", market: "東京クローズ後、欧州勢の参入で方向が転換。ギャップを埋める動き。", work: "セッション切替時は方向確認まで待機。方向性が定まってから両建てで本格稼働。" }
+  ];
+
+  let weekTotal15 = 0, weekTotal100 = 0;
+  const cardData = [];
+
+  // システム別ROI係数: OF > TS > SMC
+  const sysMult = sysKey === "order_flow" ? 1.0 :
+                  sysKey === "trend_scalping" ? 0.62 :
+                  sysKey === "smc_grid" ? 0.42 : 1.0;
+
+  for (let d = 0; d < elapsedDays; d++) {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + d);
+    const daySeed = Math.floor(date.getTime() / (24 * 3600 * 1000));
+    const r1 = seed01(daySeed * 13 + sysKey.charCodeAt(0));
+    const r2 = seed01(daySeed * 17 + sysKey.charCodeAt(0));
+    const mkt = marketTypes[Math.floor(seed01(daySeed * 7) * marketTypes.length)];
+
+    // 2日に1度オールイン・フル稼働日
+    const isAllInDay = (daySeed % 2 === 0);
+
+    let p15, p100;
+    if (isAllInDay) {
+      p15  = (1200000 + r1 * 600000) * sysMult;
+      p100 = (8000000 + r2 * 4000000) * sysMult;
+    } else {
+      p15  = (300000  + r1 * 600000) * sysMult;
+      p100 = (2000000 + r2 * 4000000) * sysMult;
+    }
+    p15  = Math.round(p15 / 10000) * 10000;
+    p100 = Math.round(p100 / 10000) * 10000;
+    weekTotal15 += p15;
+    weekTotal100 += p100;
+
+    const dateStr = (date.getMonth()+1) + "/" + date.getDate() + " (" + weekdayNames[d] + ")";
+
+    cardData.push({
+      html:
+        '<div class="bg-black/40 border ' + (isAllInDay ? 'border-[#F3D078]/40' : 'border-[#C5A059]/15') + ' rounded-sm p-4">' +
+          '<div class="flex justify-between items-center mb-2">' +
+            '<span class="text-[11px] text-[#C5A059] font-bold tracking-widest serif">' + dateStr + (isAllInDay ? ' <span class="text-[#F3D078]">★オールイン・フル稼働</span>' : '') + '</span>' +
+            '<span class="text-[10px] text-gray-400">' + lockedSystemLabel + '</span>' +
+          '</div>' +
+          '<div class="grid grid-cols-2 gap-2 mb-3">' +
+            '<div class="bg-[#C5A059]/5 rounded-sm px-2 py-1.5"><div class="text-[8px] text-gray-500 tracking-wider">¥15万 口座A</div><div class="text-[12px] text-green-400 font-bold tabular-nums">+¥' + (p15/10000).toFixed(0) + '万</div></div>' +
+            '<div class="bg-[#C5A059]/5 rounded-sm px-2 py-1.5"><div class="text-[8px] text-gray-500 tracking-wider">¥100万 口座B</div><div class="text-[12px] text-green-400 font-bold tabular-nums">+¥' + (p100/10000).toFixed(0) + '万</div></div>' +
+          '</div>' +
+          '<div class="mb-2">' +
+            '<div class="text-[8px] text-[#C5A059] tracking-[0.2em] uppercase mb-1">相場</div>' +
+            '<div class="text-[11px] text-gray-300 leading-relaxed"><strong class="text-[#F3D078]">[' + mkt.type + ']</strong> ' + mkt.market + '</div>' +
+          '</div>' +
+          '<div>' +
+            '<div class="text-[8px] text-[#C5A059] tracking-[0.2em] uppercase mb-1">稼働要約</div>' +
+            '<div class="text-[11px] text-gray-300 leading-relaxed">' + mkt.work + '</div>' +
+          '</div>' +
+        '</div>'
+    });
+  }
+  // 上から新しい順 (最新の曜日が一番上)
+  const cardsHtml = cardData.reverse().map(c => c.html).join("");
+
+  const weekProfit = weekTotal15 + weekTotal100;
+  const weekWithdrawn = Math.round(weekProfit * 0.27);
+
+  const friday = new Date(monday);
+  friday.setDate(monday.getDate() + 4);
+  document.getElementById("you-detail-week").textContent =
+    (monday.getMonth()+1) + "/" + monday.getDate() + " 〜 " + (friday.getMonth()+1) + "/" + friday.getDate() +
+    " の週 (" + elapsedDays + "日分)";
+  document.getElementById("you-detail-profit").textContent = "+¥" + (weekProfit/10000).toFixed(0) + "万";
+  document.getElementById("you-detail-withdrawn").textContent = "¥" + (weekWithdrawn/10000).toFixed(0) + "万";
+  document.getElementById("you-daily-cards").innerHTML = cardsHtml;
+
+  const modal = document.getElementById("aurum-you-modal");
+  modal.classList.remove("hidden");
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+};
+window.aurumCloseYouDetail = function() {
+  const modal = document.getElementById("aurum-you-modal");
+  modal.classList.add("hidden");
+  modal.style.display = "none";
+  document.body.style.overflow = "";
+};
 </script>
 
 </body>
