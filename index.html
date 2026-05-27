@@ -14371,7 +14371,9 @@ document.addEventListener("keydown", function(e){
 
     try {
       if (endpoint) {
-        await fetch(endpoint, { method: "POST", mode: "no-cors", body: fd });
+        var usp = new URLSearchParams();
+        fd.forEach(function(v, k){ usp.append(k, v); });
+        await fetch(endpoint, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" }, body: usp.toString() });
       } else {
         console.warn("[AURUM] setup form: API endpoint not set, dev success");
       }
@@ -14507,7 +14509,10 @@ document.addEventListener("keydown", function(e){
     var endpoint = window.AURUM_API_ENDPOINT || "";
     try {
       if (endpoint) {
-        await fetch(endpoint, { method: "POST", mode: "no-cors", body: fd });
+        // GAS の e.parameter で読めるよう urlencoded で送信 (multipartだと空になる)
+        var usp = new URLSearchParams();
+        fd.forEach(function(v, k){ usp.append(k, v); });
+        await fetch(endpoint, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" }, body: usp.toString() });
       } else {
         console.warn("[AURUM] stoploss form: API endpoint not set, dev success");
       }
@@ -15351,8 +15356,11 @@ window.aurumCloseMentorForm = function() {
       fd.append("action", "mentorship");
       var endpoint = window.AURUM_API_ENDPOINT || "";
       try {
-        if (endpoint) await fetch(endpoint, { method:"POST", mode:"no-cors", body: fd });
-        else console.warn("[AURUM] mentor form: no endpoint, dev success");
+        if (endpoint) {
+          var usp = new URLSearchParams();
+          fd.forEach(function(v, k){ usp.append(k, v); });
+          await fetch(endpoint, { method:"POST", mode:"no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" }, body: usp.toString() });
+        } else console.warn("[AURUM] mentor form: no endpoint, dev success");
         document.getElementById("aurum-mentor-form-step").style.display = "none";
         document.getElementById("aurum-mentor-done-step").style.display = "";
       } catch(ex) {
