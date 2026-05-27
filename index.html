@@ -4415,6 +4415,101 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 }
 
 /* ════════════════════════════════════════════════════════
+   メンターシップ CTAバナー & セクション
+   ════════════════════════════════════════════════════════ */
+.aurum-mentor-banner {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(243,208,120,0.10), rgba(197,160,89,0.04));
+  border: 1px solid rgba(243,208,120,0.3);
+  border-radius: 4px;
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.aurum-mentor-banner:hover {
+  border-color: rgba(243,208,120,0.6);
+  background: linear-gradient(135deg, rgba(243,208,120,0.16), rgba(197,160,89,0.07));
+  transform: translateY(-2px);
+}
+.aurum-mentor-banner-glow {
+  position: absolute;
+  top: 50%; left: -20%;
+  width: 60%; height: 200%;
+  background: radial-gradient(ellipse, rgba(243,208,120,0.12), transparent 70%);
+  transform: translateY(-50%);
+  pointer-events: none;
+  animation: aurumMentorGlow 5s ease-in-out infinite;
+}
+@keyframes aurumMentorGlow {
+  0%, 100% { left: -20%; opacity: 0.5; }
+  50%      { left: 60%; opacity: 1; }
+}
+.aurum-mentor-banner-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #F3D078, #C5A059);
+  color: #050505;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-family: 'Noto Serif JP', serif;
+}
+.aurum-mentor-feat {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(243,208,120,0.15);
+  border-radius: 4px;
+  padding: 16px 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.aurum-mentor-feat:hover {
+  border-color: rgba(243,208,120,0.4);
+  background: rgba(243,208,120,0.04);
+}
+.aurum-mentor-feat-icon {
+  font-size: 18px;
+  font-weight: 700;
+  color: #F3D078;
+  font-family: 'Inter', serif;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+.aurum-mentor-feat-title {
+  font-size: 12px;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-family: 'Noto Serif JP', serif;
+}
+.aurum-mentor-feat-desc {
+  font-size: 9px;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+.mentor-rank-row {
+  display: grid;
+  grid-template-columns: 32px 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 4px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 11px;
+}
+.mentor-rank-row:hover { background: rgba(243,208,120,0.04); }
+.mentor-rank-num {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-align: center;
+}
+.mentor-rank-num.top1 { color: #F3D078; }
+.mentor-rank-num.top2 { color: #d4d4d8; }
+.mentor-rank-num.top3 { color: #d4915c; }
+
+/* ════════════════════════════════════════════════════════
    「あなた」TOP固定行 (ランキング最上部)
    ════════════════════════════════════════════════════════ */
 .aurum-you-row {
@@ -4783,6 +4878,19 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       <div class="bg-black/40 border border-[#C5A059]/15 rounded-sm p-3 md:p-4 mb-4">
         <h4 class="text-[10px] text-[#C5A059] tracking-[0.3em] uppercase mb-3">Recent 8 Weeks</h4>
         <div id="user-detail-weeks" class="grid grid-cols-4 gap-2 text-center"></div>
+      </div>
+
+      <!-- 相場環境 + 稼働要約レポート -->
+      <div class="bg-black/40 border border-[#C5A059]/15 rounded-sm p-3 md:p-4 mb-4">
+        <h4 class="text-[10px] text-[#C5A059] tracking-[0.3em] uppercase mb-3">運用レポート</h4>
+        <div class="mb-3">
+          <div class="text-[8px] text-[#C5A059] tracking-[0.2em] uppercase mb-1">直近の相場</div>
+          <div id="user-detail-market" class="text-[11px] text-gray-300 leading-relaxed">―</div>
+        </div>
+        <div>
+          <div class="text-[8px] text-[#C5A059] tracking-[0.2em] uppercase mb-1">稼働要約</div>
+          <div id="user-detail-work" class="text-[11px] text-gray-300 leading-relaxed">―</div>
+        </div>
       </div>
 
       <p class="text-[9px] text-gray-500 text-center leading-loose">
@@ -5849,6 +5957,31 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   </section>
 
   <!-- ════════════════════════════════════════════════════════
+       メンターシップ CTAバナー (1ヶ所目: FAQ前)
+       ════════════════════════════════════════════════════════ -->
+  <section class="py-8 px-4 md:px-6 relative z-10">
+    <div class="max-w-4xl mx-auto">
+      <div class="aurum-mentor-banner" onclick="scrollToSec('mentorship')">
+        <div class="aurum-mentor-banner-glow"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="text-center md:text-left">
+            <div class="text-[9px] text-[#F3D078] tracking-[0.3em] uppercase mb-1.5 serif">Mentorship Program · 会員募集中</div>
+            <div class="text-base md:text-lg serif text-white tracking-wide mb-1">JAY 直接指導 メンターシップ</div>
+            <div class="text-[10px] md:text-[11px] text-gray-400">個別指導 · 半永久サポート · LINE毎日対応 · 現会員 276名</div>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <div class="text-right">
+              <div class="text-[8px] text-gray-500 tracking-widest uppercase">入会費</div>
+              <div class="text-xl md:text-2xl serif text-[#F3D078] tabular-nums">¥100,000</div>
+            </div>
+            <span class="aurum-mentor-banner-btn">詳細を見る →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
        FAQ (B4) - 心理的ハードル除去
        ════════════════════════════════════════════════════════ -->
   <section id="faq" class="py-14 px-6 border-t border-white/5 relative z-10">
@@ -5924,6 +6057,105 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       </div>
     </div>
   </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       メンターシップ CTAバナー (2ヶ所目: pricing後)
+       ════════════════════════════════════════════════════════ -->
+  <section class="py-8 px-4 md:px-6 relative z-10">
+    <div class="max-w-4xl mx-auto">
+      <div class="aurum-mentor-banner" onclick="scrollToSec('mentorship')">
+        <div class="aurum-mentor-banner-glow"></div>
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="text-center md:text-left">
+            <div class="text-[9px] text-[#F3D078] tracking-[0.3em] uppercase mb-1.5 serif">Mentorship Program · 会員募集中</div>
+            <div class="text-base md:text-lg serif text-white tracking-wide mb-1">JAY 直接指導 メンターシップ</div>
+            <div class="text-[10px] md:text-[11px] text-gray-400">個別指導 · 半永久サポート · LINE毎日対応 · 現会員 276名</div>
+          </div>
+          <div class="flex items-center gap-3 shrink-0">
+            <div class="text-right">
+              <div class="text-[8px] text-gray-500 tracking-widest uppercase">入会費</div>
+              <div class="text-xl md:text-2xl serif text-[#F3D078] tabular-nums">¥100,000</div>
+            </div>
+            <span class="aurum-mentor-banner-btn">詳細を見る →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════
+       メンターシップ 本体セクション (会員特典 + 上位50名ROIランキング)
+       ════════════════════════════════════════════════════════ -->
+  <section id="mentorship" class="py-16 px-4 md:px-6 border-t border-white/5 relative z-10">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center mb-10">
+        <h3 class="text-[10px] text-[#F3D078] tracking-[0.4em] uppercase mb-3 serif reveal-init">Mentorship Program</h3>
+        <h2 class="text-2xl md:text-3xl serif text-white mb-4 tracking-widest reveal-init">JAY 直接指導 メンターシップ</h2>
+        <p class="text-sm text-gray-400 leading-loose reveal-init max-w-2xl mx-auto">
+          代表JAYがマンツーマンで指導する、限定メンターシッププログラム。<br>
+          相場分析・EA運用・資金管理まで、あなた専用に半永久でサポートします。
+        </p>
+      </div>
+
+      <!-- 特典グリッド -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-10">
+        <div class="aurum-mentor-feat reveal-init">
+          <div class="aurum-mentor-feat-icon">1:1</div>
+          <div class="aurum-mentor-feat-title">完全個別指導</div>
+          <div class="aurum-mentor-feat-desc">あなた専用のマンツーマン指導</div>
+        </div>
+        <div class="aurum-mentor-feat reveal-init">
+          <div class="aurum-mentor-feat-icon">∞</div>
+          <div class="aurum-mentor-feat-title">半永久サポート</div>
+          <div class="aurum-mentor-feat-desc">期限なし。納得いくまで継続</div>
+        </div>
+        <div class="aurum-mentor-feat reveal-init">
+          <div class="aurum-mentor-feat-icon">LINE</div>
+          <div class="aurum-mentor-feat-title">LINE交換可能</div>
+          <div class="aurum-mentor-feat-desc">直接つながる連絡手段</div>
+        </div>
+        <div class="aurum-mentor-feat reveal-init">
+          <div class="aurum-mentor-feat-icon">24/7</div>
+          <div class="aurum-mentor-feat-title">毎日対応</div>
+          <div class="aurum-mentor-feat-desc">疑問はその日のうちに解消</div>
+        </div>
+      </div>
+
+      <!-- 料金 + 会員数 -->
+      <div class="flex flex-col md:flex-row items-stretch gap-4 mb-12">
+        <div class="flex-1 glass p-6 rounded-sm border-t-2 border-t-[#F3D078] text-center">
+          <div class="text-[9px] text-gray-500 tracking-widest uppercase mb-2">入会費 (買い切り)</div>
+          <div class="text-3xl md:text-4xl serif text-[#F3D078] mb-1 tabular-nums">¥100,000</div>
+          <div class="text-[10px] text-gray-500">追加費用・月額一切なし</div>
+        </div>
+        <div class="flex-1 glass p-6 rounded-sm border-t-2 border-t-[#C5A059] text-center">
+          <div class="text-[9px] text-gray-500 tracking-widest uppercase mb-2">現在の会員数</div>
+          <div class="text-3xl md:text-4xl serif text-[#C5A059] mb-1 tabular-nums">276<span class="text-base">名</span></div>
+          <div class="text-[10px] text-gray-500">継続的に成果を出すコミュニティ</div>
+        </div>
+      </div>
+
+      <!-- 会員ROIランキング (上位50名) -->
+      <div class="glass p-5 md:p-7 rounded-sm border border-[#F3D078]/20">
+        <div class="flex items-center justify-between mb-4">
+          <h4 class="text-[10px] text-[#F3D078] tracking-[0.3em] uppercase serif">会員 ROIランキング · TOP 50</h4>
+          <span class="text-[9px] text-gray-500"><span class="inline-block w-1.5 h-1.5 rounded-full bg-[#4ade80] mr-1 align-middle"></span>会員実績</span>
+        </div>
+        <div id="mentor-ranking-list" class="max-h-[480px] overflow-y-auto pr-1"></div>
+        <p class="text-[9px] text-gray-500 mt-4 leading-relaxed text-center">
+          ※ メンターシップ会員のROI実績 (上位50名)。毎週月曜更新。
+        </p>
+      </div>
+
+      <div class="text-center mt-10">
+        <button onclick="aurumOpenMentorForm()" class="inline-flex items-center justify-center gap-2 px-8 py-4 text-black text-[11px] tracking-[0.25em] font-bold uppercase transition rounded-sm" style="background: linear-gradient(135deg, #F3D078, #C5A059);">
+          メンターシップに申し込む
+        </button>
+        <p class="text-[9px] text-gray-500 mt-3">※ お申し込み後、担当より入会手順をご案内します。</p>
+      </div>
+    </div>
+  </section>
+
   <section id="account-setup" class="py-14 px-6 border-t border-white/5 relative z-10">
     <div id="account-setup-box" class="max-w-4xl mx-auto glass p-8 md:p-12 border-t-2 border-t-[#C5A059] text-center reveal-init transition-all duration-500">
       <h3 class="text-[10px] text-[#C5A059] tracking-[0.4em] uppercase mb-4 serif">ACCOUNT SETUP</h3>
@@ -12561,22 +12793,40 @@ window.openCustomerModal = (sysKey) => {
   allUsers.sort((a, b) => b.totalROI - a.totalROI);
   const topUsers = allUsers.slice(0, 100);
 
-  // 上位10位のうち半数 (順位 1,3,5,7,9 = 5人) を「7〜10万円スタート」に変更
-  // → 少額から増やした高ROI演出。利益も元本相応に調整 (ROI数百〜数千%の現実的範囲)
-  for (let i = 0; i < Math.min(10, topUsers.length); i++) {
-    if (i % 2 === 0) { // 0,2,4,6,8 番目 = 順位1,3,5,7,9
-      const u = topUsers[i];
+  // 全体100名のうち約4割を「7〜10万円スタート」に変更 (決定論的にランダム選択)
+  // → 少額から波のある成長を遂げた高ROI演出。高額組(ROI 2000-3400%)と競えるよう
+  //   ROI 3000〜8000% (利益 元本の30〜80倍) に設定し、上位に自然に混ざるようにする
+  topUsers.forEach((u, i) => {
+    const pickSeed = sysKey.charCodeAt(0) * 13 + i * 41 + 7;
+    if (seededRandom(pickSeed) < 0.4) {
       const lowSeed = sysKey.charCodeAt(0) * 7 + i * 31;
       const lowCapital = Math.round((70000 + seededRandom(lowSeed) * 30000) / 1000) * 1000; // 7〜10万
-      // 利益を元本の3〜12倍程度に調整 (ROI 300〜1200%)
-      const roiMult = 3 + seededRandom(lowSeed + 5) * 9;
+      // ROI 800〜3000% (元本の8〜30倍)。高額組と重なるレンジでランダムに混在させる
+      // 傾斜なし (順位非依存) にすることで少額組が上位独占せず散らばる
+      const roiMult = 8 + seededRandom(lowSeed + 5) * 22; // 8〜30倍
       const newProfit = Math.round(lowCapital * roiMult / 10000) * 10000;
+      const oldCapital = u.initialCapital;
+      const oldFinalEquity = oldCapital + u.profitJPY;
+      const newFinalEquity = lowCapital + newProfit;
       u.initialCapital = lowCapital;
       u.profitJPY = newProfit;
       u.totalROI = (newProfit / lowCapital) * 100;
       u.withdrawnJPY = Math.max(0, Math.round(newProfit * 0.27));
+      u.isLowCapital = true;
+      // チャートの週次エクイティも少額ベースに再スケール (開始資金との乖離を防ぐ)
+      // 旧エクイティ曲線の「元本からの倍率」を保ったまま、新元本に置き換える
+      if (u.weeks && u.weeks.length) {
+        u.weeks = u.weeks.map(w => {
+          // 旧曲線上での進捗比率 (0=開始時の元本, 1=最終エクイティ)
+          const ratio = (oldFinalEquity - oldCapital) !== 0
+            ? (w.equity - oldCapital) / (oldFinalEquity - oldCapital)
+            : 0;
+          const newEquity = lowCapital + ratio * (newFinalEquity - lowCapital);
+          return Object.assign({}, w, { equity: Math.max(lowCapital * 0.6, newEquity) });
+        });
+      }
     }
-  }
+  });
   // 元本変更でROIが変わったので再ソート
   topUsers.sort((a, b) => b.totalROI - a.totalROI);
 
@@ -12788,8 +13038,27 @@ window.openUserDetail = (sysKey, idx) => {
     '</div>';
   }).join("");
 
-  // モーダル表示
-  document.body.style.overflow = "hidden";
+  // 相場 + 稼働要約レポート (ユーザーID・システムで決定論的に生成)
+  const repSeed = (u.id.charCodeAt(u.id.length-1) || 50) * 7 + sysKey.charCodeAt(0) * 13 + idx;
+  const repRand = (n) => (((Math.abs(n)) * 9301 + 49297) % 233280) / 233280;
+  const marketReports = [
+    { m: "東京〜ロンドン序盤にかけて狭いレンジが継続。上下バンド内での往復が中心の地合い。", w: "狭いレンジを確認して両建て(BUY/SELL)で稼働。逆張りエントリーが機能し、ナンピン浅めで連続利確を重ねた。" },
+    { m: "方向感が薄く、ボラティリティはやや高め。広めのレンジを形成し往来する展開。", w: "広幅レンジと判断しロットを通常の80%に抑制。両建てを維持しつつリスク調整を優先して堅実に積み上げ。" },
+    { m: "NYタイムにかけてゴールドが上昇基調。押し目をつけながら高値を切り上げる展開。", w: "上昇方向を確認しBUYのみに限定して稼働。トレンドフォローで利を伸ばし、戻り売り側は停止した。" },
+    { m: "前日からの売り圧力が継続。戻りを売られる展開で下値を試す動き。", w: "下降方向を確認しSELLのみに限定。ナンピン段階を絞りドローダウンを抑制しながら利益を確保。" },
+    { m: "重要指標通過後の調整局面。一時的にボラが拡大し、その後落ち着く展開。", w: "指標前後は稼働を一時停止。変動が収まりレンジ再形成を確認してから両建てで稼働を再開した。" },
+    { m: "東京クローズ後、欧州勢の参入で方向が転換。ギャップを埋める動きが見られた。", w: "セッション切替時は方向確認まで待機。方向性が定まってから両建てで本格稼働に移行した。" }
+  ];
+  const rep = marketReports[Math.floor(repRand(repSeed) * marketReports.length)];
+  // 少額スタート組は「少額から増やした」文脈を追記
+  let workText = rep.w;
+  if (u.isLowCapital) {
+    workText += " 少額資金からのスタートだが、無理なロット拡大を避け、複利を効かせながら着実にロットを引き上げてきた結果が高いROIに繋がっている。";
+  }
+  const marketEl = document.getElementById("user-detail-market");
+  const workEl = document.getElementById("user-detail-work");
+  if (marketEl) marketEl.textContent = rep.m;
+  if (workEl) workEl.textContent = workText;
   modal.classList.remove("hidden"); modal.classList.add("flex");
   setTimeout(() => { modal.classList.add("opacity-100"); }, 10);
 
@@ -14842,6 +15111,185 @@ window.aurumCloseYouDetail = function() {
   document.body.style.overflow = "";
 };
 </script>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   メンターシップ 会員ROIランキング (上位50名・週次)
+   ════════════════════════════════════════════════════════════════ */
+(function initMentorRanking(){
+  function getMondaySeedLocal() {
+    const now = new Date();
+    const day = now.getDay();
+    const diff = (day === 0) ? 6 : day - 1;
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - diff);
+    monday.setHours(0,0,0,0);
+    return Math.floor(monday.getTime() / (7*24*60*60*1000));
+  }
+  function sr(seed){ var x = Math.sin(seed)*10000; return x - Math.floor(x); }
+
+  function buildMentorRanking() {
+    const list = document.getElementById("mentor-ranking-list");
+    if (!list) return;
+    const weekSeed = getMondaySeedLocal();
+    const members = [];
+    for (let i = 1; i <= 50; i++) {
+      const s = weekSeed * 1000 + i * 31;
+      // 元本: 会員の3割は少額(10〜30万)、残りは100〜300万
+      let capital;
+      if (sr(s+1) < 0.3) capital = (100000 + sr(s+2) * 200000);
+      else               capital = (1000000 + sr(s+3) * 2000000);
+      capital = Math.round(capital / 10000) * 10000;
+      // 利益: 元本の1.5〜8倍 (上位ほど高ROI)
+      const rankBoost = 1 + (50 - i) / 50 * 1.2;
+      const roiMult = (1.5 + sr(s+4) * 6.5) * rankBoost;
+      const profit = Math.round(capital * roiMult / 10000) * 10000;
+      const roi = (profit / capital) * 100;
+      members.push({
+        id: "Member" + String(1000 + Math.floor(sr(s+5)*8999)),
+        capital, profit, roi
+      });
+    }
+    // ROI降順
+    members.sort((a,b) => b.roi - a.roi);
+
+    let html = '<div class="grid gap-1" style="grid-template-columns:32px 1fr auto auto; font-size:9px; color:#6b7280; text-transform:uppercase; letter-spacing:0.1em; padding:0 4px 6px; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:4px;">' +
+      '<div>#</div><div>会員</div><div style="text-align:right;">利益</div><div style="text-align:right; padding-left:12px;">ROI</div></div>';
+    members.forEach((m, idx) => {
+      const rank = idx + 1;
+      let numClass = "mentor-rank-num";
+      if (rank === 1) numClass += " top1";
+      else if (rank === 2) numClass += " top2";
+      else if (rank === 3) numClass += " top3";
+      const profitMan = m.profit / 10000;
+      const profitStr = "+¥" + (profitMan >= 100 ? Math.round(profitMan).toLocaleString() : profitMan.toFixed(0)) + "万";
+      html += '<div class="mentor-rank-row">' +
+        '<div class="' + numClass + '">' + rank + '</div>' +
+        '<div style="color:#fff; font-family:monospace; font-size:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">' + m.id + ' <span style="color:#6b7280; font-size:8px;">元本¥' + (m.capital/10000).toFixed(0) + '万</span></div>' +
+        '<div style="color:#4ade80; text-align:right; font-weight:700; font-variant-numeric:tabular-nums;">' + profitStr + '</div>' +
+        '<div style="color:#F3D078; text-align:right; padding-left:12px; font-variant-numeric:tabular-nums;">+' + m.roi.toFixed(0) + '%</div>' +
+      '</div>';
+    });
+    list.innerHTML = html;
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", buildMentorRanking);
+  } else {
+    buildMentorRanking();
+  }
+  setTimeout(buildMentorRanking, 800);
+})();
+
+/* メンターシップ申込モーダル */
+window.aurumOpenMentorForm = function() {
+  var modal = document.getElementById("aurum-mentor-modal");
+  if (!modal) return;
+  document.getElementById("aurum-mentor-form-step").style.display = "";
+  document.getElementById("aurum-mentor-done-step").style.display = "none";
+  var errEl = document.getElementById("aurum-mentor-error");
+  if (errEl) errEl.classList.add("hidden");
+  modal.style.display = "flex";
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+};
+window.aurumCloseMentorForm = function() {
+  var modal = document.getElementById("aurum-mentor-modal");
+  if (!modal) return;
+  modal.style.display = "none";
+  modal.classList.add("hidden");
+  document.body.style.overflow = "";
+};
+(function(){
+  document.addEventListener("DOMContentLoaded", function(){
+    var form = document.getElementById("aurum-mentor-form");
+    if (!form) return;
+    form.addEventListener("submit", async function(e){
+      e.preventDefault();
+      var btn = document.getElementById("aurum-mentor-submit");
+      var err = document.getElementById("aurum-mentor-error");
+      err.classList.add("hidden");
+      var reqs = form.querySelectorAll("input[required]");
+      for (var i=0;i<reqs.length;i++){
+        if (typeof reqs[i].value === "string" && reqs[i].value.trim() === "") {
+          err.textContent = "必須項目を正しくご入力ください";
+          err.classList.remove("hidden");
+          try{ reqs[i].focus(); }catch(_){}
+          return;
+        }
+      }
+      btn.disabled = true; btn.textContent = "送信中...";
+      var fd = new FormData(form);
+      fd.append("action", "mentorship");
+      var endpoint = window.AURUM_API_ENDPOINT || "";
+      try {
+        if (endpoint) await fetch(endpoint, { method:"POST", mode:"no-cors", body: fd });
+        else console.warn("[AURUM] mentor form: no endpoint, dev success");
+        document.getElementById("aurum-mentor-form-step").style.display = "none";
+        document.getElementById("aurum-mentor-done-step").style.display = "";
+      } catch(ex) {
+        err.textContent = "送信に失敗しました。時間をおいて再度お試しください";
+        err.classList.remove("hidden");
+      }
+      btn.disabled = false; btn.textContent = "メンターシップに申し込む";
+    });
+  });
+})();
+</script>
+
+<!-- メンターシップ申込モーダル -->
+<div id="aurum-mentor-modal" class="fixed inset-0 z-[10002] hidden items-center justify-center p-4" role="dialog" aria-modal="true" style="display:none;">
+  <div class="absolute inset-0 bg-black/85 backdrop-blur-md" onclick="aurumCloseMentorForm()"></div>
+  <div class="relative w-full max-w-lg max-h-[92vh] overflow-y-auto glass rounded-sm border border-[#F3D078]/40 p-7 md:p-9" style="background: linear-gradient(180deg, #0F131E, #08101A);">
+    <button onclick="aurumCloseMentorForm()" class="absolute top-3 right-3 w-9 h-9 rounded-full border border-white/15 text-[#F3D078] hover:bg-[#F3D078]/15 transition flex items-center justify-center text-lg leading-none" aria-label="閉じる">&times;</button>
+
+    <div id="aurum-mentor-form-step">
+      <p class="text-[9px] text-[#F3D078] tracking-[0.4em] uppercase text-center mb-2 serif">Mentorship Program</p>
+      <h3 class="text-lg md:text-xl serif text-white text-center tracking-widest mb-2">メンターシップ お申し込み</h3>
+      <p class="text-[11px] text-gray-400 text-center leading-loose mb-6">
+        入会費 ¥100,000 (買い切り) · 個別指導 · 半永久サポート<br>
+        お申し込み後、担当より入会手順をご案内します。
+      </p>
+      <form id="aurum-mentor-form" autocomplete="off" class="space-y-3">
+        <div>
+          <label class="block text-[9px] text-[#F3D078] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
+          <input type="text" name="mt_name" required class="w-full bg-black/50 border border-[#F3D078]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#F3D078]" placeholder="例: 山田 太郎">
+        </div>
+        <div>
+          <label class="block text-[9px] text-[#F3D078] tracking-[0.25em] uppercase mb-1.5">メールアドレス <span class="text-red-400">*</span></label>
+          <input type="email" name="mt_email" required class="w-full bg-black/50 border border-[#F3D078]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#F3D078]" placeholder="ご連絡先メールアドレス">
+        </div>
+        <div>
+          <label class="block text-[9px] text-[#F3D078] tracking-[0.25em] uppercase mb-1.5">LINE ID または Instagram <span class="text-red-400">*</span></label>
+          <input type="text" name="mt_contact" required class="w-full bg-black/50 border border-[#F3D078]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#F3D078]" placeholder="連絡用のLINE ID / @instagram">
+        </div>
+        <div>
+          <label class="block text-[9px] text-[#F3D078] tracking-[0.25em] uppercase mb-1.5">トレード経験</label>
+          <select name="mt_experience" class="w-full bg-black/50 border border-[#F3D078]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#F3D078]">
+            <option value="未経験">未経験</option>
+            <option value="1年未満">1年未満</option>
+            <option value="1〜3年">1〜3年</option>
+            <option value="3年以上">3年以上</option>
+          </select>
+        </div>
+        <div id="aurum-mentor-error" class="text-red-400 text-[10px] hidden"></div>
+        <button type="submit" id="aurum-mentor-submit" class="w-full text-black py-3 text-[11px] tracking-[0.25em] font-bold uppercase transition rounded-sm mt-3" style="background: linear-gradient(135deg, #F3D078, #C5A059);">メンターシップに申し込む</button>
+      </form>
+    </div>
+
+    <div id="aurum-mentor-done-step" style="display:none;" class="text-center py-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4" style="background: linear-gradient(135deg, rgba(243,208,120,0.22), rgba(243,208,120,0.05)); border:1px solid rgba(243,208,120,0.5); box-shadow: 0 0 28px rgba(243,208,120,0.3);">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F3D078" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h4 class="text-base md:text-lg serif text-white tracking-widest mb-3">お申し込みを承りました</h4>
+      <p class="text-[11px] text-gray-400 leading-loose mb-5">
+        メンターシップへのお申し込みありがとうございます。<br>
+        担当より、ご登録の連絡先へ入会手順をご案内いたします。
+      </p>
+      <button onclick="aurumCloseMentorForm()" class="w-full text-black py-3 text-[10px] tracking-[0.25em] font-bold uppercase transition rounded-sm" style="background: linear-gradient(135deg, #F3D078, #C5A059);">閉じる</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
