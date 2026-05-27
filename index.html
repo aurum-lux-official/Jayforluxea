@@ -14258,7 +14258,8 @@ window.aurumGoToSystemSelect = function(ev){
         以下の情報をご入力ください (作業完了後の情報変更を強く推奨いたします)。
       </p>
 
-      <form id="aurum-setup-form" autocomplete="off" class="space-y-3">
+      <form id="aurum-setup-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
+        <input type="hidden" name="action" value="setup_concierge">
         <div>
           <label class="block text-[9px] text-[#C5A059] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
           <input type="text" name="setup_name" required class="w-full bg-black/50 border border-[#C5A059]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#C5A059]" placeholder="例: 山田 太郎">
@@ -14356,35 +14357,39 @@ document.addEventListener("keydown", function(e){
 (function() {
   var form = document.getElementById("aurum-setup-form");
   if (!form) return;
-  form.addEventListener("submit", async function(e) {
+  form.addEventListener("submit", function(e) {
     e.preventDefault();
     var btn = document.getElementById("aurum-setup-submit");
     var err = document.getElementById("aurum-setup-error");
     err.classList.add("hidden");
+    // 必須チェック (スペースのみ拒否)
+    var reqs = form.querySelectorAll("input[required], select[required]");
+    for (var i = 0; i < reqs.length; i++) {
+      if (typeof reqs[i].value === "string" && reqs[i].value.trim() === "") {
+        err.textContent = "必須項目を正しくご入力ください";
+        err.classList.remove("hidden");
+        try { reqs[i].focus(); } catch(_){}
+        return;
+      }
+    }
     btn.disabled = true;
     btn.textContent = "送信中...";
 
-    var fd = new FormData(form);
-    fd.append("action", "setup_concierge");
-    // 既存のGAS doPost に流す (action分岐で振り分け)
-    var endpoint = window.AURUM_API_ENDPOINT || window.AURUM_GAS_URL || "";
-
-    try {
-      if (endpoint) {
-        var usp = new URLSearchParams();
-        fd.forEach(function(v, k){ usp.append(k, v); });
-        await fetch(endpoint, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" }, body: usp.toString() });
-      } else {
-        console.warn("[AURUM] setup form: API endpoint not set, dev success");
-      }
+    var iframe = document.getElementById("aurum-form-target");
+    var done = false;
+    var finish = function() {
+      if (done) return; done = true;
+      iframe.removeEventListener("load", finish);
       document.getElementById("aurum-setup-form-step").style.display = "none";
       document.getElementById("aurum-setup-done-step").style.display = "";
-    } catch (ex) {
-      err.textContent = "送信に失敗しました。時間をおいて再度お試しください";
-      err.classList.remove("hidden");
-    }
-    btn.disabled = false;
-    btn.textContent = "導入代行を依頼する";
+      btn.disabled = false;
+      btn.textContent = "導入代行を依頼する";
+    };
+    iframe.addEventListener("load", finish);
+    // iframe の load が来なくても 3秒後に完了画面へ (送信自体は届く)
+    setTimeout(finish, 3000);
+    // native POST で送信 (EA申請と同じ確実な方式)
+    form.submit();
   });
 })();
 </script>
@@ -14405,7 +14410,8 @@ document.addEventListener("keydown", function(e){
         EAご購入時の情報をご入力ください。確認後、損切りEAをメールでお送りします。
       </p>
 
-      <form id="aurum-stoploss-form" autocomplete="off" class="space-y-3">
+      <form id="aurum-stoploss-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
+        <input type="hidden" name="action" value="stoploss_ea">
         <div>
           <label class="block text-[9px] text-[#4ade80] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
           <input type="text" name="sl_name" required class="w-full bg-black/50 border border-[#4ade80]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#4ade80]" placeholder="例: 山田 太郎">
@@ -14485,16 +14491,14 @@ document.addEventListener("keydown", function(e){
 (function() {
   var form = document.getElementById("aurum-stoploss-form");
   if (!form) return;
-  form.addEventListener("submit", async function(e) {
+  form.addEventListener("submit", function(e) {
     e.preventDefault();
     var btn = document.getElementById("aurum-stoploss-submit");
     var err = document.getElementById("aurum-stoploss-error");
     err.classList.add("hidden");
-    // スペースのみ入力チェック
     var reqs = form.querySelectorAll("input[required], select[required]");
     for (var i = 0; i < reqs.length; i++) {
       if (typeof reqs[i].value === "string" && reqs[i].value.trim() === "") {
-        e.preventDefault();
         err.textContent = "必須項目を正しくご入力ください";
         err.classList.remove("hidden");
         try { reqs[i].focus(); } catch(_){}
@@ -14504,26 +14508,19 @@ document.addEventListener("keydown", function(e){
     btn.disabled = true;
     btn.textContent = "送信中...";
 
-    var fd = new FormData(form);
-    fd.append("action", "stoploss_ea");
-    var endpoint = window.AURUM_API_ENDPOINT || "";
-    try {
-      if (endpoint) {
-        // GAS の e.parameter で読めるよう urlencoded で送信 (multipartだと空になる)
-        var usp = new URLSearchParams();
-        fd.forEach(function(v, k){ usp.append(k, v); });
-        await fetch(endpoint, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" }, body: usp.toString() });
-      } else {
-        console.warn("[AURUM] stoploss form: API endpoint not set, dev success");
-      }
+    var iframe = document.getElementById("aurum-form-target");
+    var done = false;
+    var finish = function() {
+      if (done) return; done = true;
+      iframe.removeEventListener("load", finish);
       document.getElementById("aurum-stoploss-form-step").style.display = "none";
       document.getElementById("aurum-stoploss-done-step").style.display = "";
-    } catch (ex) {
-      err.textContent = "送信に失敗しました。時間をおいて再度お試しください";
-      err.classList.remove("hidden");
-    }
-    btn.disabled = false;
-    btn.textContent = "損切りEAを受け取る";
+      btn.disabled = false;
+      btn.textContent = "損切りEAを受け取る";
+    };
+    iframe.addEventListener("load", finish);
+    setTimeout(finish, 3000);
+    form.submit();
   });
 })();
 </script>
@@ -15337,7 +15334,7 @@ window.aurumCloseMentorForm = function() {
   document.addEventListener("DOMContentLoaded", function(){
     var form = document.getElementById("aurum-mentor-form");
     if (!form) return;
-    form.addEventListener("submit", async function(e){
+    form.addEventListener("submit", function(e){
       e.preventDefault();
       var btn = document.getElementById("aurum-mentor-submit");
       var err = document.getElementById("aurum-mentor-error");
@@ -15352,22 +15349,18 @@ window.aurumCloseMentorForm = function() {
         }
       }
       btn.disabled = true; btn.textContent = "送信中...";
-      var fd = new FormData(form);
-      fd.append("action", "mentorship");
-      var endpoint = window.AURUM_API_ENDPOINT || "";
-      try {
-        if (endpoint) {
-          var usp = new URLSearchParams();
-          fd.forEach(function(v, k){ usp.append(k, v); });
-          await fetch(endpoint, { method:"POST", mode:"no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" }, body: usp.toString() });
-        } else console.warn("[AURUM] mentor form: no endpoint, dev success");
+      var iframe = document.getElementById("aurum-form-target");
+      var done = false;
+      var finish = function(){
+        if (done) return; done = true;
+        iframe.removeEventListener("load", finish);
         document.getElementById("aurum-mentor-form-step").style.display = "none";
         document.getElementById("aurum-mentor-done-step").style.display = "";
-      } catch(ex) {
-        err.textContent = "送信に失敗しました。時間をおいて再度お試しください";
-        err.classList.remove("hidden");
-      }
-      btn.disabled = false; btn.textContent = "この内容で相談する";
+        btn.disabled = false; btn.textContent = "この内容で相談する";
+      };
+      iframe.addEventListener("load", finish);
+      setTimeout(finish, 3000);
+      form.submit();
     });
   });
 })();
@@ -15386,7 +15379,8 @@ window.aurumCloseMentorForm = function() {
         参加費 ¥100,000 (一括) · 個別指導 · FX裁量分析<br>
         お申し込み後、担当よりDiscordでのご案内を差し上げます。
       </p>
-      <form id="aurum-mentor-form" autocomplete="off" class="space-y-3">
+      <form id="aurum-mentor-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
+        <input type="hidden" name="action" value="mentorship">
         <div>
           <label class="block text-[9px] text-[#F3D078] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
           <input type="text" name="mt_name" required class="w-full bg-black/50 border border-[#F3D078]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#F3D078]" placeholder="例: 山田 太郎">
