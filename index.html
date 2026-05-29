@@ -6641,7 +6641,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       </div>
     </div>
 
-    <form id="application-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" class="space-y-2">
+    <form id="application-form" action="https://script.google.com/macros/s/AKfycbw6QRoye5WjeR1-gwfewsD2NL7KjlyxSh-rG6Y1aJ-Ke6NAVSrhk4jiMZUmd0TJD5N2WQ/exec" method="POST" target="aurum-form-target" class="space-y-2">
       <!-- honeypot: 人間には見えない、ボットが埋めると弾く -->
       <div aria-hidden="true" style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;">
         <label>Website (do not fill)<input type="text" name="website_hp" tabindex="-1" autocomplete="off"></label>
@@ -7648,7 +7648,7 @@ window.aurumSessionSeed = (Math.random() * 1000) + (Date.now() % 1000);
    ════════════════════════════════════════════════════════════════ */
 
 // API エンドポイント (Google Apps Script ウェブアプリの URL)
-window.AURUM_API_ENDPOINT = "https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec";
+window.AURUM_API_ENDPOINT = "https://script.google.com/macros/s/AKfycbw6QRoye5WjeR1-gwfewsD2NL7KjlyxSh-rG6Y1aJ-Ke6NAVSrhk4jiMZUmd0TJD5N2WQ/exec";
 
 // ライブデータの実体 (API取得後に充填される)
 window.AURUM_LIVE_DATA = {
@@ -14258,7 +14258,7 @@ window.aurumGoToSystemSelect = function(ev){
         以下の情報をご入力ください (作業完了後の情報変更を強く推奨いたします)。
       </p>
 
-      <form id="aurum-setup-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
+      <form id="aurum-setup-form" action="https://script.google.com/macros/s/AKfycbw6QRoye5WjeR1-gwfewsD2NL7KjlyxSh-rG6Y1aJ-Ke6NAVSrhk4jiMZUmd0TJD5N2WQ/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
         <input type="hidden" name="action" value="setup_concierge">
         <div>
           <label class="block text-[9px] text-[#C5A059] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
@@ -14375,24 +14375,21 @@ document.addEventListener("keydown", function(e){
     btn.disabled = true;
     btn.textContent = "送信中...";
 
+    var iframe = document.getElementById("aurum-form-target");
     var done = false;
     var finish = function() {
       if (done) return; done = true;
+      iframe.removeEventListener("load", finish);
       document.getElementById("aurum-setup-form-step").style.display = "none";
       document.getElementById("aurum-setup-done-step").style.display = "";
       btn.disabled = false;
       btn.textContent = "導入代行を依頼する";
     };
-    setTimeout(finish, 6000);
-    try {
-      var postParams = new URLSearchParams();
-      var els = form.elements;
-      for (var pi = 0; pi < els.length; pi++) {
-        if (els[pi].name) postParams.append(els[pi].name, els[pi].value);
-      }
-      fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" })
-        .then(finish).catch(finish);
-    } catch(fe) { setTimeout(finish, 500); }
+    iframe.addEventListener("load", finish);
+    // iframe の load が来なくても 3秒後に完了画面へ (送信自体は届く)
+    setTimeout(finish, 3000);
+    // native POST で送信 (EA申請と同じ確実な方式)
+    form.submit();
   });
 })();
 </script>
@@ -14413,7 +14410,7 @@ document.addEventListener("keydown", function(e){
         EAご購入時の情報をご入力ください。確認後、損切りEAをメールでお送りします。
       </p>
 
-      <form id="aurum-stoploss-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
+      <form id="aurum-stoploss-form" action="https://script.google.com/macros/s/AKfycbw6QRoye5WjeR1-gwfewsD2NL7KjlyxSh-rG6Y1aJ-Ke6NAVSrhk4jiMZUmd0TJD5N2WQ/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
         <input type="hidden" name="action" value="stoploss_ea">
         <div>
           <label class="block text-[9px] text-[#4ade80] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
@@ -14511,24 +14508,19 @@ document.addEventListener("keydown", function(e){
     btn.disabled = true;
     btn.textContent = "送信中...";
 
+    var iframe = document.getElementById("aurum-form-target");
     var done = false;
     var finish = function() {
       if (done) return; done = true;
+      iframe.removeEventListener("load", finish);
       document.getElementById("aurum-stoploss-form-step").style.display = "none";
       document.getElementById("aurum-stoploss-done-step").style.display = "";
       btn.disabled = false;
       btn.textContent = "損切りEAを受け取る";
     };
-    setTimeout(finish, 6000);
-    try {
-      var postParams = new URLSearchParams();
-      var els = form.elements;
-      for (var pi = 0; pi < els.length; pi++) {
-        if (els[pi].name) postParams.append(els[pi].name, els[pi].value);
-      }
-      fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" })
-        .then(finish).catch(finish);
-    } catch(fe) { setTimeout(finish, 500); }
+    iframe.addEventListener("load", finish);
+    setTimeout(finish, 3000);
+    form.submit();
   });
 })();
 </script>
@@ -15357,23 +15349,18 @@ window.aurumCloseMentorForm = function() {
         }
       }
       btn.disabled = true; btn.textContent = "送信中...";
+      var iframe = document.getElementById("aurum-form-target");
       var done = false;
       var finish = function(){
         if (done) return; done = true;
+        iframe.removeEventListener("load", finish);
         document.getElementById("aurum-mentor-form-step").style.display = "none";
         document.getElementById("aurum-mentor-done-step").style.display = "";
         btn.disabled = false; btn.textContent = "この内容で相談する";
       };
-      setTimeout(finish, 6000);
-      try {
-        var postParams = new URLSearchParams();
-        var els = form.elements;
-        for (var pi = 0; pi < els.length; pi++) {
-          if (els[pi].name) postParams.append(els[pi].name, els[pi].value);
-        }
-        fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" })
-          .then(finish).catch(finish);
-      } catch(fe) { setTimeout(finish, 500); }
+      iframe.addEventListener("load", finish);
+      setTimeout(finish, 3000);
+      form.submit();
     });
   });
 })();
@@ -15392,7 +15379,7 @@ window.aurumCloseMentorForm = function() {
         参加費 ¥100,000 (一括) · 個別指導 · FX裁量分析<br>
         お申し込み後、担当よりDiscordでのご案内を差し上げます。
       </p>
-      <form id="aurum-mentor-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
+      <form id="aurum-mentor-form" action="https://script.google.com/macros/s/AKfycbw6QRoye5WjeR1-gwfewsD2NL7KjlyxSh-rG6Y1aJ-Ke6NAVSrhk4jiMZUmd0TJD5N2WQ/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
         <input type="hidden" name="action" value="mentorship">
         <div>
           <label class="block text-[9px] text-[#F3D078] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
