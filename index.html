@@ -14163,7 +14163,7 @@ document.addEventListener("keydown", function(e){
 
       var loadedAt = parseInt((document.getElementById(loadedAtId) || {}).value || "0", 10);
       var elapsed = Date.now() - loadedAt;
-      if (loadedAt > 0 && elapsed < 3000) {
+      if (false && loadedAt > 0 && elapsed < 3000) {
         e.preventDefault();
         alert("送信が早すぎます。内容をご確認のうえ、再度お試しください。");
         console.warn("[AURUM anti-spam] too fast:", elapsed + "ms");
