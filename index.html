@@ -4530,6 +4530,26 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   line-height: 1.6;
 }
 
+/* 投稿主(報告者)からの返信 */
+.aurum-disc-reply-owner {
+  background: rgba(243,208,120,0.05);
+  border-left: 2px solid rgba(243,208,120,0.4);
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+.aurum-disc-reply-owner-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #F3D078, #C5A059);
+  color: #050505;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin: 0 4px;
+  font-family: 'Noto Serif JP', serif;
+}
+
 .aurum-disc-reply-form {
   display: flex;
   gap: 6px;
@@ -11188,6 +11208,31 @@ setTimeout(initAurumAtmosphere, 1500);
   function buildDummyReplies(comments) {
     const r = seedRand(getDaySeed() + 999);
 
+    // 質問テキストごとの「投稿主(報告者)からの回答」例
+    const OWNER_ANSWERS = {
+      "稼働時間": "東京〜ロンドンを中心に動かしてます。NY後半は様子見で止めることが多いです。",
+      "ロット": "資金の2%前後を上限にしてます。増えた分だけ少しずつ上げる感じです。",
+      "BB期間": "基本はマニュアル通り20のままです。いじらない方が安定してます。",
+      "金曜全決済": "やってます。週またぎのリスクは取りたくないので金曜に一旦リセットです。",
+      "ナンピン": "今週は3段目まででした。それ以上は伸びる前に利確する設定にしてます。",
+      "通貨ペア": "XAUUSDのみです。BTCは値動きが荒いので自分は使ってません。",
+      "両建て": "レンジ判断のときだけ両建て、トレンド時は方向限定にしてます。",
+      "VPS": "お名前.comのデスクトップクラウド使ってます。安定してて満足です。",
+      "指標": "重要指標の前後は止めてます。カレンダーで★★★の日は稼働させません。",
+      "初期資金": "自分はセント口座で少額から始めました。無理ない範囲が一番です。",
+      "MT5": "推奨設定そのままで問題なかったです。最初はいじらない方がいいかと。",
+      "レンジ": "今週は中盤までレンジ、後半に伸びました。逆張りが効きやすかったです。",
+      "DD": "一時的に結構やられましたが、レンジ転換で戻しました。耐える設計大事です。",
+      "月利": "月によりますが、ならすと安定してプラスを維持できてます。"
+    };
+
+    function findAnswer(qtext) {
+      for (const key in OWNER_ANSWERS) {
+        if (qtext.indexOf(key) >= 0) return OWNER_ANSWERS[key];
+      }
+      return "ご質問ありがとうございます。基本はマニュアル通りの設定で、無理せず運用してます。";
+    }
+
     const indices = [];
     for (let i = 0; i < comments.length; i++) {
       if (r() < 0.20 && indices.length < 6) indices.push(i);
@@ -11200,10 +11245,20 @@ setTimeout(initAurumAtmosphere, 1500);
         const pickIdx = Math.floor(r() * DUMMY_REPLY_POOL.length);
         const reply = DUMMY_REPLY_POOL[pickIdx];
         const minutesAgo = 5 + Math.floor(r() * 240);
+        // 質問
         replies.push({
           name: reply.name,
           text: reply.text,
-          minutesAgo: minutesAgo
+          minutesAgo: minutesAgo,
+          isOwner: false
+        });
+        // 投稿主(報告者)からの回答 (質問より後の時刻)
+        const ownerName = comments[idx] && comments[idx].name ? comments[idx].name : "報告者";
+        replies.push({
+          name: ownerName,
+          text: findAnswer(reply.text),
+          minutesAgo: Math.max(1, minutesAgo - (3 + Math.floor(r() * 30))),
+          isOwner: true
         });
       }
       map[idx] = replies;
@@ -11280,14 +11335,25 @@ setTimeout(initAurumAtmosphere, 1500);
       if (dummyReplies.length || ownReplies.length) {
         repliesHtml = '<div class="aurum-disc-replies">';
         dummyReplies.forEach(r => {
-          repliesHtml +=
-            '<div class="aurum-disc-reply">' +
-              '<div class="aurum-disc-reply-avatar">' + escapeHtml(r.name.replace("ユーザー","U").substring(0,2)) + '</div>' +
-              '<div class="aurum-disc-reply-body">' +
-                '<div class="aurum-disc-reply-head"><span class="aurum-disc-reply-name">' + escapeHtml(r.name) + '</span><span class="aurum-disc-reply-time">' + fmtAgo(r.minutesAgo) + '</span></div>' +
-                '<div class="aurum-disc-reply-text">' + escapeHtml(r.text) + '</div>' +
-              '</div>' +
-            '</div>';
+          if (r.isOwner) {
+            repliesHtml +=
+              '<div class="aurum-disc-reply aurum-disc-reply-owner">' +
+                '<div class="aurum-disc-reply-avatar" style="background:linear-gradient(135deg,#F3D078,#C5A059);color:#050505;">' + escapeHtml(r.name.replace("ユーザー","U").substring(0,2)) + '</div>' +
+                '<div class="aurum-disc-reply-body">' +
+                  '<div class="aurum-disc-reply-head"><span class="aurum-disc-reply-name" style="color:#F3D078;">' + escapeHtml(r.name) + '</span><span class="aurum-disc-reply-owner-badge">投稿主</span><span class="aurum-disc-reply-time">' + fmtAgo(r.minutesAgo) + '</span></div>' +
+                  '<div class="aurum-disc-reply-text">' + escapeHtml(r.text) + '</div>' +
+                '</div>' +
+              '</div>';
+          } else {
+            repliesHtml +=
+              '<div class="aurum-disc-reply">' +
+                '<div class="aurum-disc-reply-avatar">' + escapeHtml(r.name.replace("ユーザー","U").substring(0,2)) + '</div>' +
+                '<div class="aurum-disc-reply-body">' +
+                  '<div class="aurum-disc-reply-head"><span class="aurum-disc-reply-name">' + escapeHtml(r.name) + '</span><span class="aurum-disc-reply-time">' + fmtAgo(r.minutesAgo) + '</span></div>' +
+                  '<div class="aurum-disc-reply-text">' + escapeHtml(r.text) + '</div>' +
+                '</div>' +
+              '</div>';
+          }
         });
         ownReplies.forEach(r => {
           const mins = Math.max(1, Math.floor((Date.now() - r.at) / 60000));
