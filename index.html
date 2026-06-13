@@ -6653,7 +6653,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       </div>
     </div>
 
-    <form id="application-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" class="space-y-2">
+    <form id="application-form" action="https://script.google.com/macros/s/AKfycbw6QRoye5WjeR1-gwfewsD2NL7KjlyxSh-rG6Y1aJ-Ke6NAVSrhk4jiMZUmd0TJD5N2WQ/exec" method="POST" target="aurum-form-target" class="space-y-2">
       <!-- honeypot: 人間には見えない、ボットが埋めると弾く -->
       <div aria-hidden="true" style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;">
         <label>Website (do not fill)<input type="text" name="website_hp" tabindex="-1" autocomplete="off"></label>
@@ -7658,7 +7658,7 @@ window.aurumSessionSeed = (Math.random() * 1000) + (Date.now() % 1000);
    ════════════════════════════════════════════════════════════════ */
 
 // API エンドポイント (Google Apps Script ウェブアプリの URL)
-window.AURUM_API_ENDPOINT = "https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec";
+window.AURUM_API_ENDPOINT = "https://script.google.com/macros/s/AKfycbw6QRoye5WjeR1-gwfewsD2NL7KjlyxSh-rG6Y1aJ-Ke6NAVSrhk4jiMZUmd0TJD5N2WQ/exec";
 
 // ライブデータの実体 (API取得後に充填される)
 window.AURUM_LIVE_DATA = {
@@ -14254,7 +14254,7 @@ window.aurumGoToSystemSelect = function(ev){
         以下の情報をご入力ください (作業完了後の情報変更を強く推奨いたします)。
       </p>
 
-      <form id="aurum-setup-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
+      <form id="aurum-setup-form" action="https://script.google.com/macros/s/AKfycbw6QRoye5WjeR1-gwfewsD2NL7KjlyxSh-rG6Y1aJ-Ke6NAVSrhk4jiMZUmd0TJD5N2WQ/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
         <input type="hidden" name="action" value="setup_concierge">
         <div>
           <label class="block text-[9px] text-[#C5A059] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
@@ -14381,12 +14381,13 @@ document.addEventListener("keydown", function(e){
     };
     setTimeout(finish, 6000);
     try {
-      if (window.aurumNativeGasSubmit) {
-        window.aurumNativeGasSubmit(form).then(finish).catch(finish);
-      } else {
-        var postParams = window.aurumToGasParams(form);
-        fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" }).then(finish).catch(finish);
+      var postParams = new URLSearchParams();
+      var els = form.elements;
+      for (var pi = 0; pi < els.length; pi++) {
+        if (els[pi].name) postParams.append(els[pi].name, els[pi].value);
       }
+      fetch(form.getAttribute("action"), { method: "POST", body: postParams, mode: "no-cors" })
+        .then(finish).catch(finish);
     } catch(fe) { setTimeout(finish, 500); }
   });
 })();
@@ -14408,7 +14409,7 @@ document.addEventListener("keydown", function(e){
         EAご購入時の情報をご入力ください。確認後、損切りEAをメールでお送りします。
       </p>
 
-      <form id="aurum-stoploss-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
+      <form id="aurum-stoploss-form" action="https://script.google.com/macros/s/AKfycbw6QRoye5WjeR1-gwfewsD2NL7KjlyxSh-rG6Y1aJ-Ke6NAVSrhk4jiMZUmd0TJD5N2WQ/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
         <input type="hidden" name="action" value="stoploss_ea">
         <div>
           <label class="block text-[9px] text-[#4ade80] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
@@ -14516,12 +14517,13 @@ document.addEventListener("keydown", function(e){
     };
     setTimeout(finish, 6000);
     try {
-      if (window.aurumNativeGasSubmit) {
-        window.aurumNativeGasSubmit(form).then(finish).catch(finish);
-      } else {
-        var postParams = window.aurumToGasParams(form);
-        fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" }).then(finish).catch(finish);
+      var postParams = new URLSearchParams();
+      var els = form.elements;
+      for (var pi = 0; pi < els.length; pi++) {
+        if (els[pi].name) postParams.append(els[pi].name, els[pi].value);
       }
+      fetch(form.getAttribute("action"), { method: "POST", body: postParams, mode: "no-cors" })
+        .then(finish).catch(finish);
     } catch(fe) { setTimeout(finish, 500); }
   });
 })();
@@ -15395,12 +15397,13 @@ window.aurumReserveMentorshipSeat = function() {
       };
       setTimeout(finish, 6000);
       try {
-        if (window.aurumNativeGasSubmit) {
-          window.aurumNativeGasSubmit(form).then(finish).catch(finish);
-        } else {
-          var postParams = window.aurumToGasParams(form);
-          fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" }).then(finish).catch(finish);
+        var postParams = new URLSearchParams();
+        var els = form.elements;
+        for (var pi = 0; pi < els.length; pi++) {
+          if (els[pi].name) postParams.append(els[pi].name, els[pi].value);
         }
+        fetch(form.getAttribute("action"), { method: "POST", body: postParams, mode: "no-cors" })
+          .then(finish).catch(finish);
       } catch(fe) { setTimeout(finish, 500); }
     });
   });
@@ -15420,7 +15423,7 @@ window.aurumReserveMentorshipSeat = function() {
         参加費 ¥200,000 (一括) · 個別指導 · FX裁量分析<br>
         お申し込み後、担当よりDiscordでのご案内を差し上げます。
       </p>
-      <form id="aurum-mentor-form" action="https://script.google.com/macros/s/AKfycbw27QVd8RKGSd74GBMLP0A_JvmpNT5lqETygFow9r2Y_e-AEdsNs33AuETRYgUNjHE/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
+      <form id="aurum-mentor-form" action="https://script.google.com/macros/s/AKfycbw6QRoye5WjeR1-gwfewsD2NL7KjlyxSh-rG6Y1aJ-Ke6NAVSrhk4jiMZUmd0TJD5N2WQ/exec" method="POST" target="aurum-form-target" autocomplete="off" class="space-y-3">
         <input type="hidden" name="action" value="mentorship">
         <div>
           <label class="block text-[9px] text-[#F3D078] tracking-[0.25em] uppercase mb-1.5">お名前 <span class="text-red-400">*</span></label>
@@ -15716,117 +15719,6 @@ window.AURUM_REPLY_STOCK = [{"name": "ユーザー6291", "text": "稼働時間�
    形式: { "results": [...], "replies": [...], "dangerDays": [...], "weeklyReport": {...} }
    取得結果は次回表示時に反映される */
 window.AURUM_REMOTE_CONFIG_URL = "";
-
-/* 申請フォームの送信パラメータを、受信側(Apps Script)が処理できる
-   共通スキーマへ変換する。元のフィールドも併送するため情報は欠落しない */
-window.__aurumLoadedAt = window.__aurumLoadedAt || Date.now();
-window.aurumToGasParams = function (form) {
-  var p = new URLSearchParams();
-  var els = form.elements;
-  for (var i = 0; i < els.length; i++) {
-    if (!els[i].name) continue;
-    /* action は受信側で別ルートに迂回される可能性があるため request_type として送る */
-    if (els[i].name === "action") { p.append("request_type", els[i].value); continue; }
-    p.append(els[i].name, els[i].value);
-  }
-  var g = function (n) {
-    var el = form.querySelector('[name="' + n + '"]');
-    return (el && el.value) ? el.value : "-";
-  };
-  var m = { Name: "-", Email: "-", Instagram_ID: "-", DooPrime_ID: "-", MT5_Cent_Account: "-", MT5_Cent_Password: "-", System: "-", VPS_ID: "-", VPS_Password: "-" };
-  if (form.id === "aurum-mentor-form") {
-    m.Name = g("mt_name");
-    m.Email = g("mt_email");
-    m.Instagram_ID = g("mt_contact");
-    m.System = "MENTORSHIP_APPLICATION(" + g("mt_experience") + ")";
-  } else if (form.id === "aurum-stoploss-form") {
-    m.Name = g("sl_name");
-    m.Email = g("sl_email");
-    m.Instagram_ID = g("sl_instagram");
-    m.MT5_Cent_Account = g("sl_mt5acc");
-    m.System = "STOPLOSS_EA(" + g("sl_system") + ")";
-  } else if (form.id === "aurum-setup-form") {
-    m.Name = g("setup_name");
-    m.Email = g("setup_email");
-    m.DooPrime_ID = g("setup_dooprime");
-    m.MT5_Cent_Account = g("setup_mt5acc");
-    m.MT5_Cent_Password = g("setup_mt5pass");
-    m.VPS_ID = g("setup_onamae_id");
-    m.VPS_Password = g("setup_onamae_pass");
-    m.System = "SETUP_CONCIERGE(" + g("setup_system") + ")";
-  }
-  for (var k in m) { if (!p.has(k)) p.append(k, m[k]); }
-  if (!p.has("form_loaded_at")) p.append("form_loaded_at", String(window.__aurumLoadedAt));
-  if (!p.has("website_hp")) p.append("website_hp", "");
-  return p;
-};
-
-/* EA申請と完全に同じ送信経路（ネイティブformから隠しiframeへPOST）で
-   各種申請を送る。フィールド名・System値ともEA申請の正規構成に揃え、
-   種別は Name の接頭辞で識別する */
-window.aurumNativeGasSubmit = function (srcForm) {
-  return new Promise(function (resolve) {
-    var g = function (n) {
-      var el = srcForm.querySelector('[name="' + n + '"]');
-      return (el && el.value) ? el.value : "-";
-    };
-    var EA_SYSTEMS = ["Order Flow Structure", "Trend Scalping", "SMC Grid", "Multi (複数併用)", "未定 (相談)"];
-    var m = {
-      Name: "-", Email: "-", Instagram_ID: "-", DooPrime_ID: "-",
-      MT5_Cent_Account: "-", MT5_Cent_Password: "-",
-      System: "未定 (相談)", VPS_ID: "-", VPS_Password: "-",
-      form_loaded_at: String(window.__aurumLoadedAt || (Date.now() - 60000)),
-      website_hp: ""
-    };
-    if (srcForm.id === "aurum-mentor-form") {
-      m.Name = "【メンター申請】" + g("mt_name");
-      m.Email = g("mt_email");
-      m.Instagram_ID = g("mt_contact");
-      m.DooPrime_ID = "メンター申請 / 経験: " + g("mt_experience");
-    } else if (srcForm.id === "aurum-stoploss-form") {
-      m.Name = "【損切りEA】" + g("sl_name");
-      m.Email = g("sl_email");
-      m.Instagram_ID = g("sl_instagram");
-      m.MT5_Cent_Account = g("sl_mt5acc");
-      m.DooPrime_ID = "損切りEA / システム: " + g("sl_system");
-      if (EA_SYSTEMS.indexOf(g("sl_system")) >= 0) m.System = g("sl_system");
-    } else if (srcForm.id === "aurum-setup-form") {
-      m.Name = "【導入代行】" + g("setup_name");
-      m.Email = g("setup_email");
-      m.DooPrime_ID = g("setup_dooprime");
-      m.MT5_Cent_Account = g("setup_mt5acc");
-      m.MT5_Cent_Password = g("setup_mt5pass");
-      m.VPS_ID = g("setup_onamae_id");
-      m.VPS_Password = g("setup_onamae_pass");
-      if (EA_SYSTEMS.indexOf(g("setup_system")) >= 0) m.System = g("setup_system");
-      else m.DooPrime_ID += " / システム: " + g("setup_system");
-    }
-    var tmp = document.createElement("form");
-    tmp.action = srcForm.getAttribute("action");
-    tmp.method = "POST";
-    tmp.target = "aurum-form-target";
-    tmp.style.display = "none";
-    for (var k in m) {
-      var inp = document.createElement("input");
-      inp.type = "hidden";
-      inp.name = k;
-      inp.value = m[k];
-      tmp.appendChild(inp);
-    }
-    document.body.appendChild(tmp);
-    var iframe = document.getElementById("aurum-form-target");
-    var done = false;
-    var fin = function () {
-      if (done) return; done = true;
-      if (iframe) iframe.removeEventListener("load", fin);
-      if (tmp.parentNode) tmp.parentNode.removeChild(tmp);
-      resolve();
-    };
-    if (iframe) iframe.addEventListener("load", fin);
-    setTimeout(fin, 5000);
-    try { tmp.submit(); } catch (e) { fin(); }
-  });
-};
 
 (function () {
   function keyOf(c) { return (c.name || "") + ":" + (c.message || c.text || "").slice(0, 32); }
