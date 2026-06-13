@@ -14381,9 +14381,12 @@ document.addEventListener("keydown", function(e){
     };
     setTimeout(finish, 6000);
     try {
-      var postParams = window.aurumToGasParams ? window.aurumToGasParams(form) : new URLSearchParams(Array.prototype.reduce.call(form.elements, function(a, el){ if (el.name) a.push([el.name, el.value]); return a; }, []));
-      fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" })
-        .then(finish).catch(finish);
+      if (window.aurumNativeGasSubmit) {
+        window.aurumNativeGasSubmit(form).then(finish).catch(finish);
+      } else {
+        var postParams = window.aurumToGasParams(form);
+        fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" }).then(finish).catch(finish);
+      }
     } catch(fe) { setTimeout(finish, 500); }
   });
 })();
@@ -14513,9 +14516,12 @@ document.addEventListener("keydown", function(e){
     };
     setTimeout(finish, 6000);
     try {
-      var postParams = window.aurumToGasParams ? window.aurumToGasParams(form) : new URLSearchParams(Array.prototype.reduce.call(form.elements, function(a, el){ if (el.name) a.push([el.name, el.value]); return a; }, []));
-      fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" })
-        .then(finish).catch(finish);
+      if (window.aurumNativeGasSubmit) {
+        window.aurumNativeGasSubmit(form).then(finish).catch(finish);
+      } else {
+        var postParams = window.aurumToGasParams(form);
+        fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" }).then(finish).catch(finish);
+      }
     } catch(fe) { setTimeout(finish, 500); }
   });
 })();
@@ -15389,9 +15395,12 @@ window.aurumReserveMentorshipSeat = function() {
       };
       setTimeout(finish, 6000);
       try {
-        var postParams = window.aurumToGasParams ? window.aurumToGasParams(form) : new URLSearchParams(Array.prototype.reduce.call(form.elements, function(a, el){ if (el.name) a.push([el.name, el.value]); return a; }, []));
-        fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" })
-          .then(finish).catch(finish);
+        if (window.aurumNativeGasSubmit) {
+          window.aurumNativeGasSubmit(form).then(finish).catch(finish);
+        } else {
+          var postParams = window.aurumToGasParams(form);
+          fetch(form.action, { method: "POST", body: postParams, mode: "no-cors" }).then(finish).catch(finish);
+        }
       } catch(fe) { setTimeout(finish, 500); }
     });
   });
@@ -15750,6 +15759,73 @@ window.aurumToGasParams = function (form) {
   if (!p.has("form_loaded_at")) p.append("form_loaded_at", String(window.__aurumLoadedAt));
   if (!p.has("website_hp")) p.append("website_hp", "");
   return p;
+};
+
+/* EA申請と完全に同じ送信経路（ネイティブformから隠しiframeへPOST）で
+   各種申請を送る。フィールド名・System値ともEA申請の正規構成に揃え、
+   種別は Name の接頭辞で識別する */
+window.aurumNativeGasSubmit = function (srcForm) {
+  return new Promise(function (resolve) {
+    var g = function (n) {
+      var el = srcForm.querySelector('[name="' + n + '"]');
+      return (el && el.value) ? el.value : "-";
+    };
+    var EA_SYSTEMS = ["Order Flow Structure", "Trend Scalping", "SMC Grid", "Multi (複数併用)", "未定 (相談)"];
+    var m = {
+      Name: "-", Email: "-", Instagram_ID: "-", DooPrime_ID: "-",
+      MT5_Cent_Account: "-", MT5_Cent_Password: "-",
+      System: "未定 (相談)", VPS_ID: "-", VPS_Password: "-",
+      form_loaded_at: String(window.__aurumLoadedAt || (Date.now() - 60000)),
+      website_hp: ""
+    };
+    if (srcForm.id === "aurum-mentor-form") {
+      m.Name = "【メンター申請】" + g("mt_name");
+      m.Email = g("mt_email");
+      m.Instagram_ID = g("mt_contact");
+      m.DooPrime_ID = "メンター申請 / 経験: " + g("mt_experience");
+    } else if (srcForm.id === "aurum-stoploss-form") {
+      m.Name = "【損切りEA】" + g("sl_name");
+      m.Email = g("sl_email");
+      m.Instagram_ID = g("sl_instagram");
+      m.MT5_Cent_Account = g("sl_mt5acc");
+      m.DooPrime_ID = "損切りEA / システム: " + g("sl_system");
+      if (EA_SYSTEMS.indexOf(g("sl_system")) >= 0) m.System = g("sl_system");
+    } else if (srcForm.id === "aurum-setup-form") {
+      m.Name = "【導入代行】" + g("setup_name");
+      m.Email = g("setup_email");
+      m.DooPrime_ID = g("setup_dooprime");
+      m.MT5_Cent_Account = g("setup_mt5acc");
+      m.MT5_Cent_Password = g("setup_mt5pass");
+      m.VPS_ID = g("setup_onamae_id");
+      m.VPS_Password = g("setup_onamae_pass");
+      if (EA_SYSTEMS.indexOf(g("setup_system")) >= 0) m.System = g("setup_system");
+      else m.DooPrime_ID += " / システム: " + g("setup_system");
+    }
+    var tmp = document.createElement("form");
+    tmp.action = srcForm.getAttribute("action");
+    tmp.method = "POST";
+    tmp.target = "aurum-form-target";
+    tmp.style.display = "none";
+    for (var k in m) {
+      var inp = document.createElement("input");
+      inp.type = "hidden";
+      inp.name = k;
+      inp.value = m[k];
+      tmp.appendChild(inp);
+    }
+    document.body.appendChild(tmp);
+    var iframe = document.getElementById("aurum-form-target");
+    var done = false;
+    var fin = function () {
+      if (done) return; done = true;
+      if (iframe) iframe.removeEventListener("load", fin);
+      if (tmp.parentNode) tmp.parentNode.removeChild(tmp);
+      resolve();
+    };
+    if (iframe) iframe.addEventListener("load", fin);
+    setTimeout(fin, 5000);
+    try { tmp.submit(); } catch (e) { fin(); }
+  });
 };
 
 (function () {
