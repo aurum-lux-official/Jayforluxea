@@ -4894,7 +4894,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       </div>
 
       <!-- 統計カード -->
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-2 md:gap-3 mb-5">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 mb-5">
         <div class="user-stat-card">
           <div class="lab">開始資金</div>
           <div class="val small" id="user-detail-capital">¥-</div>
@@ -4914,6 +4914,10 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
         <div class="user-stat-card">
           <div class="lab">運用開始</div>
           <div class="val small" id="user-detail-start">2026/01/01</div>
+        </div>
+        <div class="user-stat-card">
+          <div class="lab">最終取引日</div>
+          <div class="val small" id="user-detail-lasttrade">—</div>
         </div>
       </div>
 
@@ -12879,13 +12883,18 @@ function generateUserWeeklyData(sysKey, userIndex, baseROI, currentMondaySeed) {
       equity = equity * (1 + weeklyROI / 100);
       // 元本の60%以下にはならないよう底打ち (清算リスク回避)
       equity = Math.max(equity, initialCapital * 0.6);
-      // システム別の絶対上限 (TOP1相当の利益額をキャップ)
-      const profitCapBySystem =
-        sysKey === "order_flow"     ? 60000000 :
-        sysKey === "trend_scalping" ? 25000000 :
-        sysKey === "smc_grid"       ? 21000000 :
-                                      30000000;
-      equity = Math.min(equity, initialCapital + profitCapBySystem);
+      // 利益上限を経過時間で引き上げ、週ごとに揺らぎ(波)を持たせる
+      // → 頭打ちで固定されず、最高益が波を伴って徐々に更新される
+      const ceilAnchorMs = new Date(2026, 0, 5).getTime();
+      const ceilWeeks = Math.max(0, Math.floor((currentMonday.getTime() - ceilAnchorMs) / 604800000));
+      const baseCeil =
+        sysKey === "order_flow"     ? 62000000 :
+        sysKey === "trend_scalping" ? 26000000 :
+        sysKey === "smc_grid"       ? 22000000 :
+                                      31000000;
+      const ceilJitter = 0.90 + seededRandom(currentMondaySeed * 13 + baseSeed + 61) * 0.20;
+      const profitCeil = baseCeil * (1 + ceilWeeks * 0.009) * ceilJitter;
+      equity = Math.min(equity, initialCapital + profitCeil);
       equities.push(equity);
     }
     
@@ -12908,12 +12917,20 @@ function generateUserWeeklyData(sysKey, userIndex, baseROI, currentMondaySeed) {
   // Status (95%が ACTIVE)
   const status = seededRandom(baseSeed + 50) > 0.05 ? "ACTIVE" : "MAINTENANCE";
 
+  // 最終取引日: 直近の営業日 (今日基準で0〜4日前・ユーザー毎に分散・毎日前進する)
+  const ltDaysAgo = Math.floor(seededRandom(baseSeed + 77 + currentMondaySeed) * 5);
+  const lastTradeDate = new Date(now);
+  lastTradeDate.setDate(now.getDate() - ltDaysAgo);
+  const ltDow = lastTradeDate.getDay();
+  if (ltDow === 0) lastTradeDate.setDate(lastTradeDate.getDate() - 2);
+  else if (ltDow === 6) lastTradeDate.setDate(lastTradeDate.getDate() - 1);
+
   return {
     id, sysKey, userIndex,
     startDate, startWeeksAgo, weeks,
     totalROI, avgWeekly,
     currentEquity: equity, status,
-    initialCapital,
+    initialCapital, lastTradeDate,
     profitJPY: equity - initialCapital,
     withdrawnJPY: Math.max(0, Math.round((equity - initialCapital) * 0.27)) // 利益の27%を出金済み
   };
@@ -13083,6 +13100,10 @@ window.openCustomerModal = (sysKey) => {
     const startStr = u.startDate.getFullYear() + "/" +
       ("0"+(u.startDate.getMonth()+1)).slice(-2) + "/" +
       ("0"+u.startDate.getDate()).slice(-2);
+    const ltd = u.lastTradeDate || u.startDate;
+    const lastTradeStr = ltd.getFullYear() + "/" +
+      ("0"+(ltd.getMonth()+1)).slice(-2) + "/" +
+      ("0"+ltd.getDate()).slice(-2);
 
     // 利益表記 (万円単位、小数1桁)
     const profitMan = u.profitJPY / 10000;
@@ -13099,7 +13120,7 @@ window.openCustomerModal = (sysKey) => {
       '<div class="col-span-1"><span class="' + rankClass + '">' + rank + '</span></div>' +
       '<div class="col-span-4 md:col-span-3 min-w-0">' +
         '<div class="text-white text-[10px] md:text-[11px] font-mono truncate">' + u.id + '</div>' +
-        '<div class="md:hidden text-gray-500 text-[8px] tracking-wider">' + startStr + '</div>' +
+        '<div class="md:hidden text-gray-500 text-[8px] tracking-wider">最終取引 ' + lastTradeStr + '</div>' +
       '</div>' +
       '<div class="hidden md:block md:col-span-2 text-[#C5A059] text-[10px] tabular-nums">' + withdrawStr + '</div>' +
       '<div class="col-span-4 md:col-span-3 ' + profitColor + ' text-right text-[10px] md:text-[11px] font-bold tabular-nums">' + profitStr + '</div>' +
@@ -13163,6 +13184,13 @@ window.openUserDetail = (sysKey, idx) => {
   // 統計
   const startStr = u.startDate.getFullYear() + "/" + ("0"+(u.startDate.getMonth()+1)).slice(-2) + "/" + ("0"+u.startDate.getDate()).slice(-2);
   document.getElementById("user-detail-start").textContent = startStr;
+  (function(){
+    var lt = u.lastTradeDate;
+    if (!lt) { lt = new Date(); var dw = lt.getDay(); if (dw === 0) lt.setDate(lt.getDate()-2); else if (dw === 6) lt.setDate(lt.getDate()-1); }
+    var ltStr = lt.getFullYear() + "/" + ("0"+(lt.getMonth()+1)).slice(-2) + "/" + ("0"+lt.getDate()).slice(-2);
+    var el = document.getElementById("user-detail-lasttrade");
+    if (el) el.textContent = ltStr;
+  })();
   document.getElementById("user-detail-total").textContent = (u.totalROI >= 0 ? "+" : "") + u.totalROI.toFixed(1) + "%";
 
   // 開始資金 (万円表記)
