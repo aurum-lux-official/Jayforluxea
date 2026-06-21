@@ -4887,6 +4887,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
           <div class="text-[9px] text-gray-500 tracking-[0.3em] uppercase mb-1">User Profile</div>
           <h3 id="user-detail-id" class="text-lg md:text-xl serif text-white">AU_O_1001</h3>
           <div id="user-detail-system" class="text-[10px] text-[#C5A059] tracking-widest uppercase mt-1">Order Flow Structure</div>
+          <div id="user-detail-phase" style="display:none;" class="mt-2 items-center gap-1.5 text-[9px] tracking-widest uppercase px-2.5 py-1 rounded-sm border border-[#4ADE80]/40 bg-[#4ADE80]/10 text-[#4ADE80]"><span style="font-size:7px;vertical-align:middle;">●</span> 安定型運用に移行</div>
         </div>
         <div class="text-right">
           <div id="user-detail-rank-badge" class="rank-badge text-base px-3 py-1" style="min-width:auto;height:auto;font-size:11px;">#1</div>
@@ -13169,6 +13170,11 @@ window.openUserDetail = (sysKey, idx) => {
   // ヘッダー情報セット
   document.getElementById("user-detail-id").textContent = u.id;
   document.getElementById("user-detail-system").textContent = sysData.label;
+  (function(){
+    var STABLE_PHASE_MIN_PROFIT = 10000000; // 利益1000万円以上で「安定型運用に移行」を表示
+    var ph = document.getElementById("user-detail-phase");
+    if (ph) ph.style.display = (u.profitJPY >= STABLE_PHASE_MIN_PROFIT) ? "inline-flex" : "none";
+  })();
   
   const rankBadge = document.getElementById("user-detail-rank-badge");
   rankBadge.textContent = "#" + (idx + 1);
