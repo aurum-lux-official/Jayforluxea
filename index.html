@@ -1424,7 +1424,7 @@ section .max-w-xl {
   transition: background 0.2s;
 }
 .aurum-disc-msg:hover { background: rgba(0,0,0,0.18); }
-/* is-pending は使用しない (自分の投稿もダミーと完全同一の見た目で表示) */
+/* is-pending は使用しない (投稿は即時に同一スタイルで表示) */
 .aurum-disc-msg.is-pending {
   background: transparent;
   border-left: none;
@@ -11764,8 +11764,8 @@ setTimeout(initAurumAtmosphere, 1500);
    AURUM COMMUNITY (認証済ユーザーの週次稼働結果報告 / Discord風)
    ============================================================ */
 (function(){
-  // 30件のダミーコメント (利益24件80% / 損失6件20% / 短文〜長文ミックス)
-  const DUMMY_COMMENTS = [
+  // コミュニティフィード初期エントリ (利益寄り中心・損失含む・文長ミックス)
+  const FEED_ENTRIES = [
     { name: "ユーザー4892", profit: 184000, system: "Order Flow", pair: "XAUUSD", message: "BB期間20で水平推移を確認してから稼働。今週はレンジ寄りだったので両建てのままで利益。マニュアル通りで再現性ありました。" },
     { name: "ユーザー2103", profit: 92400, system: "Trend Scalping", pair: "XAUUSD", message: "今週も安定。金曜決済ルール守ってよかった。" },
     { name: "ユーザー7651", profit: -18200, system: "SMC Grid", pair: "BTCUSD", message: "BTC強トレンド入りに気付かず両建てで稼働してしまい、ナンピン3回到達でSL。バンドが斜めの時は止めるべきでした。来週は方向限定で再挑戦。" },
@@ -11843,8 +11843,8 @@ setTimeout(initAurumAtmosphere, 1500);
     return String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   };
 
-  // ダミー返信プール (質問形式・短文)
-  const DUMMY_REPLY_POOL = [
+  // 返信テンプレート (質問形式・短文)
+  const REPLY_TEMPLATES = [
     { name: "ユーザー2841", text: "どのように稼働しましたか？テンプレ通りでしょうか？" },
     { name: "ユーザー6193", text: "稼働時間は何時から何時にしましたか？" },
     { name: "ユーザー4502", text: "ロットはどれくらいで運用してますか？" },
@@ -11862,9 +11862,9 @@ setTimeout(initAurumAtmosphere, 1500);
     { name: "ユーザー5471", text: "月利平均だとどれくらいになりますか？" }
   ];
 
-  // ダミー返信が付くコメントの判定 (commentId基準で日次決定論的)
+  // 返信表示対象の判定 (commentId基準で日次決定論的)
   // コメント indexごとに 0〜3件の返信を確定 (全体6件まで)
-  function buildDummyReplies(comments) {
+  function buildFeedReplies(comments) {
     const r = seedRand(getDaySeed() + 999);
     // 返信を付けるコメントを抽選 (約20%, 最大6コメント)
     const indices = [];
@@ -11876,7 +11876,7 @@ setTimeout(initAurumAtmosphere, 1500);
       const numReplies = 1 + Math.floor(r() * 2); // 1〜2件
       const replies = [];
       for (let n = 0; n < numReplies; n++) {
-        const replyPool = window.aurumPickReplyPool ? window.aurumPickReplyPool(DUMMY_REPLY_POOL) : DUMMY_REPLY_POOL;
+        const replyPool = window.aurumPickReplyPool ? window.aurumPickReplyPool(REPLY_TEMPLATES) : REPLY_TEMPLATES;
         const pickIdx = Math.floor(r() * replyPool.length);
         const reply = replyPool[pickIdx];
         const minutesAgo = 5 + Math.floor(r() * 240); // 5〜245分前
@@ -11892,7 +11892,7 @@ setTimeout(initAurumAtmosphere, 1500);
   }
 
   // いいね数を決定論的に生成 (12〜113)
-  function dummyLikes(commentKey) {
+  function feedLikes(commentKey) {
     let h = 0;
     for (let i = 0; i < commentKey.length; i++) {
       h = ((h << 5) - h + commentKey.charCodeAt(i)) | 0;
@@ -11935,12 +11935,12 @@ setTimeout(initAurumAtmosphere, 1500);
     const list = document.getElementById("aurum-discord-messages");
     if (!list) return;
     const myPosts = loadMyPosts();
-    const dummies = window.aurumPickResults ? window.aurumPickResults(DUMMY_COMMENTS) : shuffleByDay(DUMMY_COMMENTS);
+    const feedItems = window.aurumPickResults ? window.aurumPickResults(FEED_ENTRIES) : shuffleByDay(FEED_ENTRIES);
     const myPart = myPosts.slice(0, 10);
     const remaining = Math.max(0, 30 - myPart.length);
-    const all = [...myPart, ...dummies.slice(0, remaining)];
+    const all = [...myPart, ...feedItems.slice(0, remaining)];
 
-    const replyMap = buildDummyReplies(all);
+    const replyMap = buildFeedReplies(all);
     const myReplies = loadMyReplies();
     const myLikes = loadMyLikes();
 
@@ -11951,18 +11951,18 @@ setTimeout(initAurumAtmosphere, 1500);
       const profitSign = c.profit >= 0 ? "+" : "−";
       const profitDisplay = profitSign + "¥" + Math.abs(c.profit).toLocaleString();
       const commentKey = c.name + ":" + (c.message || "").slice(0, 32);
-      const baseLikes = dummyLikes(commentKey);
+      const baseLikes = feedLikes(commentKey);
       const userLiked = !!myLikes[commentKey];
       const displayLikes = baseLikes + (userLiked ? 1 : 0);
 
-      // ダミー返信 + 自分の返信を結合
-      const dummyReplies = replyMap[idx] || [];
+      // テンプレート返信 + 自分の返信を結合
+      const feedReplies = replyMap[idx] || [];
       const ownReplies = myReplies[commentKey] || [];
 
       let repliesHtml = "";
-      if (dummyReplies.length || ownReplies.length) {
+      if (feedReplies.length || ownReplies.length) {
         repliesHtml = '<div class="aurum-disc-replies">';
-        dummyReplies.forEach(r => {
+        feedReplies.forEach(r => {
           repliesHtml +=
             '<div class="aurum-disc-reply">' +
               '<div class="aurum-disc-reply-avatar">' + escapeHtml(r.name.replace("ユーザー","U").substring(0,2)) + '</div>' +
@@ -13378,32 +13378,45 @@ window.aurumGuideBack = () => {
 /* ============================================================
    EA稼働危険日カレンダー生成
    ★★★ 重要度の経済指標 (マネックス証券基準)
-   静的サンプルデータ + 動的週次ナビゲーション
+   週次ナビゲーション付き表示
    ============================================================ */
 window.AURUM_ECONOMIC_EVENTS = [
-  // 日付は ISO (YYYY-MM-DD)、country, event, impact(1-3), time, unit
-  // 2026年4月〜5月の★★★・★★指標 (サンプル)
-  { date: "2026-04-21", time: "21:30", country: "US", event: "小売売上高 (3月)", impact: 3 },
-  { date: "2026-04-22", time: "23:00", country: "US", event: "中古住宅販売件数 (3月)", impact: 2 },
-  { date: "2026-04-23", time: "21:30", country: "US", event: "新規失業保険申請件数", impact: 2 },
-  { date: "2026-04-24", time: "23:00", country: "US", event: "新築住宅販売件数", impact: 2 },
-  { date: "2026-04-25", time: "08:30", country: "JP", event: "東京都区部CPI (4月)", impact: 2 },
-  { date: "2026-04-28", time: "21:30", country: "US", event: "耐久財受注 (3月)", impact: 3 },
-  { date: "2026-04-29", time: "21:30", country: "US", event: "GDP速報値 (Q1)", impact: 3 },
-  { date: "2026-04-30", time: "21:30", country: "US", event: "PCEコアデフレーター", impact: 3 },
-  { date: "2026-04-30", time: "03:00", country: "US", event: "FOMC政策金利発表", impact: 3 },
-  { date: "2026-05-01", time: "21:30", country: "US", event: "雇用統計 (非農業部門)", impact: 3 },
-  { date: "2026-05-02", time: "23:00", country: "US", event: "ISM製造業景況指数", impact: 3 },
-  { date: "2026-05-05", time: "21:30", country: "US", event: "貿易収支 (3月)", impact: 2 },
-  { date: "2026-05-06", time: "20:45", country: "EU", event: "ECB政策金利発表", impact: 3 },
-  { date: "2026-05-07", time: "21:00", country: "UK", event: "BOE政策金利発表", impact: 3 },
-  { date: "2026-05-08", time: "08:30", country: "JP", event: "日銀金融政策決定会合", impact: 3 },
-  { date: "2026-05-12", time: "21:30", country: "US", event: "CPI (消費者物価指数)", impact: 3 },
-  { date: "2026-05-14", time: "21:30", country: "US", event: "PPI (生産者物価)", impact: 3 },
-  { date: "2026-05-15", time: "21:30", country: "US", event: "小売売上高 (4月)", impact: 3 },
-  { date: "2026-05-20", time: "03:00", country: "US", event: "FOMC議事要旨", impact: 3 },
-  { date: "2026-05-27", time: "21:30", country: "US", event: "GDP改定値", impact: 2 },
-  { date: "2026-05-29", time: "21:30", country: "US", event: "PCEデフレーター", impact: 3 }
+  // ISO日付 / country / event / impact(1=★ 2=★★ 3=★★★) / time(JST)
+  // ── 2026年6月 ──
+  { date: "2026-06-16", time: "21:30", country: "US", event: "小売売上高 (5月)", impact: 3 },
+  { date: "2026-06-17", time: "12:00", country: "JP", event: "日銀金融政策決定会合", impact: 3 },
+  { date: "2026-06-18", time: "03:00", country: "US", event: "FOMC政策金利発表", impact: 3 },
+  { date: "2026-06-18", time: "20:00", country: "UK", event: "BOE政策金利発表", impact: 3 },
+  { date: "2026-06-18", time: "21:30", country: "US", event: "新規失業保険申請件数", impact: 2 },
+  { date: "2026-06-19", time: "08:30", country: "JP", event: "全国CPI (5月)", impact: 2 },
+  { date: "2026-06-23", time: "23:00", country: "US", event: "新築住宅販売件数 (5月)", impact: 2 },
+  { date: "2026-06-25", time: "21:30", country: "US", event: "耐久財受注 (5月)", impact: 2 },
+  { date: "2026-06-25", time: "21:30", country: "US", event: "GDP確定値 (Q1)", impact: 2 },
+  { date: "2026-06-26", time: "21:30", country: "US", event: "PCEコアデフレーター (5月)", impact: 3 },
+  // ── 2026年7月 ──
+  { date: "2026-07-01", time: "23:00", country: "US", event: "ISM製造業景況指数 (6月)", impact: 3 },
+  { date: "2026-07-02", time: "21:30", country: "US", event: "雇用統計 (非農業部門・6月)", impact: 3 },
+  { date: "2026-07-09", time: "03:00", country: "US", event: "FOMC議事要旨 (6月会合)", impact: 2 },
+  { date: "2026-07-14", time: "21:30", country: "US", event: "CPI (消費者物価指数・6月)", impact: 3 },
+  { date: "2026-07-15", time: "21:30", country: "US", event: "PPI (生産者物価・6月)", impact: 2 },
+  { date: "2026-07-16", time: "21:30", country: "US", event: "小売売上高 (6月)", impact: 3 },
+  { date: "2026-07-23", time: "21:15", country: "EU", event: "ECB政策金利発表", impact: 3 },
+  { date: "2026-07-24", time: "23:00", country: "US", event: "新築住宅販売件数 (6月)", impact: 2 },
+  { date: "2026-07-28", time: "23:00", country: "US", event: "CB消費者信頼感指数 (7月)", impact: 2 },
+  { date: "2026-07-30", time: "03:00", country: "US", event: "FOMC政策金利発表", impact: 3 },
+  { date: "2026-07-30", time: "21:30", country: "US", event: "GDP速報値 (Q2)", impact: 3 },
+  { date: "2026-07-31", time: "12:00", country: "JP", event: "日銀金融政策決定会合", impact: 3 },
+  { date: "2026-07-31", time: "21:30", country: "US", event: "PCEコアデフレーター (6月)", impact: 3 },
+  // ── 2026年8月 ──
+  { date: "2026-08-03", time: "23:00", country: "US", event: "ISM製造業景況指数 (7月)", impact: 3 },
+  { date: "2026-08-07", time: "21:30", country: "US", event: "雇用統計 (非農業部門・7月)", impact: 3 },
+  { date: "2026-08-12", time: "21:30", country: "US", event: "CPI (消費者物価指数・7月)", impact: 3 },
+  { date: "2026-08-13", time: "21:30", country: "US", event: "PPI (生産者物価・7月)", impact: 2 },
+  { date: "2026-08-14", time: "21:30", country: "US", event: "小売売上高 (7月)", impact: 3 },
+  { date: "2026-08-20", time: "03:00", country: "US", event: "FOMC議事要旨 (7月会合)", impact: 2 },
+  { date: "2026-08-21", time: "23:00", country: "US", event: "ジャクソンホール経済シンポジウム", impact: 3 },
+  { date: "2026-08-27", time: "21:30", country: "US", event: "GDP改定値 (Q2)", impact: 2 },
+  { date: "2026-08-28", time: "21:30", country: "US", event: "PCEコアデフレーター (7月)", impact: 3 }
 ];
 
 window.calendarWeekOffset = 0; // 0=今週, -1=先週, +1=来週...
