@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>MT5 設置・ログイン手順（Android）| AURUM LUX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{ --gold:#C5A059; --gold-2:#F3D078; --navy:#0A0F1C; --ink:#070B14; }
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scrollbar-width:thin; scrollbar-color:rgba(197,160,89,.45) rgba(10,15,28,.95); }
+body{
+  font-family:'Shippori Mincho','Noto Serif JP',serif;
+  background:
+    radial-gradient(900px 480px at 50% -10%, rgba(197,160,89,.10), transparent 60%),
+    linear-gradient(180deg, var(--ink), var(--navy) 40%, var(--ink));
+  color:#e5e7eb; min-height:100vh; letter-spacing:.04em;
+  border-top:2px solid rgba(197,160,89,.55);
+}
+body::before{
+  content:""; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:256px 256px;
+}
+.wrap{ position:relative; z-index:1; max-width:680px; margin:0 auto; padding:48px 20px 64px; }
+.brand{ text-align:center; margin-bottom:8px; }
+.brand a{ font-family:'Cormorant Garamond',serif; font-size:26px; letter-spacing:.45em; color:var(--gold-2); text-decoration:none; }
+.brand-sub{ text-align:center; font-size:9px; letter-spacing:.4em; color:var(--gold); text-transform:uppercase; margin-bottom:36px; }
+.badge{ display:block; width:fit-content; margin:0 auto 14px; font-size:10px; letter-spacing:.35em; color:var(--gold-2); border:1px solid rgba(243,208,120,.4); padding:6px 14px; border-radius:2px; text-transform:uppercase; }
+h1{ text-align:center; font-size:22px; font-weight:600; color:#fff; letter-spacing:.18em; margin-bottom:14px; }
+.lead{ text-align:center; font-size:12px; color:#9ca3af; line-height:2; margin-bottom:30px; }
+.os-switch{ display:flex; justify-content:center; gap:10px; margin-bottom:36px; }
+.os-switch a{
+  font-size:11px; letter-spacing:.2em; text-decoration:none; padding:9px 22px; border-radius:999px;
+  border:1px solid rgba(197,160,89,.35); color:#9ca3af; transition:.3s;
+}
+.os-switch a.active{ background:linear-gradient(135deg, rgba(243,208,120,.2), rgba(197,160,89,.08)); border-color:rgba(243,208,120,.7); color:var(--gold-2); }
+.os-switch a:not(.active):hover{ color:var(--gold-2); border-color:rgba(243,208,120,.5); }
+.step{
+  background:rgba(10,15,28,.55); border:1px solid rgba(197,160,89,.25); border-radius:3px;
+  padding:22px 20px; margin-bottom:14px;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.06), 0 8px 24px rgba(0,0,0,.45);
+}
+.step-head{ display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.step-num{
+  flex-shrink:0; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg, var(--gold-2), var(--gold)); color:#050505; font-size:12px; font-weight:600;
+}
+.step h2{ font-size:13px; color:#fff; font-weight:600; letter-spacing:.08em; line-height:1.7; padding-top:4px; }
+.step-body{ font-size:12px; color:#c4c9d4; line-height:2.05; padding-left:40px; }
+strong{ color:var(--gold-2); font-weight:600; }
+.support{
+  margin-top:34px; text-align:center; border:1px solid rgba(197,160,89,.25); border-radius:3px;
+  padding:20px 16px; background:rgba(10,15,28,.4);
+}
+.support p{ font-size:11px; color:#9ca3af; line-height:2; }
+.back{ text-align:center; margin-top:28px; }
+.back a{ font-size:11px; letter-spacing:.15em; color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(197,160,89,.4); padding-bottom:2px; }
+footer{ text-align:center; margin-top:44px; font-size:9px; letter-spacing:.3em; color:#4b5563; text-transform:uppercase; }
+@media (min-width:640px){
+  h1{ font-size:26px; }
+  .step{ padding:26px 26px; }
+  .step-body{ font-size:12.5px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><a href="https://aurum-lux-official.github.io/Jayforluxea/">AURUM</a></div>
+  <div class="brand-sub">Official Setup Guide</div>
+  <span class="badge">FOR ANDROID</span>
+  <h1>MT5 設置・ログイン手順</h1>
+  <p class="lead">AndroidからVPSに接続し、MT5の事前準備を行う正式手順です。<br>上から順に進めれば、操作が苦手な方でも数分で完了します。</p>
+  <nav class="os-switch">
+    <a href="mt5-iphone.html" class="">iPhone</a>
+    <a href="mt5-android.html" class="active">Android</a>
+  </nav>
+
+      <section class="step">
+        <div class="step-head">
+          <span class="step-num">1</span>
+          <h2>STEP 1 — お名前.com VPS の接続情報を確認</h2>
+        </div>
+        <p class="step-body">お名前.com デスクトップクラウドのコントロールパネルにログインし、「リモートデスクトップ接続情報」から以下の3点をメモします。<br><br>・<strong>接続先コンピューター名</strong> (SDC で始まる英数字)<br>・<strong>ユーザー名</strong><br>・<strong>パスワード</strong> (コントロールパネルで設定)</p>
+      </section>
+
+      <section class="step">
+        <div class="step-head">
+          <span class="step-num">2</span>
+          <h2>STEP 2 — Microsoft Remote Desktop アプリをインストール</h2>
+        </div>
+        <p class="step-body">Google Play で <strong>「Microsoft Remote Desktop」</strong> または「RD Client」を検索し、無料インストールします。<br>(提供元: Microsoft Corporation)</p>
+      </section>
+
+      <section class="step">
+        <div class="step-head">
+          <span class="step-num">3</span>
+          <h2>STEP 3 — VPS への接続を追加</h2>
+        </div>
+        <p class="step-body">アプリ起動 → 右上の「+」→「PC を追加」をタップ。<br><br>・<strong>PC 名</strong>: STEP 1 の接続先コンピューター名<br>・<strong>ユーザーアカウント</strong>: STEP 1 のユーザー名 / パスワード<br>・<strong>ゲートウェイ</strong>: コントロールパネル記載のRDPゲートウェイサーバー名<br><br>保存して、リスト画面のサーバーをタップで接続できます。</p>
+      </section>
+
+      <section class="step">
+        <div class="step-head">
+          <span class="step-num">4</span>
+          <h2>STEP 4 — VPS 上で MT5 をインストール</h2>
+        </div>
+        <p class="step-body">VPS の Windows デスクトップが表示されたら、左下のスタートメニュー → <strong>「MT5 インストーラー」</strong>(お名前.com 標準搭載) をダブルタップで起動。<br><br>当方指定のブローカー (Doo Prime) を選択し、画面の指示通りに「次へ」を進めるだけで完了します。</p>
+      </section>
+
+      <section class="step">
+        <div class="step-head">
+          <span class="step-num">5</span>
+          <h2>STEP 5 — MT5 にログイン</h2>
+        </div>
+        <p class="step-body">MT5 を起動し、メニューから <strong>「ファイル」→「取引口座にログイン」</strong>。<br><br>ご用意いただいた Doo Prime の<br>・<strong>ログイン番号 (口座番号)</strong><br>・<strong>パスワード</strong><br>・<strong>サーバー名</strong> (例: DooPrime-Live2)<br><br>を入力してログイン。これで事前準備は完了です。</p>
+      </section>
+
+      <section class="step">
+        <div class="step-head">
+          <span class="step-num">6</span>
+          <h2>STEP 6 — システム到着をお待ちください</h2>
+        </div>
+        <p class="step-body">ご本人確認 + 入金確認が完了次第、当方より <strong>専用ライセンスファイルとセットアップ手順</strong>をメールでお送りいたします。<br><br>到着後はその手順に従って、VPS 上の MT5 にセットするだけで稼働開始となります。</p>
+      </section>
+  <div class="support">
+    <p>手順の途中でうまくいかない場合は、無理に進めず<br>担当までInstagramのDMからお気軽にご相談ください。</p>
+  </div>
+  <div class="back"><a href="https://aurum-lux-official.github.io/Jayforluxea/">AURUM LUX 公式ページへ戻る</a></div>
+  <footer>&copy; AURUM LUX</footer>
+</div>
+</body>
+</html>
