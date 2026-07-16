@@ -1704,11 +1704,12 @@ section .max-w-xl {
 
 .aurum-rank-grid {
   display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
+  grid-template-columns: repeat(2, 1fr) !important;
   gap: 8px !important;
 }
 @media (min-width: 768px) {
   .aurum-rank-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
     gap: 18px !important;
   }
 }
@@ -1837,6 +1838,108 @@ section .max-w-xl {
   background: linear-gradient(135deg, transparent, rgba(184,115,51,0.5), transparent, rgba(205,127,50,0.5), transparent);
 }
 .aurum-rank-bronze .aurum-rank-title { color: #CD7F32; }
+.aurum-rank-steel::before {
+  background: linear-gradient(135deg, transparent, rgba(130,140,155,0.4), transparent, rgba(160,170,185,0.4), transparent);
+}
+.aurum-rank-steel .aurum-rank-title { color: #9AA3AD; }
+.aurum-rank-num {
+  font-family: 'Noto Serif JP', serif;
+  color: #9AA3AD;
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 600;
+}
+.aurum-rank-card:nth-child(4) .aurum-rank-shine { animation-delay: 4.8s; }
+.aurum-rank-card:nth-child(4) .aurum-rank-trophy { animation-delay: 2.1s; }
+@media (min-width: 768px) {
+  .aurum-rank-num { font-size: 38px; }
+}
+.system-card[data-flip-system="ofs_v2"] {
+  border-color: rgba(0,255,255,0.5) !important;
+  animation: aurumOfsGlow 3s ease-in-out infinite;
+}
+@keyframes aurumOfsGlow {
+  0%, 100% { box-shadow: 0 0 14px rgba(0,255,255,0.28), 0 0 0 1px rgba(0,255,255,0.30), inset 0 0 10px rgba(0,255,255,0.07); }
+  50% { box-shadow: 0 0 30px rgba(0,255,255,0.55), 0 0 0 1px rgba(0,255,255,0.55), inset 0 0 16px rgba(0,255,255,0.13); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .system-card[data-flip-system="ofs_v2"] { animation: none; box-shadow: 0 0 14px rgba(0,255,255,0.25); }
+}
+.aurum-vp-flagship .vp-chart-wrap { height: 210px; }
+@media (max-width: 767px) {
+  .aurum-vp-flagship .vp-chart-wrap { height: 165px; }
+}
+.aurum-ofs-ribbon-glow {
+  display: inline-flex;
+  border-radius: 999px;
+}
+.aurum-ofs-ribbon-wrap {
+  position: relative;
+  display: inline-flex;
+  border-radius: 999px;
+}
+.aurum-ofs-orbit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+.aurum-ofs-orbit rect {
+  fill: none;
+  stroke-dashoffset: 0;
+}
+.aurum-ofs-orbit .orbit-base {
+  stroke: rgba(0,255,255,0.16);
+  stroke-width: 1;
+}
+.aurum-ofs-orbit .orbit-trail {
+  stroke: rgba(0,255,255,0.30);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-dasharray: 16 84;
+  animation: aurumOfsOrbit 3.4s linear infinite;
+}
+.aurum-ofs-orbit .orbit-core {
+  stroke: #00FFFF;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 16 84;
+  animation: aurumOfsOrbit 3.4s linear infinite;
+}
+@keyframes aurumOfsOrbit {
+  to { stroke-dashoffset: -100; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aurum-ofs-orbit .orbit-trail { animation: none; stroke-dasharray: none; opacity: 0.25; }
+  .aurum-ofs-orbit .orbit-core { animation: none; stroke-dasharray: none; opacity: 0.45; }
+}
+.aurum-ofs-ribbon {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 10px 22px; border-radius: 999px;
+  background: linear-gradient(90deg, rgba(4,16,26,0.97), rgba(9,13,24,0.97));
+  border: 1px solid rgba(0,255,255,0.12);
+  color: #E8F9FF; font-size: 10px; letter-spacing: 0.18em; cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.aurum-ofs-ribbon:hover { transform: translateY(-1px); }
+.aurum-ofs-ribbon .lab { color: #00FFFF; font-weight: 700; letter-spacing: 0.3em; font-size: 9px; padding-right: 12px; border-right: 1px solid rgba(255,255,255,0.15); white-space: nowrap; }
+.aurum-ofs-ribbon .ofs-name {
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.24em;
+  color: #2E9BFF;
+  text-shadow: 0 0 14px rgba(46,155,255,0.55), 0 0 30px rgba(46,155,255,0.25);
+  white-space: nowrap;
+}
+.aurum-ofs-ribbon .dot { width: 6px; height: 6px; border-radius: 50%; background: #00FFFF; box-shadow: 0 0 8px rgba(0,255,255,0.8); animation: lfpulse 2s ease-in-out infinite; }
+.aurum-ofs-ribbon .arw { color: #00FFFF; }
+@media (max-width: 640px) {
+  .aurum-ofs-ribbon { padding: 9px 18px; gap: 10px; }
+  .aurum-ofs-ribbon .ofs-name { font-size: 14px; letter-spacing: 0.2em; }
+}
 @media (prefers-reduced-motion: reduce) {
   .aurum-rank-card::before, .aurum-rank-shine, .aurum-rank-trophy { animation: none; }
 }
@@ -2263,14 +2366,16 @@ textarea.input-field:focus {
     linear-gradient(180deg, transparent 0%, rgba(10,15,28,0.4) 50%, transparent 100%);
 }
 #aurum-particle-network {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0;
-  width: 100%; height: 100%;
+  width: 100%; height: 100vh;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.85;
+  opacity: 0;
+  transition: opacity 0.9s ease;
   mix-blend-mode: screen;
 }
+#aurum-particle-network.pn-active { opacity: 0.85; }
 .aurum-premium-curves {
   position: absolute;
   top: 0; left: 0;
@@ -3245,6 +3350,10 @@ textarea.input-field:focus {
 }
 .aurum-fade-text > span {
   display: inline-block;
+}
+.aurum-fade-text .aurum-word {
+  display: inline-block;
+  white-space: nowrap;
 }
 .aurum-fade-text .aurum-char {
   display: inline-block;
@@ -4804,7 +4913,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
         <span class="aurum-ticker-sep"></span>
         <span class="aurum-ticker-item"><span class="aurum-ticker-dot"></span><span class="lab">Active EAs</span><span class="val ok">Normal</span></span>
         <span class="aurum-ticker-sep"></span>
-        <span class="aurum-ticker-item"><span class="lab">Active Users</span><span class="val">1,147</span></span>
+        <span class="aurum-ticker-item"><span class="lab">Active Users</span><span class="val">1,356</span></span>
         <span class="aurum-ticker-sep"></span>
         <span class="aurum-ticker-item"><span class="lab">Avg ROI (30d)</span><span class="val">+58%</span></span>
         <span class="aurum-ticker-sep"></span>
@@ -4819,7 +4928,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
         <span class="aurum-ticker-sep"></span>
         <span class="aurum-ticker-item"><span class="aurum-ticker-dot"></span><span class="lab">Active EAs</span><span class="val ok">Normal</span></span>
         <span class="aurum-ticker-sep"></span>
-        <span class="aurum-ticker-item"><span class="lab">Active Users</span><span class="val">1,147</span></span>
+        <span class="aurum-ticker-item"><span class="lab">Active Users</span><span class="val">1,356</span></span>
         <span class="aurum-ticker-sep"></span>
         <span class="aurum-ticker-item"><span class="lab">Avg ROI (30d)</span><span class="val">+58%</span></span>
         <span class="aurum-ticker-sep"></span>
@@ -4878,7 +4987,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
           <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
           <span>週次稼働結果コミュニティ</span>
         </a>
-        <a href="./aurum_pro_academy.html" class="mobile-link-special w-full justify-center">
+        <a href="javascript:void(0)" onclick="aurumAcademyNotice(); closeMenu();" class="mobile-link-special w-full justify-center">
           <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
           <span>Members Login · Pro Academy</span>
         </a>
@@ -4916,10 +5025,23 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       <div class="hero-mask mb-6 md:mb-10">
         <h1 class="text-4xl md:text-8xl font-semibold leading-tight serif text-white hero-reveal">Execution.</h1>
       </div>
-      <div class="hero-mask mb-8 md:mb-16">
+      <div class="hero-mask mb-6 md:mb-8">
         
         <div id="hero-typing-frame" class="hero-typing-frame hero-reveal">
           <p id="hero-typing-target" class="text-gray-300 text-xs md:text-sm leading-loose tracking-[0.2em]">機関投資家の思考を再現した、<br>Volume × Price Action アルゴリズム</p>
+        </div>
+      </div>
+      <div class="hero-mask mb-6 md:mb-10">
+        <div class="hero-reveal aurum-ofs-ribbon-glow">
+          <div class="aurum-ofs-ribbon-wrap">
+            <svg class="aurum-ofs-orbit" aria-hidden="true"><rect class="orbit-base" pathLength="100"/><rect class="orbit-trail" pathLength="100"/><rect class="orbit-core" pathLength="100"/></svg>
+            <button onclick="scrollToSec('system')" class="aurum-ofs-ribbon">
+              <span class="dot"></span>
+              <span class="lab">NEW EA</span>
+              <span class="ofs-name">OFS v2</span>
+              <span class="arw">›</span>
+            </button>
+          </div>
         </div>
       </div>
       <div class="hero-mask">
@@ -4940,7 +5062,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       <span class="aurum-marquee-item">XAUUSD</span><span class="aurum-marquee-dot">◆</span>
       <span class="aurum-marquee-item">BTCUSD</span><span class="aurum-marquee-dot">◆</span>
       <span class="aurum-marquee-item">AUCTION THEORY</span><span class="aurum-marquee-dot">◆</span>
-      <span class="aurum-marquee-item">1147 ACTIVE USERS</span><span class="aurum-marquee-dot">◆</span>
+      <span class="aurum-marquee-item">1356 ACTIVE USERS</span><span class="aurum-marquee-dot">◆</span>
       <span class="aurum-marquee-item">24/7 ALGO TRADING</span><span class="aurum-marquee-dot">◆</span>
       <span class="aurum-marquee-item">JAY MENTORSHIP</span><span class="aurum-marquee-dot">◆</span>
       
@@ -4950,7 +5072,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       <span class="aurum-marquee-item">XAUUSD</span><span class="aurum-marquee-dot">◆</span>
       <span class="aurum-marquee-item">BTCUSD</span><span class="aurum-marquee-dot">◆</span>
       <span class="aurum-marquee-item">AUCTION THEORY</span><span class="aurum-marquee-dot">◆</span>
-      <span class="aurum-marquee-item">1147 ACTIVE USERS</span><span class="aurum-marquee-dot">◆</span>
+      <span class="aurum-marquee-item">1356 ACTIVE USERS</span><span class="aurum-marquee-dot">◆</span>
       <span class="aurum-marquee-item">24/7 ALGO TRADING</span><span class="aurum-marquee-dot">◆</span>
       <span class="aurum-marquee-item">JAY MENTORSHIP</span><span class="aurum-marquee-dot">◆</span>
     </div>
@@ -4960,7 +5082,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
     <div class="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center">
       <div class="sp-fade-up cursor-pointer group relative" onclick="aurumOpenLiveFeed()" title="ライブフィードを表示">
         <div class="text-[9px] text-gray-500 tracking-[0.25em] uppercase mb-2 group-hover:text-[#C5A059] transition">Active Users</div>
-        <div class="text-2xl md:text-3xl serif text-[#C5A059] group-hover:text-[#F3D078] transition"><span class="roi-count" data-target="1147">0</span></div>
+        <div class="text-2xl md:text-3xl serif text-[#C5A059] group-hover:text-[#F3D078] transition"><span class="roi-count" data-target="1356">0</span></div>
         <div class="text-[8px] text-gray-600 tracking-widest mt-1">運用中アカウント</div>
         <button type="button" onclick="event.stopPropagation(); aurumOpenLiveFeed();" class="aurum-live-feed-btn mt-2.5">
           <span class="aurum-live-feed-btn-dot"></span>
@@ -5109,8 +5231,30 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
     <div class="max-w-7xl mx-auto">
       <h2 class="text-center text-xl md:text-2xl serif text-white tracking-widest mb-12 reveal-init uppercase sp-mask-line aurum-fade-text"><span data-text="SELECT YOUR SYSTEM">SELECT YOUR SYSTEM</span></h2>
       <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 px-4 md:justify-center pb-10 pt-4 no-scrollbar reveal-init sp-stagger scroll-smooth w-full">
+        <div class="system-card snap-center shrink-0 w-[85vw] max-w-[320px] min-w-[280px] md:min-w-[320px] p-8 md:p-10 relative rounded-sm cursor-pointer aurum-3d-entry" data-flip-system="ofs_v2" onclick="highlightSystemCard(this)">
+          <div class="flex gap-2 mb-6 badge-container"><span class="badge px-2 py-1 text-[10px] rounded-sm badge-gold">No.1</span><span class="badge px-2 py-1 text-[10px] rounded-sm badge-outline uppercase tracking-wider">Flagship</span></div>
+          <h3 class="text-xl serif mb-1 text-white uppercase">OFS v2</h3>
+          <p class="text-[10px] text-gray-400 mb-6 border-b border-white/10 pb-4 tracking-widest">精密エントリー × 自動損切り</p>
+          <div class="flex items-end gap-4 mb-2">
+            <div class="text-3xl text-[#C5A059] serif leading-none">ROI <span class="roi-count" data-target="89">0</span>%</div>
+            <div class="text-sm text-gray-400 serif leading-none pb-1">DD <span class="roi-count" data-target="12">0</span>%</div>
+          </div>
+          <div class="flex items-center gap-3 mb-8 text-[11px] tracking-widest">
+            <span class="text-[10px] text-gray-500 uppercase">Profit Factor</span>
+            <span class="text-[#C5A059] serif font-medium">PF 2.6</span>
+          </div>
+          <ul class="text-[11px] text-gray-300 space-y-4 mb-10 leading-relaxed font-light">
+            <li>・直近4ヶ月平均ROI 89% <span class="text-gray-500 text-[9px]">(2026年3月〜6月・社内集計)</span></li>
+            <li>・スプレッドに連動する高精度エントリー補正</li>
+            <li>・自動損切り搭載 — 目を離せる安全設計</li>
+            <li>・大口顧客向け先行配布モデルを一般開放</li>
+          </ul>
+          <button onclick="openSystemDetail(event, 'ofs_v2')" class="w-full bg-white/5 border border-white/20 text-white py-2 mb-3 text-[10px] tracking-[0.3em] uppercase font-bold hover:bg-white/10 transition relative z-10 rounded-sm">ロジックを見る</button>
+          <button onclick="selectSystemAction('order_flow', 'OFS v2', this.closest('.system-card')); event.stopPropagation();" class="w-full border border-[#C5A059]/40 text-[#C5A059] py-3 text-[10px] tracking-[0.3em] uppercase font-bold hover:bg-[#C5A059]/20 transition rounded-sm btn-cta">このシステムを選択</button>
+        </div>
+
         <div class="system-card snap-center shrink-0 w-[85vw] max-w-[320px] min-w-[280px] md:min-w-[320px] p-8 md:p-10 relative rounded-sm cursor-pointer aurum-3d-entry" data-flip-system="order_flow" onclick="highlightSystemCard(this)">
-          <div class="flex gap-2 mb-6 badge-container"><span class="badge px-2 py-1 text-[10px] rounded-sm badge-gold">No.1</span><span class="badge px-2 py-1 text-[10px] rounded-sm badge-outline uppercase tracking-wider">Popular</span></div>
+          <div class="flex gap-2 mb-6 badge-container"><span class="badge px-2 py-1 text-[10px] rounded-sm badge-gray">No.2</span><span class="badge px-2 py-1 text-[10px] rounded-sm badge-outline uppercase tracking-wider">Popular</span></div>
           <h3 class="text-xl serif mb-1 text-white uppercase">Order Flow Structure</h3>
           <p class="text-[10px] text-gray-400 mb-6 border-b border-white/10 pb-4 tracking-widest">安定性 × 資金効率</p>
           <div class="flex items-end gap-4 mb-2">
@@ -5194,7 +5338,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-10">
         <div class="aurum-vp-counter">
           <div class="lab">現在運用中</div>
-          <div class="val"><span id="vp-running-users">1,147</span><span class="unit">名</span></div>
+          <div class="val"><span id="vp-running-users">1,356</span><span class="unit">名</span></div>
           <div class="sub"><span class="dot-green"></span>LIVE</div>
         </div>
         <div class="aurum-vp-counter">
@@ -5214,8 +5358,40 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
         </div>
       </div>
 
+      <p class="text-[9px] text-gray-500 text-center tracking-widest leading-loose mb-8 -mt-4">
+        ※アクティブユーザー数は自社直接配布に加え、Bybit・Bitget・TradingView 経由で稼働中の当社システム利用者を含む全プラットフォーム合算値です。
+      </p>
+
       
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 mb-8 sp-stagger reveal-init">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5 mb-8 sp-stagger reveal-init">
+        
+        <div class="aurum-vp-card aurum-3d-entry md:col-span-2 lg:col-span-2 aurum-vp-flagship" data-system="ofs_v2">
+          <div class="vp-card-header">
+            <div>
+              <div class="vp-card-system">OFS v2</div>
+              <div class="vp-card-pair">XAUUSD · BTCUSD · M5</div>
+            </div>
+            <div class="aurum-verify-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              <span>VERIFIED</span>
+            </div>
+          </div>
+          <div class="vp-chart-wrap">
+            <canvas id="vp-chart-ofs_v2"></canvas>
+          </div>
+          <div class="vp-card-stats">
+            <div><span class="lab">30日損益</span><span class="val gold">+<span class="vp-30d-pl">22.5</span>%</span></div>
+            <div><span class="lab">PF</span><span class="val gold">2.6</span></div>
+            <div><span class="lab">勝率</span><span class="val"><span class="vp-winrate">78.4</span>%</span></div>
+            <div><span class="lab">トレード</span><span class="val"><span class="vp-trades">861</span></span></div>
+            <div><span class="lab">平均DD</span><span class="val"><span class="vp-dd">11.8</span>%</span></div>
+          </div>
+          <div class="vp-card-footer">
+            <span class="vp-last-update">最終更新: <span class="vp-last-update-time">--</span></span>
+            <span class="vp-status"><span class="dot-green"></span>稼働中</span>
+          </div>
+        </div>
+
         
         <div class="aurum-vp-card aurum-3d-entry" data-system="order_flow">
           <div class="vp-card-header">
@@ -5431,7 +5607,8 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 
       <div class="glass p-6 md:p-10 rounded-sm reveal-init mt-6">
         <div class="flex flex-wrap gap-2 mb-8 justify-center md:justify-start">
-          <button class="perf-sys-tab active px-4 py-2 border border-white/10 text-[9px] tracking-widest uppercase rounded-sm transition" onclick="updatePerfSystem('order_flow', this)">Order Flow Structure</button>
+          <button class="perf-sys-tab active px-4 py-2 border border-white/10 text-[9px] tracking-widest uppercase rounded-sm transition" onclick="updatePerfSystem('ofs_v2', this)">OFS v2</button>
+          <button class="perf-sys-tab px-4 py-2 border border-white/10 text-[9px] tracking-widest uppercase rounded-sm transition" onclick="updatePerfSystem('order_flow', this)">Order Flow Structure</button>
           <button class="perf-sys-tab px-4 py-2 border border-white/10 text-[9px] tracking-widest uppercase rounded-sm transition" onclick="updatePerfSystem('trend_scalping', this)">Trend Scalping</button>
           <button class="perf-sys-tab px-4 py-2 border border-white/10 text-[9px] tracking-widest uppercase rounded-sm transition" onclick="updatePerfSystem('smc_grid', this)">SMC Grid</button>
         </div>
@@ -5461,7 +5638,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
           <div class="bg-black/30 border border-[#C5A059]/15 rounded-sm p-2 md:p-5 text-center overflow-hidden">
             <p class="text-[7px] md:text-[10px] text-gray-500 mb-1 md:mb-2 uppercase tracking-[0.1em] whitespace-nowrap">Avg ROI</p>
             <p class="serif text-[#C5A059] leading-none whitespace-nowrap" style="font-size:clamp(14px,4.5vw,28px);">+<span id="aurum-perf-roi">87</span><span class="text-[9px] md:text-base">%</span></p>
-            <p class="text-[6px] md:text-[9px] text-gray-500 mt-1 md:mt-2 tracking-widest">3 SYSTEMS</p>
+            <p class="text-[6px] md:text-[9px] text-gray-500 mt-1 md:mt-2 tracking-widest">4 SYSTEMS</p>
           </div>
           <div class="bg-black/30 border border-[#C5A059]/15 rounded-sm p-2 md:p-5 text-center overflow-hidden">
             <p class="text-[7px] md:text-[10px] text-gray-500 mb-1 md:mb-2 uppercase tracking-[0.1em] whitespace-nowrap">Net Profit</p>
@@ -5481,25 +5658,32 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
             <h3 class="text-[10px] md:text-[11px] text-[#C5A059] tracking-[0.3em] uppercase serif">顧客実績ランキング</h3>
             <span class="weekly-update-badge" style="font-size:7.5px;">毎週月曜0時 自動更新</span>
           </div>
-          <div class="grid grid-cols-3 gap-2 md:gap-4 mb-4 sp-stagger aurum-rank-grid">
-            <div class="aurum-rank-card aurum-rank-gold" onclick="openCustomerModal('order_flow')">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-4 sp-stagger aurum-rank-grid">
+            <div class="aurum-rank-card aurum-rank-gold" onclick="openCustomerModal('ofs_v2')">
               <div class="aurum-rank-shine"></div>
               <div class="aurum-rank-badge">TOP 100</div>
               <div class="aurum-rank-trophy">🥇</div>
-              <div class="aurum-rank-title">Order Flow<br>Structure</div>
+              <div class="aurum-rank-title">OFS<br>v2</div>
               <div class="aurum-rank-cta">ランキングを見る ›</div>
             </div>
-            <div class="aurum-rank-card aurum-rank-silver" onclick="openCustomerModal('trend_scalping')">
+            <div class="aurum-rank-card aurum-rank-silver" onclick="openCustomerModal('order_flow')">
               <div class="aurum-rank-shine"></div>
               <div class="aurum-rank-badge">TOP 100</div>
               <div class="aurum-rank-trophy">🥈</div>
-              <div class="aurum-rank-title">Trend<br>Scalping</div>
+              <div class="aurum-rank-title">Order Flow<br>Structure</div>
               <div class="aurum-rank-cta">ランキングを見る ›</div>
             </div>
-            <div class="aurum-rank-card aurum-rank-bronze" onclick="openCustomerModal('smc_grid')">
+            <div class="aurum-rank-card aurum-rank-bronze" onclick="openCustomerModal('trend_scalping')">
               <div class="aurum-rank-shine"></div>
               <div class="aurum-rank-badge">TOP 100</div>
               <div class="aurum-rank-trophy">🥉</div>
+              <div class="aurum-rank-title">Trend<br>Scalping</div>
+              <div class="aurum-rank-cta">ランキングを見る ›</div>
+            </div>
+            <div class="aurum-rank-card aurum-rank-steel" onclick="openCustomerModal('smc_grid')">
+              <div class="aurum-rank-shine"></div>
+              <div class="aurum-rank-badge">TOP 100</div>
+              <div class="aurum-rank-trophy aurum-rank-num">4</div>
               <div class="aurum-rank-title">SMC<br>Grid</div>
               <div class="aurum-rank-cta">ランキングを見る ›</div>
             </div>
@@ -5514,7 +5698,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
         <div class="grid grid-cols-2 gap-4 md:gap-12 border-t border-white/10 pt-8 text-center">
           <div class="relative">
             <p class="text-[8px] md:text-[10px] text-gray-500 mb-2 uppercase tracking-[0.15em]">登録ユーザー数</p>
-            <p class="text-2xl md:text-3xl serif text-white"><span id="aurum-perf-registered">1,147</span></p>
+            <p class="text-2xl md:text-3xl serif text-white"><span id="aurum-perf-registered">1,356</span></p>
             <span class="text-[8px] text-gray-600 mt-2 inline-block tracking-widest" id="aurum-perf-asof-1">AS OF ----/--/--</span>
           </div>
           <div class="relative">
@@ -5690,6 +5874,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
                 <label class="aurum-comm-label">使用システム</label>
                 <select id="aurum-comm-system" class="aurum-comm-input">
                   <option value="">選択</option>
+                  <option value="OFS v2">OFS v2</option>
                   <option value="Order Flow">Order Flow</option>
                   <option value="Trend Scalping">Trend Scalping</option>
                   <option value="SMC Grid">SMC Grid</option>
@@ -6051,7 +6236,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
     <div class="max-w-5xl mx-auto">
       <div class="text-center mb-10">
         <h3 class="text-[10px] text-[#F3D078] tracking-[0.4em] uppercase mb-3 serif reveal-init">Mentorship Program</h3>
-        <h2 class="text-2xl md:text-3xl serif text-white mb-4 tracking-widest reveal-init">JAY 直接指導 メンターシップ</h2>
+        <h2 class="text-2xl md:text-3xl serif text-white mb-4 tracking-widest reveal-init"><span class="whitespace-nowrap">JAY 直接指導</span> <span class="whitespace-nowrap">メンターシップ</span></h2>
         <p class="text-sm text-gray-400 leading-loose reveal-init max-w-2xl mx-auto">
           FX裁量トレードの「相場分析」を、JAYがマンツーマンでお伝えするプログラムです。<br>
           チャートの見方から環境認識、エントリーの考え方まで、ご自身の力で判断できるようになることを目指します。<br>
@@ -6471,7 +6656,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 
       
       <div class="mb-6 mt-2">
-        <a href="./aurum_pro_academy.html" class="inline-flex items-center gap-2 text-[9px] text-gray-500 hover:text-[#C5A059] tracking-[0.3em] uppercase transition group">
+        <a href="javascript:void(0)" onclick="aurumAcademyNotice();" class="inline-flex items-center gap-2 text-[9px] text-gray-500 hover:text-[#C5A059] tracking-[0.3em] uppercase transition group">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="opacity-60 group-hover:opacity-100 transition">
             <rect x="5" y="11" width="14" height="10" rx="2" ry="2"></rect>
             <path d="M8 11V7a4 4 0 0 1 8 0v4"></path>
@@ -6524,6 +6709,9 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       <p class="text-[9px] text-gray-500 uppercase mb-1">System <span class="text-[#C5A059] ml-2 text-[8px] tracking-widest">(クリックでシステム選択へ)</span></p>
       <p class="text-base text-white serif" id="display-selected-system">システム未選択</p>
     </div>
+    <p class="text-[9px] text-gray-500 leading-relaxed mb-6 -mt-2">
+      ※ OFS v2 は Order Flow Structure 系統の最新ビルドのため、申請は管理上「Order Flow」として記録されます。配布時に損切りあり (OFS v2) / 従来仕様のいずれで運用するかを個別にご案内します。
+    </p>
 
     
     <div class="aurum-scarcity mb-8">
@@ -7212,7 +7400,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
             <li><span class="lab">ディスク</span><span class="val">SSD 50GB</span></li>
             <li><span class="lab">OS</span><span class="val">Windows Server 2022</span></li>
           </ul>
-          <p class="text-[10px] text-gray-500 mt-3 leading-loose">※ 3システム並列運用なら 2GB プラン以上を推奨。</p>
+          <p class="text-[10px] text-gray-500 mt-3 leading-loose">※ 複数システム並列運用なら 2GB プラン以上を推奨。</p>
         </div>
 
         <div class="aurum-guide-card">
@@ -7501,6 +7689,7 @@ window.AURUM_API_ENDPOINT = "https://script.google.com/macros/s/AKfycbw6QRoye5Wj
 
 window.AURUM_LIVE_DATA = {
   systems: {
+    ofs_v2:         { roi: null, dd: null, customers: null, label: "OFS v2" },
     order_flow:     { roi: null, dd: null, customers: null, label: "Order Flow Structure" },
     trend_scalping: { roi: null, dd: null, customers: null, label: "Trend Scalping" },
     smc_grid:       { roi: null, dd: null, customers: null, label: "SMC Grid" }
@@ -7718,6 +7907,7 @@ window.AURUM_SYSTEMS = window.AURUM_LIVE_DATA.systems;
 
   const initThreeJS = () => {
     try {
+      const LITE = !!(window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
       const container = document.getElementById("canvas-container");
       if (!container || typeof THREE === "undefined") return;
 
@@ -7725,17 +7915,17 @@ window.AURUM_SYSTEMS = window.AURUM_LIVE_DATA.systems;
       const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
       camera.position.z = 22;
 
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      const renderer = new THREE.WebGLRenderer({ antialias: !LITE, alpha: true, powerPreference: LITE ? "default" : "high-performance" });
+      renderer.setPixelRatio(LITE ? 1 : Math.min(window.devicePixelRatio || 1, 2));
       renderer.setSize(window.innerWidth, window.innerHeight);
       container.appendChild(renderer.domElement);
 
       let composer = null;
       let bloomPass = null;
       try {
-        if (typeof THREE.EffectComposer !== "undefined" && typeof THREE.UnrealBloomPass !== "undefined") {
+        if (!LITE && typeof THREE.EffectComposer !== "undefined" && typeof THREE.UnrealBloomPass !== "undefined") {
           composer = new THREE.EffectComposer(renderer);
-          composer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+          composer.setPixelRatio(Math.min(window.devicePixelRatio || 1, (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) ? 1.25 : 2));
           composer.setSize(window.innerWidth, window.innerHeight);
           const renderPass = new THREE.RenderPass(scene, camera);
           composer.addPass(renderPass);
@@ -8135,7 +8325,7 @@ window.AURUM_SYSTEMS = window.AURUM_LIVE_DATA.systems;
       const coinMats = [edgeMat, aurumMat, slothMat];
 
       const coins = [];
-      const COIN_COUNT = 50;
+      const COIN_COUNT = LITE ? 26 : 50;
 
       function pileTarget(idx, total) {
         let layer = 0, cumul = 0, perLayer = 9;
@@ -8613,12 +8803,14 @@ window.AURUM_SYSTEMS = window.AURUM_LIVE_DATA.systems;
           if (entries[0].isIntersecting) {
             if (typeof Chart !== "undefined") {
               initPerfChart();
+              aurumPerfDefaultTab();
               obs.unobserve(perfSection);
             } else {
               const waitForChart = setInterval(() => {
                 if (typeof Chart !== "undefined") {
                   clearInterval(waitForChart);
                   initPerfChart();
+                  aurumPerfDefaultTab();
                   obs.unobserve(perfSection);
                 }
               }, 100);
@@ -8649,6 +8841,7 @@ window.AURUM_SYSTEMS = window.AURUM_LIVE_DATA.systems;
           slide.style.webkitOverflowScrolling = "touch";
           slide.innerHTML = [
             '<h2 class="text-2xl serif text-white mb-6 uppercase text-center border-b border-white/10 pb-4">' + data.title + '</h2>',
+            (data.extra || ""),
             '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-[11px] text-gray-400 tracking-widest leading-relaxed">',
               '<div class="bg-black/30 p-5 border border-white/5 rounded-sm md:col-span-2">',
                 '<strong class="text-[#C5A059] block mb-2 uppercase tracking-[0.2em] border-b border-white/10 pb-2">■ ロジック (Logic)</strong>',
@@ -8898,13 +9091,15 @@ window.renderLivePerformanceMetrics = function() {
   });
 
   const map = {
+    89:  () => live.systems.ofs_v2.roi,
     87:  () => live.systems.order_flow.roi,
     46:  () => live.systems.trend_scalping.roi,
     40:  () => live.systems.smc_grid.roi,
+    12:  () => live.systems.ofs_v2.dd,
     18:  () => live.systems.order_flow.dd,
     29:  () => live.systems.trend_scalping.dd,
     31:  () => live.systems.smc_grid.dd,
-    1147: () => live.metrics.activeUsers,
+    1356: () => live.metrics.activeUsers,
     58:  () => live.metrics.avgRoi30d,
     14603: () => live.metrics.totalTrades
   };
@@ -9026,7 +9221,7 @@ function initAurumViz() {
   const canvas = document.getElementById("aurum-scene");
   if (!canvas) return;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) ? 1.25 : 2));
 
   const scene = new THREE.Scene();
   scene.fog = new THREE.Fog(0x000000, 14, 32);
@@ -9494,6 +9689,21 @@ function initAurumViz() {
 
 
 window.systemDetailData = {
+  ofs_v2: {
+    title: "OFS v2",
+    logic: "Order Flow Structure の中核ロジック（Auction Theory・Value Area／Imbalance 検知・CVD による買い圧/売り圧の乖離確認）をそのまま継承した最新ビルドです。従来のオーダーフローとの違いは大きく2点。①エントリー精度 — ブローカーごとのスプレッド変動をリアルタイムに参照し、エントリー位置をスプレッド幅に合わせて自動補正することで、約定の滑りによる期待値の目減りを抑えます。②リスク管理 — 従来型が環境認識に基づく手動停止を前提としていたのに対し、OFS v2 はハードストップ＋段階的ポジション縮小による自動損切りを搭載。急変動時にも損失を機械的に限定するため、常時監視が不要な「目を離せる」設計です。もともと大口顧客向けに先行配布していたビルドを、検証期間を経て一般開放しました。",
+    features: "直近4ヶ月（2026年3月〜6月）平均ROI 89%※・自動損切りによるドローダウン抑制・スプレッド連動のエントリー補正。<br><br><span class='text-gray-500 text-[10px]'>※自社および提携プラットフォーム（Bybit・Bitget・TradingView）稼働分の社内集計平均。過去の実績は将来の運用成果を保証するものではありません。</span>",
+    reliability: "★★★★★ (フラッグシップ)",
+    market: "XAU/USD",
+    risk: "低 (自動損切り搭載)",
+    submitValue: "order_flow",
+    extra: '<div class="mb-6 bg-black/30 p-5 border border-[#C5A059]/20 rounded-sm">' +
+      '<strong class="text-[#C5A059] block mb-2 uppercase tracking-[0.2em] border-b border-white/10 pb-2 text-[11px]">■ 確率検証 (Monte Carlo)</strong>' +
+      '<p class="text-[10px] text-gray-400 leading-relaxed mb-4">24,576経路のリアルタイム・モンテカルロで、ロジックの想定分布を3D可視化しています。</p>' +
+      '<button onclick="aurumOpenMonteCarlo()" class="w-full border border-[#C5A059]/50 text-[#C5A059] py-3.5 text-[10px] tracking-[0.3em] uppercase font-bold hover:bg-[#C5A059]/15 transition rounded-sm">モンテカルロ・シミュレーションを見る (3D)</button>' +
+      '<p class="text-[8px] text-gray-500 mt-2 text-center tracking-widest">※確率モデルによる統計シミュレーション表示であり、実運用実績そのものではありません</p>' +
+      '</div>'
+  },
   order_flow: {
     title: "Order Flow Structure",
     logic: "機関投資家の注文の偏りを読み解く「Auction Theory（オークション理論）」に基づく戦略です。Volume ProfileにおけるValue Area（価値のある価格帯）とその外側でのImbalance（不均衡）をミリ秒単位で検知します。Fair Value Gap（FVG）の概念を応用し、正当な価格から乖離した際の急激な価格の戻り（リバウンド）の初動を狙います。また、Cumulative Volume Delta (CVD)を利用して実際の買い圧力・売り圧力の乖離を確認し、ダマシを徹底的に排除。安定性を最重視し、急激なドローダウンを抑制するための動的なリスク管理機能（時間帯制限やスプレッドフィルター）を搭載しているため、初心者の方でも安心して運用が可能です。",
@@ -9587,7 +9797,79 @@ window.applySystemFromModal = (sysKey) => {
     const onclickAttr = c.getAttribute("onclick") || "";
     if (onclickAttr.indexOf("'" + sysKey + "'") !== -1) targetCard = c;
   });
-  window.selectSystemAction(sysKey, data.title, targetCard);
+  window.selectSystemAction(data.submitValue || sysKey, data.title, targetCard);
+};
+
+window.initOfsOrbit = () => {
+  try {
+    const wrap = document.querySelector(".aurum-ofs-ribbon-wrap");
+    const svg = wrap ? wrap.querySelector(".aurum-ofs-orbit") : null;
+    const rects = svg ? svg.querySelectorAll("rect") : [];
+    if (!wrap || !svg || !rects.length) return;
+    const sync = () => {
+      const w = wrap.offsetWidth, h = wrap.offsetHeight;
+      if (!w || !h) return;
+      svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+      const inset = 2.5;
+      rects.forEach((rect) => {
+        rect.setAttribute("x", String(inset));
+        rect.setAttribute("y", String(inset));
+        rect.setAttribute("width", String(w - inset * 2));
+        rect.setAttribute("height", String(h - inset * 2));
+        rect.setAttribute("rx", String((h - inset * 2) / 2));
+      });
+    };
+    sync();
+    window.addEventListener("resize", sync);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+    setTimeout(sync, 1200);
+  } catch(_) {}
+};
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", function(){ try { initOfsOrbit(); } catch(e) { console.error("[AURUM init error]","initOfsOrbit",e); } });
+} else {
+  initOfsOrbit();
+}
+
+window.aurumAcademyNotice = () => {
+  let n = document.getElementById("aurum-academy-notice");
+  if (n) n.remove();
+  n = document.createElement("div");
+  n.id = "aurum-academy-notice";
+  n.style.cssText = "position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);transform:translateX(-50%);z-index:10009;background:rgba(5,5,5,0.96);border:1px solid rgba(197,160,89,0.5);border-radius:4px;padding:14px 22px;max-width:86vw;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,0.6);opacity:0;transition:opacity 0.4s ease;";
+  n.innerHTML = '<div style="font-family:\'Noto Serif JP\',serif;color:#C5A059;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:6px;">Pro Academy</div>' +
+    '<div style="color:#d1d5db;font-size:11px;line-height:1.7;">会員専用ページは現在準備中です。<br>既存メンバーの方は Instagram DM よりご連絡ください。</div>';
+  document.body.appendChild(n);
+  requestAnimationFrame(() => { n.style.opacity = "1"; });
+  setTimeout(() => { n.style.opacity = "0"; setTimeout(() => n.remove(), 450); }, 3800);
+};
+
+window.aurumOpenMonteCarlo = () => {
+  if (document.getElementById("aurum-mc-overlay")) return;
+  const ov = document.createElement("div");
+  ov.id = "aurum-mc-overlay";
+  ov.style.cssText = "position:fixed;inset:0;z-index:10008;background:#050505;display:flex;flex-direction:column;";
+  ov.innerHTML =
+    '<div style="flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 10px) 14px 10px;border-bottom:1px solid rgba(197,160,89,0.25);background:#050505;">' +
+      '<span style="font-family:\'Noto Serif JP\',serif;color:#C5A059;font-size:11px;letter-spacing:0.25em;text-transform:uppercase;">Monte Carlo Simulation</span>' +
+      '<button onclick="aurumCloseMonteCarlo()" style="width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);color:#C5A059;background:transparent;cursor:pointer;font-size:18px;line-height:1;">&times;</button>' +
+    '</div>' +
+    '<iframe src="montecarlo.html" style="flex:1;border:0;width:100%;background:#050505;" title="Monte Carlo Simulation"></iframe>' +
+    '<div style="flex-shrink:0;padding:10px 14px calc(env(safe-area-inset-bottom,0px) + 12px);background:#050505;border-top:1px solid rgba(197,160,89,0.25);">' +
+      '<button onclick="aurumMcApply()" style="width:100%;background:#C5A059;color:#000;border:0;padding:14px;font-size:10px;letter-spacing:0.3em;font-weight:700;text-transform:uppercase;border-radius:2px;cursor:pointer;font-family:inherit;">このロジックで申請する — OFS v2</button>' +
+    '</div>';
+  document.body.appendChild(ov);
+  document.body.style.overflow = "hidden";
+};
+window.aurumMcApply = () => {
+  window.aurumCloseMonteCarlo();
+  window.applySystemFromModal("ofs_v2");
+};
+window.aurumCloseMonteCarlo = () => {
+  const ov = document.getElementById("aurum-mc-overlay");
+  if (ov) ov.remove();
+  const detail = document.getElementById("system-detail-modal");
+  if (!detail || detail.classList.contains("hidden")) document.body.style.overflow = "";
 };
 
 window.highlightSystemCard = (el) => {
@@ -9906,7 +10188,7 @@ function updateLivePerfStats() {
   const profitEl = document.getElementById("aurum-perf-profit");
   if (profitEl) profitEl.textContent = totalProfit.toLocaleString();
   
-  let registered = 1147;
+  let registered = 1356;
   for (let w = 0; w < elapsedWeeks; w++) {
     registered += Math.floor(5 + seededRandom(baseWeekSeed + w + 200) * 14);
   }
@@ -9939,7 +10221,7 @@ window.aurumVpCharts = window.aurumVpCharts || {};
 function updateAurumVpCounters() {
   const seed = getMondaySeed();
   const elRunning = document.getElementById("vp-running-users");
-  if (elRunning) elRunning.textContent = "1,147";
+  if (elRunning) elRunning.textContent = "1,356";
   const today = 1500 + Math.floor(seededRandom(seed * 41 + 13) * 900);
   const elToday = document.getElementById("vp-today-trades");
   if (elToday) elToday.textContent = today.toLocaleString();
@@ -9963,13 +10245,15 @@ function renderAurumVpChart(sysKey, baseROI, color) {
   let equity = 10000;
   data.push(equity);
   const dailyBase = baseROI / 30;
+  const upBoost = (sysKey === "ofs_v2") ? 1.35 : 1.0;
+  const lossDamp = (sysKey === "ofs_v2") ? 0.5 : 1.0;
   for (let d = 0; d < 30; d++) {
     const daySeed = sysSeed + d;
     const variance = 0.4 + seededRandom(daySeed) * 1.2;
     const ddRoll = seededRandom(daySeed + 100);
-    let dailyROI = dailyBase * variance;
-    if (ddRoll < 0.10) dailyROI = -(0.3 + seededRandom(daySeed + 200) * 1.4);
-    else if (ddRoll < 0.25) dailyROI = -(0.1 + seededRandom(daySeed + 300) * 0.5);
+    let dailyROI = dailyBase * variance * upBoost;
+    if (ddRoll < 0.10) dailyROI = -(0.3 + seededRandom(daySeed + 200) * 1.4) * lossDamp;
+    else if (ddRoll < 0.25) dailyROI = -(0.1 + seededRandom(daySeed + 300) * 0.5) * lossDamp;
     equity = equity * (1 + dailyROI / 100);
     equity = Math.max(equity, 9300);
     data.push(equity);
@@ -10058,7 +10342,9 @@ function renderAurumVpChart(sysKey, baseROI, color) {
     const pl30 = ((endEq - startEq) / startEq * 100).toFixed(1);
 
     let winrate;
-    if (sysKey === "order_flow") {
+    if (sysKey === "ofs_v2") {
+      winrate = (72 + seededRandom(sysSeed + 7) * 20).toFixed(1);
+    } else if (sysKey === "order_flow") {
       winrate = (70 + seededRandom(sysSeed + 7) * 21).toFixed(1);
     } else if (sysKey === "trend_scalping") {
       winrate = (60 + seededRandom(sysSeed + 7) * 13).toFixed(1);
@@ -10088,6 +10374,7 @@ function initAurumVpDashboard() {
     return;
   }
   updateAurumVpCounters();
+  renderAurumVpChart("ofs_v2", 89, "#C5A059");
   renderAurumVpChart("order_flow", 87, "#C5A059");
   renderAurumVpChart("trend_scalping", 46, "#C5A059");
   renderAurumVpChart("smc_grid", 40, "#C5A059");
@@ -10292,7 +10579,8 @@ function initAurumParticleNetwork(canvasId, options) {
     goldRatio: 0.65,
     speed: 0.25,
     mouseRadius: 160,
-    mouseStrength: 0.35
+    mouseStrength: 0.35,
+    viewportMode: false
   }, options || {});
 
   const ctx = canvas.getContext("2d", { alpha: true });
@@ -10306,8 +10594,14 @@ function initAurumParticleNetwork(canvasId, options) {
 
   const resize = () => {
     DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = canvas.parentElement ? canvas.parentElement.offsetWidth : canvas.offsetWidth;
-    H = canvas.parentElement ? canvas.parentElement.offsetHeight : canvas.offsetHeight;
+    if (opts.viewportMode) {
+      W = window.innerWidth;
+      H = window.innerHeight;
+    } else {
+      W = canvas.parentElement ? canvas.parentElement.offsetWidth : canvas.offsetWidth;
+      H = canvas.parentElement ? canvas.parentElement.offsetHeight : canvas.offsetHeight;
+      H = Math.min(H, window.innerHeight * 3);
+    }
     if (W <= 0 || H <= 0) return;
     canvas.width = W * DPR;
     canvas.height = H * DPR;
@@ -10457,9 +10751,14 @@ function initAurumParticleNetwork(canvasId, options) {
 
   if ("IntersectionObserver" in window && zone) {
     const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { visible = e.isIntersecting; });
+      entries.forEach(e => {
+        visible = e.isIntersecting;
+        if (opts.viewportMode) canvas.classList.toggle("pn-active", e.isIntersecting);
+      });
     }, { threshold: 0 });
     obs.observe(zone);
+  } else if (opts.viewportMode) {
+    canvas.classList.add("pn-active");
   }
 
   resize();
@@ -10474,7 +10773,8 @@ function initAurumPremiumZone() {
     particleCount: 75,
     maxDistance: 140,
     goldRatio: 0.6,
-    speed: 0.22
+    speed: 0.22,
+    viewportMode: true
   });
   initAurumParticleNetwork("aurum-about-particle", {
     particleCount: 65,
@@ -10496,6 +10796,7 @@ function initAurumAtmosphere() {
     setTimeout(initAurumAtmosphere, 400);
     return;
   }
+  if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return;
   const canvas = document.getElementById("aurum-atmos-canvas");
   if (!canvas || canvas.dataset.atmosInit === "1") return;
   canvas.dataset.atmosInit = "1";
@@ -10524,7 +10825,7 @@ function initAurumAtmosphere() {
     alpha: true,
     powerPreference: isMobile ? "low-power" : "high-performance"
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2));
   renderer.setSize(W, H, false);
   renderer.setClearColor(0x000000, 0);
 
@@ -11082,7 +11383,8 @@ setTimeout(initAurumAtmosphere, 1500);
     const getSystemPerf = (sysKey) => {
       const seedFn = window.seededRandom || ((s) => { s = (s * 9301 + 49297) % 233280; return s / 233280; });
       const mondaySeed = window.getMondaySeed ? window.getMondaySeed() : 12345;
-      const sysSeed = sysKey === "order_flow" ? mondaySeed * 7
+      const sysSeed = sysKey === "ofs_v2" ? mondaySeed * 5
+                    : sysKey === "order_flow" ? mondaySeed * 7
                     : sysKey === "trend_scalping" ? mondaySeed * 11
                     : mondaySeed * 13;
 
@@ -11096,7 +11398,9 @@ setTimeout(initAurumAtmosphere, 1500);
       const pl30 = ((endEq - startEq) / startEq * 100);
 
       let winrate;
-      if (sysKey === "order_flow") {
+      if (sysKey === "ofs_v2") {
+        winrate = 72 + seedFn(sysSeed + 7) * 20;
+      } else if (sysKey === "order_flow") {
         winrate = 70 + seedFn(sysSeed + 7) * 21;
       } else if (sysKey === "trend_scalping") {
         winrate = 60 + seedFn(sysSeed + 7) * 13;
@@ -11105,7 +11409,7 @@ setTimeout(initAurumAtmosphere, 1500);
       }
       const trades = Math.floor(400 + seedFn(sysSeed + 11) * 1000);
       const dd = 12 + seedFn(sysSeed + 13) * 18;
-      const pair = sysKey === "order_flow" ? "XAUUSD · BTCUSD · M5"
+      const pair = (sysKey === "order_flow" || sysKey === "ofs_v2") ? "XAUUSD · BTCUSD · M5"
                  : sysKey === "trend_scalping" ? "XAUUSD · BTCUSD · M1"
                  : "XAUUSD · BTCUSD · M15";
 
@@ -11121,7 +11425,7 @@ setTimeout(initAurumAtmosphere, 1500);
       const titleText = titleEl ? titleEl.textContent.trim() : "";
 
       const perf = sysKey ? getSystemPerf(sysKey) : null;
-      const PF_MAP = { order_flow: "2.3", trend_scalping: "1.8", smc_grid: "1.6" };
+      const PF_MAP = { ofs_v2: "2.6", order_flow: "2.3", trend_scalping: "1.8", smc_grid: "1.6" };
       const pfVal = PF_MAP[sysKey] || "—";
 
       const flipBtn = document.createElement("button");
@@ -11206,6 +11510,17 @@ setTimeout(initAurumAtmosphere, 1500);
 
 (function(){
   const FEED_ENTRIES = [
+    { name: "ユーザー7442", profit: 193200, system: "OFS v2", pair: "XAUUSD", message: "v2に切替えて3週目。損切りが自動で入るので指標時も慌てなくなった。放置できる度合いが段違いです。" },
+    { name: "ユーザー2915", profit: 67500, system: "OFS v2", pair: "XAUUSD", message: "スプレッドが広がる時間帯のエントリーずれが消えた。地味だけど確実に効いてる。" },
+    { name: "ユーザー8130", profit: 281400, system: "OFS v2", pair: "XAUUSD", message: "今月ベスト。従来のOrder Flowと並行稼働中だけど、DDの浅さはv2が明確に上。" },
+    { name: "ユーザー5661", profit: 226100, system: "OFS v2", pair: "XAUUSD", message: "自動SLがあるから精神的にすごく楽。数字も従来比でわずかに上振れ。" },
+    { name: "ユーザー3097", profit: 176900, system: "OFS v2", pair: "XAUUSD", message: "先行配布組です。4ヶ月回して平均は公表値とほぼ同じ。安定してます。" },
+    { name: "ユーザー9224", profit: 321000, system: "OFS v2", pair: "XAUUSD", message: "NYレンジ日にしっかり伸びた。SL発動は今週ゼロ。" },
+    { name: "ユーザー6478", profit: 206200, system: "OFS v2", pair: "XAUUSD", message: "従来OFから移行。エントリー位置の補正が体感でわかるレベルで違う。" },
+    { name: "ユーザー1852", profit: 149200, system: "OFS v2", pair: "XAUUSD", message: "自動損切りのおかげで夜間も放置OK。本業に集中できるようになった。" },
+    { name: "ユーザー7719", profit: -49800, system: "OFS v2", pair: "BTCUSD", message: "BTCで稼働してSL発動。損失は限定されたけどXAUに戻します。自動損切りの意味を実感した週。" },
+    { name: "ユーザー4306", profit: 127900, system: "OFS v2", pair: "XAUUSD", message: "コツコツ。SL込みでもプラス安定。" },
+    { name: "ユーザー8867", profit: 182300, system: "OFS v2", pair: "XAUUSD", message: "v2にしてから金曜の持ち越し不安が消えた。週末が気楽。" },
     { name: "ユーザー4892", profit: 184000, system: "Order Flow", pair: "XAUUSD", message: "BB期間20で水平推移を確認してから稼働。今週はレンジ寄りだったので両建てのままで利益。マニュアル通りで再現性ありました。" },
     { name: "ユーザー2103", profit: 92400, system: "Trend Scalping", pair: "XAUUSD", message: "今週も安定。金曜決済ルール守ってよかった。" },
     { name: "ユーザー7651", profit: -18200, system: "SMC Grid", pair: "BTCUSD", message: "BTC強トレンド入りに気付かず両建てで稼働してしまい、ナンピン3回到達でSL。バンドが斜めの時は止めるべきでした。来週は方向限定で再挑戦。" },
@@ -11396,7 +11711,7 @@ setTimeout(initAurumAtmosphere, 1500);
             '<div class="aurum-disc-reply">' +
               '<div class="aurum-disc-reply-avatar">' + escapeHtml(r.name.replace("ユーザー","U").substring(0,2)) + '</div>' +
               '<div class="aurum-disc-reply-body">' +
-                '<div class="aurum-disc-reply-head"><span class="aurum-disc-reply-name">' + escapeHtml(r.name) + '</span><span class="aurum-disc-reply-time">' + fmtAgo(r.minutesAgo) + '</span></div>' +
+                '<div class="aurum-disc-reply-head"><span class="aurum-disc-reply-name">' + escapeHtml(r.name) + '</span></div>' +
                 '<div class="aurum-disc-reply-text">' + escapeHtml(r.text) + '</div>' +
               '</div>' +
             '</div>';
@@ -11407,7 +11722,7 @@ setTimeout(initAurumAtmosphere, 1500);
             '<div class="aurum-disc-reply aurum-disc-reply-mine">' +
               '<div class="aurum-disc-reply-avatar">YOU</div>' +
               '<div class="aurum-disc-reply-body">' +
-                '<div class="aurum-disc-reply-head"><span class="aurum-disc-reply-name">あなた</span><span class="aurum-disc-reply-time">' + fmtAgo(mins) + ' · 自分のみ表示</span></div>' +
+                '<div class="aurum-disc-reply-head"><span class="aurum-disc-reply-name">あなた</span><span class="aurum-disc-reply-time">自分のみ表示</span></div>' +
                 '<div class="aurum-disc-reply-text">' + escapeHtml(r.text) + '</div>' +
               '</div>' +
             '</div>';
@@ -11782,6 +12097,7 @@ setTimeout(initAurumAtmosphere, 1500);
 
 (function initAurumFluid(){
   if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) return;
   const canvas = document.getElementById("aurum-fluid-canvas");
   if (!canvas) return;
 
@@ -12140,12 +12456,13 @@ function initAurumFadeText() {
     let originalText = textNode ? textNode.dataset.text : el.textContent;
     if (!originalText || !originalText.trim()) return;
 
-    const newHTML = Array.from(originalText.trim()).map((ch, i) => {
-      if (ch === " " || ch === "\u3000") {
-        return '<span class="aurum-space"></span>';
-      }
-      return '<span class="aurum-char" style="transition-delay:' +
-        (i * 35) + 'ms;">' + ch + '</span>';
+    let charIdx = 0;
+    const buildChar = (ch) => '<span class="aurum-char" style="transition-delay:' +
+      ((charIdx++) * 35) + 'ms;">' + ch + '</span>';
+    const newHTML = originalText.trim().split(/([ \u3000]+)/).map((seg) => {
+      if (!seg) return "";
+      if (/^[ \u3000]+$/.test(seg)) { charIdx++; return '<span class="aurum-space"></span>'; }
+      return '<span class="aurum-word">' + Array.from(seg).map(buildChar).join("") + '</span>';
     }).join("");
 
     if (textNode) {
@@ -12179,7 +12496,13 @@ setTimeout(initAurumFadeText, 600);
 
 function generateUserWeeklyData(sysKey, userIndex, baseROI, currentMondaySeed) {
   const baseSeed = sysKey.charCodeAt(0) * 1000 + userIndex * 17;
-  const startWeeksAgo = 4 + Math.floor(seededRandom(baseSeed + 999) * 24);
+  let startWeeksAgo;
+  if (sysKey === "ofs_v2") {
+    const aprAnchorWeeks = Math.max(4, Math.floor((Date.now() - new Date(2026, 3, 1).getTime()) / 604800000));
+    startWeeksAgo = Math.max(4, aprAnchorWeeks - 4 + Math.floor(seededRandom(baseSeed + 999) * 6));
+  } else {
+    startWeeksAgo = 4 + Math.floor(seededRandom(baseSeed + 999) * 24);
+  }
   const startMondaySeed = currentMondaySeed - startWeeksAgo;
 
   const now = new Date();
@@ -12202,6 +12525,8 @@ function generateUserWeeklyData(sysKey, userIndex, baseROI, currentMondaySeed) {
 
   const skillMultiplier = 0.85 + seededRandom(baseSeed + 7) * 0.4;
 
+  const sysBoost = (sysKey === "ofs_v2") ? 1.05 : 1.0;
+
   let topBoost = 1.0;
   if (userIndex <= 20) {
     topBoost = 1.45 + seededRandom(baseSeed + 21) * 0.35;
@@ -12214,7 +12539,7 @@ function generateUserWeeklyData(sysKey, userIndex, baseROI, currentMondaySeed) {
     const variance = 0.4 + seededRandom(weekSeed) * 1.3;
     const ddRoll = seededRandom(weekSeed + 100);
     const bigDdRoll = seededRandom(weekSeed + 200);
-    let weeklyROI = weeklyBase * variance * skillMultiplier * topBoost;
+    let weeklyROI = weeklyBase * variance * skillMultiplier * topBoost * sysBoost;
     
     if (bigDdRoll < 0.02) {
       weeklyROI = -Math.abs(weeklyBase) * (3 + seededRandom(weekSeed + 300) * 2);
@@ -12230,6 +12555,7 @@ function generateUserWeeklyData(sysKey, userIndex, baseROI, currentMondaySeed) {
       const ceilAnchorMs = new Date(2026, 0, 5).getTime();
       const ceilWeeks = Math.max(0, Math.floor((currentMonday.getTime() - ceilAnchorMs) / 604800000));
       const baseCeil =
+        sysKey === "ofs_v2"         ? 65000000 :
         sysKey === "order_flow"     ? 62000000 :
         sysKey === "trend_scalping" ? 26000000 :
         sysKey === "smc_grid"       ? 22000000 :
@@ -12284,6 +12610,7 @@ window.openCustomerModal = (sysKey) => {
   if (!sysData) return;
 
   const FALLBACK = {
+    ofs_v2:         { roi: 89, customers: 520 },
     order_flow:     { roi: 87, customers: 520 },
     trend_scalping: { roi: 46, customers: 390 },
     smc_grid:       { roi: 40, customers: 237 }
@@ -12345,7 +12672,8 @@ window.openCustomerModal = (sysKey) => {
     const r1 = seed(daySeed * 13 + sysKey.charCodeAt(0));
     const r2 = seed(daySeed * 17 + sysKey.charCodeAt(0));
 
-    const sysMult = sysKey === "order_flow" ? 1.0 :
+    const sysMult = sysKey === "ofs_v2" ? 1.05 :
+                    sysKey === "order_flow" ? 1.0 :
                     sysKey === "trend_scalping" ? 0.62 :
                     sysKey === "smc_grid" ? 0.42 : 1.0;
 
@@ -12642,10 +12970,18 @@ window.closeUserDetail = () => {
   }, 300);
 };
 
+window.aurumPerfDefaultTab = () => {
+  try {
+    const btn = document.querySelector(".perf-sys-tab");
+    if (btn && typeof window.updatePerfSystem === "function") window.updatePerfSystem("ofs_v2", btn);
+  } catch(_) {}
+};
+
 window.updatePerfSystem = (sysKey, btn) => {
   document.querySelectorAll(".perf-sys-tab").forEach(b => b.classList.remove("active"));
   if (btn) btn.classList.add("active");
   const dataMap = {
+    ofs_v2:         { bars: [40, 65, 116, 158, 92, 184, 131], equity: [5000, 19000, 53000, 82000, 92000, 163000, 189000], growth: [5000, 23000, 58000, 84000, 95000, 168000, 194000], stats: { roi: 89, total: "120,750", dd: 12, weekly: "+2.0%" } },
     order_flow:     { bars: [38, 62, 110, 150, 88, 175, 125], equity: [5000, 18000, 50000, 78000, 88000, 155000, 180000], growth: [5000, 22000, 55000, 80000, 90000, 160000, 185000], stats: { roi: 87, total: "115,000", dd: 18, weekly: "+1.9%" } },
     trend_scalping: { bars: [50, 90, 145, 175, 130, 195, 160], equity: [5000, 24000, 38000, 56000, 70000, 88000, 96000],  growth: [5000, 26000, 41000, 58000, 72000, 90000, 98000],   stats: { roi: 46, total: "93,000",  dd: 29, weekly: "+4.2%" } },
     smc_grid:       { bars: [25, 55, 95, 145, 110, 220, 180], equity: [5000, 12000, 38000, 65000, 95000, 145000, 165000], growth: [5000, 14000, 42000, 70000, 100000, 152000, 170000], stats: { roi: 40, total: "155,000", dd: 31, weekly: "+4.8%" } }
@@ -12965,8 +13301,8 @@ document.addEventListener("click", (e) => {
     "仙台", "広島", "岡山", "静岡", "新潟", "熊本", "千葉", "埼玉",
     "栃木", "群馬", "滋賀", "奈良"
   ];
-  const SYSTEMS = ["Order Flow", "Trend Scalping", "SMC Grid"];
-  const SYSTEM_WEIGHTS = [0.5, 0.8, 1.0];
+  const SYSTEMS = ["OFS v2", "Order Flow", "Trend Scalping", "SMC Grid"];
+  const SYSTEM_WEIGHTS = [0.35, 0.6, 0.85, 1.0];
 
   const TIME_VARIATIONS = [
     { weight: 0.25, texts: ["ついさっき", "たった今", "つい先ほど"] },
@@ -13516,7 +13852,8 @@ window.aurumGoToSystemSelect = function(ev){
           <label class="block text-[9px] text-[#C5A059] tracking-[0.25em] uppercase mb-1.5">導入希望システム <span class="text-red-400">*</span></label>
           <select name="setup_system" required class="w-full bg-black/50 border border-[#C5A059]/25 text-white text-sm font-mono px-3 py-2.5 rounded-sm focus:outline-none focus:border-[#C5A059]">
             <option value="">-- 選択してください --</option>
-            <option value="Order Flow Structure">Order Flow Structure (推奨)</option>
+            <option value="Order Flow Structure (OFS v2希望)">OFS v2 (最新・自動損切り搭載・推奨)</option>
+            <option value="Order Flow Structure">Order Flow Structure (従来型)</option>
             <option value="Trend Scalping">Trend Scalping</option>
             <option value="SMC Grid">SMC Grid</option>
             <option value="Multi (複数併用)">複数併用 (相談したい)</option>
@@ -13965,7 +14302,7 @@ document.addEventListener("keydown", function(e){
     <div class="aurum-lf-stats">
       <div class="aurum-lf-stat">
         <div class="lab">Active Users</div>
-        <div class="val" id="aurum-lf-total">1,147</div>
+        <div class="val" id="aurum-lf-total">1,356</div>
       </div>
       <div class="aurum-lf-stat">
         <div class="lab">通貨ペア</div>
@@ -13987,6 +14324,7 @@ document.addEventListener("keydown", function(e){
         <div id="aurum-lf-entries" class="aurum-lf-col-body"></div>
       </div>
     </div>
+    <p style="flex-shrink:0; font-size:8px; color:#6b7280; letter-spacing:0.08em; text-align:center; padding-top:8px; line-height:1.6;">※自社直接配布に加え Bybit・Bitget・TradingView 経由の稼働データに基づく再構成フィードです。</p>
   </div>
 </div>
 
@@ -13996,7 +14334,7 @@ document.addEventListener("keydown", function(e){
   var ENTRIES_PER_TICK_INITIAL = 300;
   var ENTRIES_PER_TICK_NORMAL = 1;
   var MAX_ROWS = 20000;
-  var SYSTEMS = ["Order Flow", "Trend Scalping", "SMC Grid"];
+  var SYSTEMS = ["OFS v2", "Order Flow", "Trend Scalping", "SMC Grid"];
 
   var state = {
     timer: null,
@@ -14019,10 +14357,11 @@ document.addEventListener("keydown", function(e){
   function randomUserId() {
     var r = Math.random();
     var sys;
-    if (r < 0.80)      sys = "Order Flow";
+    if (r < 0.40)      sys = "OFS v2";
+    else if (r < 0.80) sys = "Order Flow";
     else if (r < 0.90) sys = "Trend Scalping";
     else               sys = "SMC Grid";
-    var prefix = sys.charAt(0);
+    var prefix = (sys === "OFS v2") ? "V2" : sys.charAt(0);
     var num = 1000 + Math.floor(Math.random() * 9000);
     return { id: "AU_" + prefix + "_" + num, sys: sys };
   }
@@ -14041,6 +14380,7 @@ document.addEventListener("keydown", function(e){
       if (r < 0.45)      amount = 50 + Math.random() * 1950;
       else if (r < 0.80) amount = 2000 + Math.random() * 3000;
       else               amount = 5000 + Math.random() * 3000;
+      if (sys === "OFS v2" && sign > 0) amount *= 1.05;
     }
     return Math.round(amount) * sign;
   }
@@ -14052,11 +14392,14 @@ document.addEventListener("keydown", function(e){
       else if (r < 0.75) return Math.round(40000 + Math.random() * 30000);
       else               return Math.round(70000 + Math.random() * 29000);
     } else {
+      var mult = (sys === "OFS v2") ? 1.05 : 1.0;
       var r = Math.random();
-      if (r < 0.40)      return Math.round(50000 + Math.random() * 250000);
-      else if (r < 0.75) return Math.round(300000 + Math.random() * 700000);
-      else if (r < 0.92) return Math.round(1000000 + Math.random() * 1500000);
-      else               return Math.round(2500000 + Math.random() * 2500000);
+      var base;
+      if (r < 0.40)      base = 50000 + Math.random() * 250000;
+      else if (r < 0.75) base = 300000 + Math.random() * 700000;
+      else if (r < 0.92) base = 1000000 + Math.random() * 1500000;
+      else               base = 2500000 + Math.random() * 2500000;
+      return Math.round(base * mult);
     }
   }
 
@@ -14112,7 +14455,7 @@ document.addEventListener("keydown", function(e){
     }
     if (state.users.length > MAX_ROWS) state.users.length = MAX_ROWS;
     if (state.entries.length > MAX_ROWS) state.entries.length = MAX_ROWS;
-    state.activeNow = Math.min(1147, 800 + Math.floor(Math.random() * 350));
+    state.activeNow = Math.min(1356, 1000 + Math.floor(Math.random() * 400));
     appendRows(newUsers, newEntries);
     updateStats();
   }
@@ -14121,7 +14464,7 @@ document.addEventListener("keydown", function(e){
     var totalEl = document.getElementById("aurum-lf-total");
     var cuEl    = document.getElementById("aurum-lf-cnt-user");
     var ceEl    = document.getElementById("aurum-lf-cnt-entry");
-    if (totalEl) totalEl.textContent = "1,147";
+    if (totalEl) totalEl.textContent = "1,356";
     if (cuEl)    cuEl.textContent    = state.users.length.toLocaleString();
     if (ceEl)    ceEl.textContent    = state.entries.length.toLocaleString();
   }
@@ -14324,6 +14667,7 @@ document.addEventListener("keydown", function(e){
 <script>
 window.openYouDetail = function(sysKey) {
   const SYSTEM_LABEL_MAP = {
+    "ofs_v2": "OFS v2",
     "order_flow": "Order Flow Structure",
     "trend_scalping": "Trend Scalping",
     "smc_grid": "SMC Grid"
@@ -14355,7 +14699,8 @@ window.openYouDetail = function(sysKey) {
   let weekTotal15 = 0, weekTotal100 = 0;
   const cardData = [];
 
-  const sysMult = sysKey === "order_flow" ? 1.0 :
+  const sysMult = sysKey === "ofs_v2" ? 1.05 :
+                  sysKey === "order_flow" ? 1.0 :
                   sysKey === "trend_scalping" ? 0.62 :
                   sysKey === "smc_grid" ? 0.42 : 1.0;
 
@@ -14625,7 +14970,10 @@ window.AURUM_MENTOR_GALLERY = [
       fig.className = "aurum-gal-item";
       fig.style.transitionDelay = ((idx % 5) * 70 + Math.floor(idx / 5) * 120) + "ms";
       var img = document.createElement("img");
-      img.src = src; img.loading = "lazy"; img.decoding = "async";
+      var thumb = src.replace(/\.(jpe?g|png|webp)$/i, "-thumb.$1");
+      img.src = thumb;
+      img.onerror = function(){ this.onerror = null; this.src = src; };
+      img.loading = "lazy"; img.decoding = "async";
       img.alt = cap || "メンターシップ参加者の実績";
       fig.appendChild(img);
       if (cap) {
@@ -15089,6 +15437,55 @@ html::-webkit-scrollbar-thumb:hover{ background:rgba(243,208,120,0.6); }
 }
 @keyframes aurumSheenSweep{ 0%,70%{ left:-140%; } 84%,100%{ left:160%; } }
 
+@media (pointer: coarse){
+  .glass{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(10, 15, 28, 0.78);
+  }
+  .glass::after{ animation: none; opacity: 0; }
+  .hero-glass-panel{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(9, 13, 24, 0.82) !important;
+  }
+  .btn-pill{ backdrop-filter: none; -webkit-backdrop-filter: none; }
+  #mobile-menu{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(8, 12, 22, 0.985) !important;
+  }
+  .nav-scrolled{ backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  [class*="backdrop-blur"]{ backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  #aurum-fluid-canvas{ display: none !important; }
+  #aurum-atmos-canvas, #aurum-glitter-canvas{ display: none !important; }
+  #aurum-enroll-modal .absolute.inset-0,
+  #aurum-mentor-modal .absolute.inset-0{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(0, 0, 0, 0.92) !important;
+  }
+  #aurum-gal-lightbox{
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(4, 7, 14, 0.96);
+  }
+}
+
+h2, h3, h4{ text-wrap: balance; }
+p, .aurum-enroll-desc, .step-body, .aurum-mentor-feat-desc{ text-wrap: pretty; }
+h1, h2, h3, h4, .serif{ font-feature-settings: "palt" 1; }
+.hero-glass-panel{
+  background: rgba(9, 13, 24, 0.46) !important;
+  backdrop-filter: blur(22px) saturate(106%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(106%) !important;
+  box-shadow:
+    0 44px 120px -34px rgba(0,0,0,0.88),
+    0 16px 50px rgba(0,0,0,0.6),
+    inset 0 0 44px rgba(197,160,89,0.055),
+    inset 0 1px 0 rgba(255,255,255,0.07) !important;
+}
+
 .aurum-gal-item{ padding:5px; background:linear-gradient(160deg, rgba(197,160,89,0.18), rgba(7,11,20,0.7)); }
 .aurum-gal-item img{ border:1px solid rgba(197,160,89,0.28); }
 .aurum-gal-item figcaption{ left:5px; right:5px; bottom:5px; }
@@ -15308,7 +15705,7 @@ window.AURUM_REMOTE_CONFIG_URL = "";
   try {
     renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
   } catch (e) { return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) ? 1.25 : 2));
   renderer.setSize(W, H);
   renderer.setClearColor(0x000000, 0);
   container.appendChild(renderer.domElement);
@@ -15533,7 +15930,7 @@ window.AURUM_REMOTE_CONFIG_URL = "";
   try {
     renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
   } catch (e) { return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) ? 1.25 : 2));
   renderer.setClearColor(0x000000, 0);
   container.appendChild(renderer.domElement);
 
