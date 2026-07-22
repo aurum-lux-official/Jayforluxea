@@ -5250,7 +5250,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
             <li>・大口顧客向け先行配布モデルを一般開放</li>
           </ul>
           <button onclick="openSystemDetail(event, 'ofs_v2')" class="w-full bg-white/5 border border-white/20 text-white py-2 mb-3 text-[10px] tracking-[0.3em] uppercase font-bold hover:bg-white/10 transition relative z-10 rounded-sm">ロジックを見る</button>
-          <button onclick="selectSystemAction('order_flow', 'OFS v2', this.closest('.system-card')); event.stopPropagation();" class="w-full border border-[#C5A059]/40 text-[#C5A059] py-3 text-[10px] tracking-[0.3em] uppercase font-bold hover:bg-[#C5A059]/20 transition rounded-sm btn-cta">このシステムを選択</button>
+          <button onclick="selectSystemAction('ofs_v2', 'OFS v2', this.closest('.system-card')); event.stopPropagation();" class="w-full border border-[#C5A059]/40 text-[#C5A059] py-3 text-[10px] tracking-[0.3em] uppercase font-bold hover:bg-[#C5A059]/20 transition rounded-sm btn-cta">このシステムを選択</button>
         </div>
 
         <div class="system-card snap-center shrink-0 w-[85vw] max-w-[320px] min-w-[280px] md:min-w-[320px] p-8 md:p-10 relative rounded-sm cursor-pointer aurum-3d-entry" data-flip-system="order_flow" onclick="highlightSystemCard(this)">
@@ -6710,7 +6710,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
       <p class="text-base text-white serif" id="display-selected-system">システム未選択</p>
     </div>
     <p class="text-[9px] text-gray-500 leading-relaxed mb-6 -mt-2">
-      ※ OFS v2 は Order Flow Structure 系統の最新ビルドのため、申請は管理上「Order Flow」として記録されます。配布時に損切りあり (OFS v2) / 従来仕様のいずれで運用するかを個別にご案内します。
+      ※ OFS v2 は Order Flow Structure 系統の最新ビルド（自動損切り搭載）です。配布時の運用仕様（損切りあり / 従来仕様）は個別にご案内します。
     </p>
 
     
@@ -9695,7 +9695,7 @@ window.systemDetailData = {
     reliability: "★★★★★ (フラッグシップ)",
     market: "XAU/USD",
     risk: "低 (自動損切り搭載)",
-    submitValue: "order_flow",
+    submitValue: "ofs_v2",
     extra: '<div class="mb-6 bg-black/30 p-5 border border-[#C5A059]/20 rounded-sm">' +
       '<strong class="text-[#C5A059] block mb-2 uppercase tracking-[0.2em] border-b border-white/10 pb-2 text-[11px]">■ 確率検証 (Monte Carlo)</strong>' +
       '<p class="text-[10px] text-gray-400 leading-relaxed mb-4">24,576経路のリアルタイム・モンテカルロで、ロジックの想定分布を3D可視化しています。</p>' +
