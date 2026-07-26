@@ -1419,6 +1419,13 @@ section .max-w-xl {
   border-radius: 3px;
   font-family: 'Inter', sans-serif;
 }
+.aurum-disc-meta-qbadge {
+  color: #0A0F1C;
+  background: linear-gradient(135deg, #F3D078, #C5A059);
+  border-color: rgba(243,208,120,0.6);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
 .aurum-disc-meta-profit {
   font-size: 11px;
   font-weight: 700;
@@ -4985,7 +4992,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
         </a>
         <a href="javascript:void(0)" onclick="closeMenu(); setTimeout(()=>{ const el=document.getElementById('community'); if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); } }, 300);" class="mobile-link-special w-full justify-center">
           <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-          <span>週次稼働結果コミュニティ</span>
+          <span>稼働ユーザーの質問所</span>
         </a>
         <a href="javascript:void(0)" onclick="aurumAcademyNotice(); closeMenu();" class="mobile-link-special w-full justify-center">
           <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
@@ -5791,19 +5798,18 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 
   
   
-  
   <section id="community" class="py-14 px-4 md:px-6 border-t border-white/5 relative z-10">
     <div class="max-w-3xl mx-auto">
       <h3 class="text-[10px] text-[#C5A059] tracking-[0.4em] uppercase mb-3 serif text-center">Verified Community</h3>
-      <h2 class="text-xl md:text-2xl serif text-white mb-3 tracking-widest text-center sp-mask-line aurum-fade-text"><span data-text="認証済ユーザー様の週次稼働結果">認証済ユーザー様の週次稼働結果</span></h2>
+      <h2 class="text-xl md:text-2xl serif text-white mb-3 tracking-widest text-center sp-mask-line aurum-fade-text"><span data-text="稼働ユーザーの質問所">稼働ユーザーの質問所</span></h2>
       <p class="text-[11px] md:text-xs text-gray-400 max-w-2xl mx-auto leading-loose text-center mb-3">
-        実際にAURUM EAをご利用中のユーザー様による<strong class="text-[#C5A059]">週次稼働結果報告</strong>です。<br>
+        実際にAURUM EAをご利用中のユーザー様による<strong class="text-[#C5A059]">質問と回答の場</strong>です。設定・稼働時間・相場判断など、運用の疑問はここで解決できます。<br>
         プライバシー保護のため、ハンドルネーム表記となっています。
       </p>
       <div class="flex flex-wrap justify-center items-center gap-2 mb-8">
-        <span class="aurum-comm-badge"><span class="dot-green"></span>実ユーザー報告</span>
+        <span class="aurum-comm-badge"><span class="dot-green"></span>実ユーザーQ&amp;A</span>
         <span class="aurum-comm-badge">VERIFIED</span>
-        <span class="aurum-comm-badge">毎週更新</span>
+        <span class="aurum-comm-badge">毎日更新</span>
       </div>
 
       
@@ -5811,7 +5817,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
         <div class="aurum-discord-header">
           <div class="aurum-discord-channel">
             <span class="aurum-discord-hash">#</span>
-            <span class="aurum-discord-channel-name">weekly-results</span>
+            <span class="aurum-discord-channel-name">qa-board</span>
           </div>
           <div class="aurum-discord-online">
             <span class="dot-green"></span>
@@ -5824,7 +5830,7 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
         <div class="aurum-discord-footer">
           <button type="button" id="aurum-discord-post-btn" class="aurum-discord-post-btn">
             <span class="aurum-discord-plus">+</span>
-            <span>週次結果を投稿する</span>
+            <span>質問を投稿する</span>
           </button>
         </div>
       </div>
@@ -5860,50 +5866,37 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
 
           
           <div id="aurum-comm-post-step" class="aurum-comm-post-step" style="display:none;">
-            <h4 class="aurum-comm-post-title">週次稼働結果を投稿</h4>
+            <h4 class="aurum-comm-post-title">質問を投稿</h4>
             <div class="aurum-comm-auth-success">
               <span class="aurum-comm-check">✓</span>
               <span>認証完了 - <span class="aurum-comm-user-name">ユーザー</span></span>
             </div>
-            <div class="aurum-comm-form-grid-3">
-              <div>
-                <label class="aurum-comm-label">今週の収益</label>
-                <input type="text" id="aurum-comm-profit" placeholder="例: +120,000" class="aurum-comm-input" inputmode="numeric">
-              </div>
-              <div>
-                <label class="aurum-comm-label">使用システム</label>
-                <select id="aurum-comm-system" class="aurum-comm-input">
-                  <option value="">選択</option>
-                  <option value="OFS v2">OFS v2</option>
-                  <option value="Order Flow">Order Flow</option>
-                  <option value="Trend Scalping">Trend Scalping</option>
-                  <option value="SMC Grid">SMC Grid</option>
-                  <option value="Multi">複数併用</option>
-                </select>
-              </div>
-              <div>
-                <label class="aurum-comm-label">通貨ペア</label>
-                <select id="aurum-comm-pair" class="aurum-comm-input">
-                  <option value="XAUUSD">XAUUSD</option>
-                  <option value="BTCUSD">BTCUSD</option>
-                  <option value="MULTI">複数</option>
-                </select>
-              </div>
+            <div>
+              <label class="aurum-comm-label">対象システム</label>
+              <select id="aurum-comm-system" class="aurum-comm-input">
+                <option value="">選択</option>
+                <option value="OFS v2">OFS v2</option>
+                <option value="Order Flow">Order Flow</option>
+                <option value="Trend Scalping">Trend Scalping</option>
+                <option value="SMC Grid">SMC Grid</option>
+                <option value="Multi">複数併用</option>
+                <option value="全般">運用全般</option>
+              </select>
             </div>
             <div style="margin-top:14px;">
-              <label class="aurum-comm-label">コメント (任意・200字まで)</label>
-              <textarea id="aurum-comm-message" maxlength="200" rows="3" placeholder="今週の所感や気付き等" class="aurum-comm-input aurum-comm-textarea"></textarea>
+              <label class="aurum-comm-label">質問内容 (200字まで)</label>
+              <textarea id="aurum-comm-message" maxlength="200" rows="3" placeholder="例: 指標発表の日は稼働を止めたほうがいいですか？" class="aurum-comm-input aurum-comm-textarea"></textarea>
             </div>
-            <button type="button" id="aurum-comm-submit-btn" class="aurum-comm-submit-btn">投稿する</button>
+            <button type="button" id="aurum-comm-submit-btn" class="aurum-comm-submit-btn">質問を投稿する</button>
           </div>
 
           
           <div id="aurum-comm-done-step" class="aurum-comm-done-step" style="display:none;">
             <div class="aurum-comm-done-icon">✓</div>
-            <h5 class="aurum-comm-done-title">投稿が反映されました</h5>
+            <h5 class="aurum-comm-done-title">質問を投稿しました</h5>
             <p class="aurum-comm-done-text">
-              ご投稿いただきありがとうございます。<br>
-              週次結果に追加されました。
+              ご投稿ありがとうございます。<br>
+              ボードに反映されました。他のユーザー様から回答が付くのをお待ちください。
             </p>
             <button type="button" id="aurum-comm-done-close" class="aurum-comm-submit-btn" style="margin-top:18px;">閉じる</button>
           </div>
@@ -11613,27 +11606,23 @@ setTimeout(initAurumAtmosphere, 1500);
 
   function buildFeedReplies(comments) {
     const r = seedRand(getDaySeed() + 999);
-    const indices = [];
-    for (let i = 0; i < comments.length; i++) {
-      if (r() < 0.20 && indices.length < 6) indices.push(i);
+    const pool = (window.aurumPickReplyPool ? window.aurumPickReplyPool(REPLY_TEMPLATES) : REPLY_TEMPLATES).slice();
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(r() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
     }
     const map = {};
-    indices.forEach(idx => {
-      const numReplies = 1 + Math.floor(r() * 2);
-      const replies = [];
-      for (let n = 0; n < numReplies; n++) {
-        const replyPool = window.aurumPickReplyPool ? window.aurumPickReplyPool(REPLY_TEMPLATES) : REPLY_TEMPLATES;
-        const pickIdx = Math.floor(r() * replyPool.length);
-        const reply = replyPool[pickIdx];
-        const minutesAgo = 5 + Math.floor(r() * 240);
-        replies.push({
-          name: reply.name,
-          text: reply.text,
-          minutesAgo: minutesAgo
-        });
+    let attached = 0;
+    for (let i = 0; i < comments.length; i++) {
+      const c = comments[i];
+      if (!c || c.kind === "question") continue;
+      if (attached >= 6 || !pool.length) break;
+      if (r() < 0.25) {
+        const num = Math.min(1 + Math.floor(r() * 2), pool.length);
+        map[i] = pool.splice(0, num).map(reply => ({ name: reply.name, text: reply.text }));
+        attached++;
       }
-      map[idx] = replies;
-    });
+    }
     return map;
   }
 
@@ -11679,10 +11668,20 @@ setTimeout(initAurumAtmosphere, 1500);
     const list = document.getElementById("aurum-discord-messages");
     if (!list) return;
     const myPosts = loadMyPosts();
-    const feedItems = window.aurumPickResults ? window.aurumPickResults(FEED_ENTRIES) : shuffleByDay(FEED_ENTRIES);
+    const qaThreads = window.aurumPickQA ? window.aurumPickQA() : [];
+    const reports = window.aurumPickResults ? window.aurumPickResults(FEED_ENTRIES) : shuffleByDay(FEED_ENTRIES);
+    const mixed = [];
+    {
+      const q = qaThreads.slice(), p = reports.slice();
+      const mr = seedRand(getDaySeed() + 555);
+      while ((q.length || p.length) && mixed.length < 30) {
+        const takeQ = q.length && (!p.length || mr() < 0.6);
+        mixed.push(takeQ ? q.shift() : p.shift());
+      }
+    }
     const myPart = myPosts.slice(0, 10);
     const remaining = Math.max(0, 30 - myPart.length);
-    const all = [...myPart, ...feedItems.slice(0, remaining)];
+    const all = [...myPart, ...mixed.slice(0, remaining)];
 
     const replyMap = buildFeedReplies(all);
     const myReplies = loadMyReplies();
@@ -11690,16 +11689,29 @@ setTimeout(initAurumAtmosphere, 1500);
 
     list.innerHTML = "";
     all.forEach((c, idx) => {
+      const isQ = c.kind === "question";
       const initial = c.name.replace("ユーザー", "U").substring(0, 2);
-      const profitClass = c.profit >= 0 ? "profit-plus" : "profit-minus";
-      const profitSign = c.profit >= 0 ? "+" : "−";
-      const profitDisplay = profitSign + "¥" + Math.abs(c.profit).toLocaleString();
       const commentKey = c.name + ":" + (c.message || "").slice(0, 32);
       const baseLikes = feedLikes(commentKey);
       const userLiked = !!myLikes[commentKey];
       const displayLikes = baseLikes + (userLiked ? 1 : 0);
 
-      const feedReplies = replyMap[idx] || [];
+      let metaHtml;
+      if (isQ) {
+        metaHtml =
+          '<span class="aurum-disc-meta-tag aurum-disc-meta-qbadge">質問</span>' +
+          '<span class="aurum-disc-meta-tag">' + escapeHtml(c.system || "全般") + '</span>';
+      } else {
+        const profitClass = c.profit >= 0 ? "profit-plus" : "profit-minus";
+        const profitSign = c.profit >= 0 ? "+" : "−";
+        const profitDisplay = profitSign + "¥" + Math.abs(c.profit).toLocaleString();
+        metaHtml =
+          '<span class="aurum-disc-meta-tag">' + escapeHtml(c.system) + '</span>' +
+          '<span class="aurum-disc-meta-tag">' + escapeHtml(c.pair) + '</span>' +
+          '<span class="aurum-disc-meta-profit ' + profitClass + '">' + profitDisplay + '</span>';
+      }
+
+      const feedReplies = isQ ? (c.answers || []) : (replyMap[idx] || []);
       const ownReplies = myReplies[commentKey] || [];
 
       let repliesHtml = "";
@@ -11739,11 +11751,7 @@ setTimeout(initAurumAtmosphere, 1500);
             '<span class="aurum-disc-name">' + escapeHtml(c.name) + '</span>' +
             '<span class="aurum-disc-verified">VERIFIED</span>' +
           '</div>' +
-          '<div class="aurum-disc-meta">' +
-            '<span class="aurum-disc-meta-tag">' + escapeHtml(c.system) + '</span>' +
-            '<span class="aurum-disc-meta-tag">' + escapeHtml(c.pair) + '</span>' +
-            '<span class="aurum-disc-meta-profit ' + profitClass + '">' + profitDisplay + '</span>' +
-          '</div>' +
+          '<div class="aurum-disc-meta">' + metaHtml + '</div>' +
           (c.message ? '<div class="aurum-disc-message">' + escapeHtml(c.message) + '</div>' : '') +
           '<div class="aurum-disc-actions">' +
             '<button type="button" class="aurum-disc-action-btn aurum-disc-like-btn ' + (userLiked ? 'liked' : '') + '" data-action="like">' +
@@ -11880,21 +11888,17 @@ setTimeout(initAurumAtmosphere, 1500);
 
   document.addEventListener("click", (e) => {
     if (!(e.target && (e.target.id === "aurum-comm-submit-btn" || e.target.closest("#aurum-comm-submit-btn")))) return;
-    const profitEl = document.getElementById("aurum-comm-profit");
     const systemEl = document.getElementById("aurum-comm-system");
-    const pairEl = document.getElementById("aurum-comm-pair");
     const messageEl = document.getElementById("aurum-comm-message");
     const accountEl = document.getElementById("aurum-comm-account");
 
-    const profitStr = profitEl ? profitEl.value.trim() : "";
     const system = systemEl ? systemEl.value : "";
-    const pair = pairEl ? pairEl.value : "";
     const message = messageEl ? messageEl.value.trim() : "";
     const account = accountEl ? accountEl.value.trim() : "";
 
     let errMsg = "";
-    if (!profitStr) errMsg = "今週の収益を入力してください";
-    else if (!system) errMsg = "使用システムを選択してください";
+    if (!system) errMsg = "対象システムを選択してください";
+    else if (!message) errMsg = "質問内容を入力してください";
 
     const existingErr = document.querySelector(".aurum-comm-error");
     if (existingErr) existingErr.remove();
@@ -11910,13 +11914,12 @@ setTimeout(initAurumAtmosphere, 1500);
       return;
     }
 
-    const profit = parseInt(profitStr.replace(/[^\d-]/g, ""), 10) || 0;
     const myPost = {
+      kind: "question",
       name: "ユーザー" + account.slice(-4),
-      profit: profit,
       system: system,
-      pair: pair,
-      message: message
+      message: message,
+      answers: []
     };
     saveMyPost(myPost);
 
@@ -15590,7 +15593,9 @@ window.AURUM_RESULT_STOCK = [{"name": "ユーザー1247", "profit": 87000, "syst
 
 window.AURUM_REPLY_STOCK = [{"name": "ユーザー6291", "text": "稼働時間どうしてますか？推奨通りにしてますか？"}, {"name": "ユーザー3847", "text": "自分も金曜全決済にしてます。週末持ち越しが怖くて。"}, {"name": "ユーザー7163", "text": "ロット何で稼働してますか？参考にしたいです！"}, {"name": "ユーザー1528", "text": "ナイス利確です！"}, {"name": "ユーザー9274", "text": "VPSはどこ使ってますか？"}, {"name": "ユーザー4836", "text": "同じくCPI週はヒヤヒヤしました。"}, {"name": "ユーザー2753", "text": "BB期間6と20どっちがメインで使ってますか？"}, {"name": "ユーザー8491", "text": "素晴らしいリザルトですね！"}, {"name": "ユーザー5317", "text": "自分もFOMC前後は稼働OFFにしています。同じ方針です。"}, {"name": "ユーザー7082", "text": "複利設定はどうしていますか？再投資の割合を教えていただきたいです。"}, {"name": "ユーザー3619", "text": "ナンピン幅の設定、何pipsにしてますか？"}, {"name": "ユーザー1947", "text": "BTCUSD稼働してる方いるんですね！自分も検討中です。"}, {"name": "ユーザー6483", "text": "資金分散のやり方を教えてください。何ペアくらいで稼働していますか？"}, {"name": "ユーザー8725", "text": "自分も乗り換え組です。安定感が違いますよね。"}, {"name": "ユーザー4162", "text": "月利どのくらい出ていますか？"}, {"name": "ユーザー9538", "text": "東京タイムに絞った稼働いいですね。参考になります。"}, {"name": "ユーザー2847", "text": "マイナス週からのリカバリー応援してます！"}, {"name": "ユーザー7319", "text": "SMC GridとOrder Flowで悩んでます。どちらから始めましたか？"}, {"name": "ユーザー5284", "text": "MT5の設定って特別なことしてますか？"}, {"name": "ユーザー1637", "text": "同じくDD管理が一番大事だと思います。"}, {"name": "ユーザー8162", "text": "複数システム稼働のロット配分どうしてますか？"}, {"name": "ユーザー3948", "text": "最初のロットはいくらから始めましたか？"}, {"name": "ユーザー6271", "text": "ナイスリザルトです！今週も頑張りましょう！"}, {"name": "ユーザー4817", "text": "経済指標のカレンダー何で確認してますか？"}, {"name": "ユーザー9163", "text": "自分もBUY限定でやっています。方向判断が難しいですよね。"}, {"name": "ユーザー2584", "text": "グリッドのDD管理のコツを教えてください。"}, {"name": "ユーザー7428", "text": "推奨稼働時間を教えてもらえますか？"}, {"name": "ユーザー5093", "text": "自分も同じ週でマイナスでした。FOMC怖いですね。"}, {"name": "ユーザー1748", "text": "エクスパンション局面の判断ってどうやっていますか？"}, {"name": "ユーザー8361", "text": "週ベースでの収支管理はどうしていますか？スプレッドシートとか使ってますか？"}, {"name": "ユーザー3527", "text": "XAUUSDとBTCUSDどちらがおすすめですか？"}, {"name": "ユーザー6849", "text": "お疲れ様でした！来週も一緒に頑張りましょう。"}, {"name": "ユーザー4273", "text": "Trend ScalpingをBTCUSDで稼働するのはどうですか？"}, {"name": "ユーザー9471", "text": "自分も両建て設定でDDを抑えています。同じ方針ですね。"}, {"name": "ユーザー2163", "text": "グリッドの最大ポジション数ってどのくらいに設定してますか？"}, {"name": "ユーザー7516", "text": "ロンドンタイムに集中するの効果的ですよね。自分もそうしてます。"}, {"name": "ユーザー5738", "text": "複利で運用するとどのくらいから加速感が出てきましたか？"}, {"name": "ユーザー1384", "text": "稼働開始からどのくらい経ちますか？"}, {"name": "ユーザー8627", "text": "SLの設定は固定ですか？それとも相場に応じて変えていますか？"}, {"name": "ユーザー3182", "text": "自分も今週同じくマイナスでした。来週一緒に取り返しましょう！"}, {"name": "ユーザー6417", "text": "Multiの資金配分はどうやって決めましたか？"}, {"name": "ユーザー4738", "text": "週の相場環境の確認ってどのタイミングでしてますか？"}, {"name": "ユーザー9284", "text": "Order FlowとSMC Gridを併用している方いますか？"}, {"name": "ユーザー2617", "text": "ナイスです！今週は自分もプラスで終われました！"}, {"name": "ユーザー7843", "text": "VPS稼働に切り替えてから安定しましたか？"}, {"name": "ユーザー5163", "text": "自分もナンピン設定を広げたら安定しました。同じ経験です。"}, {"name": "ユーザー1829", "text": "月ごとの収支はプラスが続いていますか？"}, {"name": "ユーザー8374", "text": "初心者でもMultiシステムから始めた方がいいですか？"}, {"name": "ユーザー3916", "text": "自分も乗り換え検討中です。移行の手順など参考になります。"}, {"name": "ユーザー6582", "text": "CPI後の急変対応のコツを教えてください。"}, {"name": "ユーザー4829", "text": "週プラスおめでとうございます！自分も続けて頑張ります。"}, {"name": "ユーザー9174", "text": "稼働OFFの設定ってどのツールで管理していますか？"}, {"name": "ユーザー2483", "text": "自分も今週同じペアで稼働してました。同じ結果になりましたよ。"}, {"name": "ユーザー7263", "text": "ロット増やすタイミングってどう判断していますか？"}, {"name": "ユーザー5947", "text": "Trend Scalpingのおすすめの稼働時間帯はどこですか？"}, {"name": "ユーザー1573", "text": "グリッドの含み損はどこまで許容していますか？"}, {"name": "ユーザー8248", "text": "同じく金曜は全決済派です。週末の不確実性を排除するのが一番ですよね。"}, {"name": "ユーザー3764", "text": "BTCUSDでのSMC Gridリザルト気になります！"}, {"name": "ユーザー6139", "text": "エクスパンション局面はどこで判断していますか？BB幅で見てますか？"}, {"name": "ユーザー4517", "text": "自分はまだマイナスが多いですがこのリザルト見て励まされます！"}, {"name": "ユーザー9382", "text": "稼働資金はいくらから始めましたか？参考に聞かせてください。"}, {"name": "ユーザー2746", "text": "同じくFOCM後は怖いですね。稼働OFFは必須ですよね。"}, {"name": "ユーザー7481", "text": "マイナスからの立て直し、どのくらいかかりましたか？"}, {"name": "ユーザー5293", "text": "自分も同じシステムで稼働中です。今週のリザルトを参考にします。"}, {"name": "ユーザー1964", "text": "Multiで稼働する場合、ペアの組み合わせはどうしていますか？"}, {"name": "ユーザー8537", "text": "週ごとのリザルトを記録しているツールはありますか？"}, {"name": "ユーザー3281", "text": "ロット0.01から始めた方がいいですか？最初のロット感が難しいです。"}, {"name": "ユーザー6748", "text": "同じく今週は取りやすい相場でしたね！"}, {"name": "ユーザー4162", "text": "VPSのスペックはどのくらいあれば足りますか？"}, {"name": "ユーザー9517", "text": "ナイスリカバリーです！諦めないのが大事ですよね。"}, {"name": "ユーザー2849", "text": "自分も環境認識の精度を上げようとしているところです。"}, {"name": "ユーザー7364", "text": "SMC GridとMultiの併用はできますか？"}, {"name": "ユーザー5738", "text": "週プラスで終われたのは素晴らしい！自分も続けます。"}, {"name": "ユーザー1847", "text": "東京タイムで仕込んでNYで取るパターン、自分もやっています。"}, {"name": "ユーザー8162", "text": "両建て設定のやり方を詳しく聞きたいです。"}, {"name": "ユーザー3519", "text": "自分もBB期間を変えながら試しています。6より20の方が安定しますか？"}, {"name": "ユーザー6284", "text": "乗り換え組として同じ経験です。安定感が全然違いますよね。"}, {"name": "ユーザー4837", "text": "月利の目標は何パーセントくらいに設定していますか？"}, {"name": "ユーザー9163", "text": "自分もマイナス週があったので共感します。原因が明確なら立て直せますよね。"}, {"name": "ユーザー2748", "text": "経済指標の稼働OFFってMT5の設定でできますか？"}, {"name": "ユーザー7382", "text": "今週のリザルト素晴らしいです！どういう環境認識でしたか？"}, {"name": "ユーザー5164", "text": "自分も同じ週でプラスでした！相場が良かったですよね。"}, {"name": "ユーザー1738", "text": "ナンピンの最大回数ってどのくらいに設定してますか？"}, {"name": "ユーザー8293", "text": "Trend Scalpingは初心者でも使いやすいですか？"}, {"name": "ユーザー3846", "text": "グリッドが広がった時のメンタル管理はどうしていますか？"}, {"name": "ユーザー6517", "text": "自分も来週から金曜全決済にしようと思います。参考になりました。"}, {"name": "ユーザー4283", "text": "複数ペアの相関ってどう考えていますか？"}, {"name": "ユーザー9748", "text": "リザルトを毎週投稿するの大変じゃないですか？"}, {"name": "ユーザー2517", "text": "ロンドンタイムの動き方、参考になります。自分も意識します。"}, {"name": "ユーザー7284", "text": "自分もこの週は同じくしんどかったです。来週一緒に頑張りましょう！"}, {"name": "ユーザー5839", "text": "稼働してから何ヶ月目ですか？"}, {"name": "ユーザー1473", "text": "Order Flowの方向判断はどうやって決めていますか？"}, {"name": "ユーザー8364", "text": "自分はまだ稼働2週目ですが参考にさせていただきます！"}, {"name": "ユーザー3719", "text": "複利運用でロットを増やすタイミングはどのくらいの残高増加で判断していますか？"}, {"name": "ユーザー6142", "text": "Multiシステム試してみたいです。最初の資金はいくらから推奨ですか？"}, {"name": "ユーザー4927", "text": "週プラスで終われるの本当に嬉しいですよね。お疲れ様でした！"}, {"name": "ユーザー9361", "text": "自分も同じ週でSMC Gridが膨らんで焦りました。同じ経験です。"}, {"name": "ユーザー2648", "text": "指標カレンダーの確認を習慣にするのが大事ですよね。自分も意識します。"}, {"name": "ユーザー7193", "text": "ロットの増減の判断基準を教えてください。"}, {"name": "ユーザー5826", "text": "XAUUSD以外も稼働するのは怖くないですか？BTCUSDのボラが気になって。"}, {"name": "ユーザー1584", "text": "今週プラスで終わっておめでとうございます！来週も頑張りましょう。"}];
 
-window.AURUM_REMOTE_CONFIG_URL = "";
+window.AURUM_QA_STOCK = [{"kind": "question","name": "ユーザー8538","system": "全般","message": "MT5にEAファイル入れたのにナビゲーターに出てきません。どこか置き場所間違えてますかね？","answers": [{"name": "ユーザー1362","text": "ファイル→『データフォルダを開く』→MQL5→Expertsの中に入れてますか？そこに置いてナビゲーターを右クリック→更新で出てくるはずです。自分は最初デスクトップに置いたまま探してました笑"}]},{"kind": "question","name": "ユーザー7179","system": "全般","message": "自動売買のボタンが見当たらない","answers": [{"name": "ユーザー8155","text": "上のツールバーにある『アルゴリズム取引』ってやつです。押して緑になればON、赤のままだとEAは一切動かないので注意"}]},{"kind": "question","name": "ユーザー4055","system": "全般","message": "雷マークがずっと灰色なんだけど","answers": [{"name": "ユーザー8560","text": "うちも導入日にそれなったよ⚡ EAをチャートに乗せるとき出る画面の『アルゴリズム取引を許可』にチェック入れ忘れてるだけだと思う。EA入れ直せば直るはず"}]},{"kind": "question","name": "ユーザー4654","system": "全般","message": "DooPrimeのログイン、口座番号とパス3回入れ直しても『回線不通』って出るの俺だけ？","answers": [{"name": "ユーザー6021","text": "マニュアルの『MT5ログイン』の項にサーバー選択の説明ありますよ。口座開設メールに書いてあるサーバー名と、選んでるやつが一致してるか見てみてください。回線不通は大体サーバー違いです"}]},{"kind": "question","name": "ユーザー1393","system": "全般","message": "設置代行お願いしたいんですが、何を渡せばいいのか教えてほしいです","answers": [{"name": "ユーザー4490","text": "自分のときは口座番号・MT5のログイン情報・VPSの接続情報の3点を渡して、翌日には稼働まで終わってました。先にDooPrimeの口座開設だけ済ませておくとスムーズです"}]},{"kind": "question","name": "ユーザー6635","system": "全般","message": "パソコンを持ってなくてスマホだけなんですけど、お名前.comのVPSっていうのを契約すればMT5を動かせるって理解で合ってますか。契約後に自分で設定できる自信がなくて、申し込む前から不安で手が止まってます…","answers": [{"name": "ユーザー6513","text": "合ってますよ。VPS上のMT5でEAを動かして、スマホからはリモートデスクトップのアプリで様子を見る形です。設定が不安なら導入代行があるので、そのまま運営に相談しちゃっていいと思います"},{"name": "ユーザー4173","text": "私もスマホ組でしたが、契約だけ自分でやって残りは代行にお任せで無事動いてます😊 同じところで止まってたので気持ちわかります"}]},{"kind": "question","name": "ユーザー7111","system": "全般","message": "口座を作り直したらEAがうんともすんとも言わなくなりました。何か壊しちゃったんでしょうか…","answers": [{"name": "ユーザー3752","text": "EAは口座番号ライセンスなので、口座が変わるとそのままでは動かない仕様です。壊れたわけじゃないですよ。新しい口座番号を運営に伝えてライセンスを出し直してもらえば大丈夫です"},{"name": "ユーザー4680","text": "補足すると、切り替えの間に旧口座へポジションが残ってると管理が面倒なので、金曜の全決済のタイミングに合わせて移行すると楽です"}]},{"kind": "question","name": "ユーザー7967","system": "全般","message": "昨日EAを設置して、チャート右上に名前も出てて自動売買もオンなんですが、既定だと朝8:00から稼働のはずが10時を過ぎても一回もエントリーしません。どこを確認すればいいのか教えてもらえると助かります","answers": [{"name": "ユーザー5569","text": "マニュアルの環境認識の項が先かも。ボリバン期間20/偏差2.0でレンジを確認して稼働させる前提なので、条件が揃わないうちは入らないのが正常です"},{"name": "ユーザー9919","text": "初日おれも半日無音で焦ったクチ。壊れたかと思ったら夕方に普通に入ってた。8:00っていうのはあくまで「稼働していい時間」ってだけで、そこから相場の条件が揃うまではエントリーしない仕組みだから、朝イチ無音は珍しくないと思う。マニュアルの推奨時間もそもそも11時〜18時だし、名前が出てて自動売買オンなら設置は合ってるはず。数日は気長に見ていいと思う"}]},{"kind": "question","name": "ユーザー3513","system": "全般","message": "XAUUSDが一覧に出てきません","answers": [{"name": "ユーザー6091","text": "気配値ウィンドウで右クリック→『すべて表示』か、銘柄検索でXAUUSDを追加すればチャート開けますよ"},{"name": "ユーザー3810","text": "末尾に文字が付いた紛らわしい銘柄名が並ぶこともあるから、チャート開いてスプレッドがちゃんと表示されてるのを確認してからEA乗せた方がいいよ"}]},{"kind": "question","name": "ユーザー2557","system": "全般","message": "資金10万でスタートしようと思ってるんだけど、初期設定のロット0.01のままでいくかオートロットをオンにするか迷ってる。そもそも設定画面のどこを触ればいいのかもわからん","answers": [{"name": "ユーザー9334","text": "10万なら自分は0.01固定で始めて、感覚つかんでからオートロット(残高連動)に切り替えました。設定はチャート上のEAをダブルクリック→パラメーター一覧の中にあります"},{"name": "ユーザー1716","text": "維持率150%で全決済の安全弁はあるけど、最初から欲張らず0.01で挙動を見るのがおすすめ。オートロットへの切り替えはいつでもできるし"}]},{"kind": "question","name": "ユーザー5376","system": "OFS v2","message": "先週OFS v2を導入したばかりの初心者です。資金10万円でスタートしたんですが、ロットは0.01のままがいいのか、少し上げてもいいのか、決め方の基準がわからず困ってます。","answers": [{"name": "ユーザー5975","text": "自分も10万スタートでした。最初の1ヶ月は0.01固定で回して、挙動に慣れてから考えるで十分だと思いますよ。マニュアルにも初期ロット0.01〜とあるので、焦って上げる必要はないかと。"}]},{"kind": "question","name": "ユーザー8363","system": "全般","message": "ナンピン5段に減らすのってアリ？","answers": [{"name": "ユーザー7596","text": "アリだと思う。段数減らすと粘れる幅は狭くなるけど、その分DDは浅くなるし。自分もレンジが薄い時期は段数落として様子見てた。"}]},{"kind": "question","name": "ユーザー1861","system": "全般","message": "利確幅って広げても平気？","answers": [{"name": "ユーザー2228","text": "広げすぎ注意です。利確が遠いとレンジ抜けに巻き込まれやすくなるので、変えるなら少しずつ、最小ロットで様子見てからがいいですよ。"}]},{"kind": "question","name": "ユーザー6965","system": "全般","message": "オートロットって残高いくらくらいからONにするものなんでしょう。目安があれば知りたいです。","answers": [{"name": "ユーザー9262","text": "自分は複利に切り替えたくなった20万超えのあたりでONにしました。残高連動なので、資金が小さいうちは手動0.01のままの方が管理しやすかったです。"}]},{"kind": "question","name": "ユーザー7473","system": "全般","message": "設定ってどこまで触ってOK？","answers": [{"name": "ユーザー2767","text": "基本は触らんでいいよ。マニュアルの推奨設定の項にある稼働時間・方向限定・ロットあたりまでで十分。ロジック側のパラメータは下手にいじると挙動変わるからおすすめしない。"}]},{"kind": "question","name": "ユーザー2917","system": "全般","message": "稼働時間について質問です。EAの既定は8:00〜翌3:00になっていますが、マニュアルには11:00〜18:00推奨とあって、どちらに合わせるべきか迷っています。皆さんは時間帯を絞ってますか？","answers": [{"name": "ユーザー5978","text": "迷うなら一旦マニュアル推奨の11:00〜18:00に合わせておくのが無難だと思います。既定の8:00〜翌3:00はNY時間まで含むので、値動きの荒い帯も拾う印象です。"},{"name": "ユーザー4715","text": "うちは既定のまま回してるけど、指標がある日だけ手動で止めてる。時間を絞るより指標またぎの回避の方が効いてる気がするな〜。"}]},{"kind": "question","name": "ユーザー5970","system": "全般","message": "維持率150%で全決済される安全弁の数値、下げても問題ないのか気になっています。","answers": [{"name": "ユーザー7968","text": "下げるのはおすすめしないです。150%はロスカット前に自動で逃げるための安全弁なので、ここを下げると逃げ遅れます。触るなら上げる方向かと。"},{"name": "ユーザー2727","text": "わかる、一回発動すると「もうちょい粘れたのでは」って思うんよね。でも自分は急変の日に150%発動で助かった側なので、そのままにしてる。"}]},{"kind": "question","name": "ユーザー9532","system": "全般","message": "環境認識のBBって期間20・偏差2.0のまま？いじってる人いたら理由聞きたい","answers": [{"name": "ユーザー3777","text": "公式マニュアルの環境認識の項が期間20・偏差2.0前提で書かれてるので、そのままの人が多いはずです。スクイーズやエクスパンションの見方もその設定ありきですし。"},{"name": "ユーザー1136","text": "一回いじったけど結局20/2.0に戻した。判断基準が公式手順とズレると停止タイミングで迷子になる😂"}]},{"kind": "question","name": "ユーザー5508","system": "Trend Scalping","message": "Trend Scalpingを使い始めて2週間の者です。急変時に15分新規停止する機能があると聞いたのですが、これも自分で感度を変えられるのか、初心者は触らない方がいいのか不安で、まだ何も触れずにいます…","answers": [{"name": "ユーザー8070","text": "あれは1分50pipsの急変で15分新規停止っていう安全機能なので、初心者のうちは触らなくて大丈夫ですよ。むしろ触らない前提の機能だと思ってます。"},{"name": "ユーザー7042","text": "2週間ならまだ何も触らなくていいと思う。自分も最初の1ヶ月は完全に見てるだけだったよ。まずは金曜の全決済だけ習慣にしとけば大丈夫👍"}]},{"kind": "question","name": "ユーザー2463","system": "全般","message": "XAUUSD用の設定のままBTCUSDにも使い回すのはやめた方がいいでしょうか。リスク高めとは聞いてはいるのですが。","answers": [{"name": "ユーザー9857","text": "やめた方がいいです。BTCはボラも値幅の桁も金と違いすぎるので、XAUUSD用のナンピン幅や利確幅のままだと想定外のDDになりやすいかと。やるならロット最小で別調整の前提ですね。"},{"name": "ユーザー1276","text": "自分はBTCで試したらDDが20%近くまでいって一旦止めた。XAUUSDに戻したら落ち着いたので、素直に推奨ペアが楽だと思う。"}]},{"kind": "question","name": "ユーザー6371","system": "全般","message": "金曜って何時に全決済してる？","answers": [{"name": "ユーザー3059","text": "自分は金曜の22時めどで全決済してる。NY後半はスプレッド広がりやすいし、日付またぐ前に切っとくと週末が気楽だよ"}]},{"kind": "question","name": "ユーザー2590","system": "全般","message": "月曜の窓開けが不安でたまらないです","answers": [{"name": "ユーザー1717","text": "わかります、私も最初は日曜の夜が憂鬱でした。でも金曜に全決済して週末ノーポジにしてからは、窓が開いても関係なくなりましたよ。マニュアル通り持ち越さないのが一番の対策だと思います"}]},{"kind": "question","name": "ユーザー3568","system": "全般","message": "CPIの日も回してていいの？","answers": [{"name": "ユーザー2998","text": "CPI・雇用統計・FOMCの三つは止め推奨。マニュアルにも重要指標前は停止って載ってるよ。自分は発表の1時間前に新規停止して、ナンピンが浅ければポジはそのままにしてる"}]},{"kind": "question","name": "ユーザー9557","system": "全般","message": "マニュアル推奨の11時〜18時と、EA既定の8時〜翌3時、どっちに合わせればいいんでしょうか？","answers": [{"name": "ユーザー6517","text": "どっちでも動くには動きますよ。自分も最初は既定の8時〜翌3時のまま回してました。ただ、あの設定だと深夜までポジションを持つことになるので、寝てる間の値動きが気になって、今はマニュアル推奨どおり11時〜18時に絞ってます。迷ってるならまずは推奨の11〜18時に合わせておくのが無難かなと。日中だけの稼働なら仕事の合間にスマホでチラ見もできるし、夜中に何かあっても新規を持ってない分、気持ちがラクです。慣れてきて稼働時間を伸ばしたくなったら、そのタイミングで既定に戻すか検討すればいいと思いますよ。"}]},{"kind": "question","name": "ユーザー1950","system": "全般","message": "FOMCの週って前日から止めるのか当日だけでいいのか、先輩たちのやり方を教えてほしいです","answers": [{"name": "ユーザー8819","text": "うちは当日の朝に止めて、翌日の東京時間から再開のパターンです。最初は週まるごと止めてたんですが、動かせる日が減りすぎる気がして今の形に落ち着きました"}]},{"kind": "question","name": "ユーザー6373","system": "全般","message": "年末年始っていつまで動かして大丈夫なんでしょう。12月最終週はスプレッドが広がると聞いたのですが","answers": [{"name": "ユーザー3053","text": "例年だとクリスマス前、12月20日すぎには止めて、再開は1月6日以降って人が多い印象。年末は流動性スカスカでスプレッド広がるから、回すメリットが薄いんだよね"},{"name": "ユーザー4058","text": "去年、大納会あたりまで欲張って回してたら普段の倍以上スプレッド開いててヒヤッとしました💦 それ以来クリスマス週の前には止めるようにしてます"}]},{"kind": "question","name": "ユーザー6421","system": "全般","message": "先週の雇用統計を止め忘れてそのまままたいでしまいました。急変時に15分新規停止する機能があると聞いたんですが、あれがあれば指標も放置でいいのか、手動で止めるのが基本なのかわからず困ってます","answers": [{"name": "ユーザー8430","text": "あの15分停止は急変後の飛び乗りを防ぐ保険で、すでに持ってるポジションを守る機能ではないんですよね。指標は手動停止が基本と考えたほうがいいです"},{"name": "ユーザー1065","text": "またいじゃった気持ちわかる、俺も一度やらかした😅 以来スマホに指標カレンダーの通知を入れて、前日に必ず鳴るようにしてる。忘れない仕組みにしちゃうのが早いよ"}]},{"kind": "question","name": "ユーザー8870","system": "全般","message": "普段は仕事でチャート見れなくて、お名前.comのVPSで回してるんだけど、出先で指標前に止めたいときみんなどうしてる？スマホのMT5アプリからVPS側のEAって止められるもんなの？","answers": [{"name": "ユーザー1554","text": "スマホのMT5アプリからじゃVPS側のEAは触れないよ。リモートデスクトップアプリでVPSに直接入って、MT5の自動売買ボタンをオフにする流れ。慣れれば1分かからない"},{"name": "ユーザー3185","text": "導入代行のときに接続設定を保存してもらったら、出先からワンタップで入れるようになって楽になりました。昼休みにその日の指標だけ確認するのが習慣です"}]},{"kind": "question","name": "ユーザー7665","system": "全般","message": "米国が夏時間の間って稼働時間の設定もずらしたほうがいいのかな。指標の時間も1時間ずれるよね","answers": [{"name": "ユーザー5783","text": "日本時間ベースの設定だから稼働時間はそのままで平気。ただ米指標が夏は21時半、冬は22時半って1時間ずれるから、止めるタイミングだけ注意ね"},{"name": "ユーザー8009","text": "指標カレンダーを日本時間表示のアプリで見るようにすると迷わなくなるよ。夏冬が切り替わる週だけうっかりが起きやすいから、そこだけ気をつけて"}]},{"kind": "question","name": "ユーザー1838","system": "全般","message": "資金10万、ロット0.01で始めたばかりの初心者です。指標の前に止めるときって自動売買ボタンをオフにするだけでいいのか、ナンピン中のポジションも決済したほうがいいのか、どうすればいいのか迷ってます","answers": [{"name": "ユーザー5166","text": "マニュアルの停止手順の項が参考になりますよ。基本は自動売買オフで新規だけ止めて、ポジションは維持率に余裕があれば持ち越し、ナンピンが深いときは決済推奨という整理でした"},{"name": "ユーザー2259","text": "資金10万でロット0.01なら維持率はかなり余裕あるはずです。ただナンピンが7本8本と進んでる状態なら、決済してから止めるほうが安心かと。150%の安全弁が働く状況は作らないのがコツです"}]},{"kind": "question","name": "ユーザー4971","system": "全般","message": "バンドウォークって放置でいいの？","answers": [{"name": "ユーザー2742","text": "放置は危ないと思う。バンドウォーク中は逆側のポジだけ増え続けるから、自分は気づいたら新規止めて走ってる方向の限定に切り替えてる。戻り待ちでそのまま回すのはDD膨らみやすいよ。"}]},{"kind": "question","name": "ユーザー8102","system": "全般","message": "BBは期間20・偏差2.0のまま使ってますが、期間を変えてる方っていますか？","answers": [{"name": "ユーザー6538","text": "マニュアルの環境認識の項に期間20・偏差2.0が前提って書いてあるので、私はそのままです。運用ルール全体がこの設定基準で組まれてるみたいなので、変えると判断がズレそうで。"}]},{"kind": "question","name": "ユーザー3016","system": "全般","message": "レンジだと思って回してたら急にトレンドが出て、ナンピンが7回目まで増えてて怖いです…どうすればいいかわからず困ってます💦","answers": [{"name": "ユーザー6697","text": "まずは新規停止だけ先にやりましょう。維持率に余裕があるなら慌てて損切りしなくて大丈夫ですし、150%まで落ちたら全決済の安全弁も動きます。落ち着いてからトレンド方向だけに切り替えると立て直しやすいですよ。"}]},{"kind": "question","name": "ユーザー4699","system": "全般","message": "一瞬バンド抜けてすぐ戻るのはダマシ扱い？","answers": [{"name": "ユーザー6468","text": "一瞬抜けてすぐバンド内に戻るやつは俺はレンジ継続とみなしてる。ローソク確定で外に居続けるかで判断するようにしたら騙されにくくなったよ。"}]},{"kind": "question","name": "ユーザー4303","system": "全般","message": "先週の雇用統計のあとからエクスパンションが続いていて、マニュアル通りいったん停止しています。ただ再開の目安が難しく、スクイーズに戻ったと判断する基準を皆さんがどこに置いているのか教えていただきたいです","answers": [{"name": "ユーザー6218","text": "私はバンド幅が指標前の水準近くまで縮んで、ローソク5〜6本横ばいが続いたのを見てから再開してます。雇用統計の週は結局木曜まで待ちました。焦って戻すより機会損失のほうがマシかなと。"}]},{"kind": "question","name": "ユーザー6124","system": "全般","message": "環境認識って皆さん何分足で見てます？","answers": [{"name": "ユーザー2333","text": "自分は1時間足で大きい流れ見て、15分足でレンジ幅の確認って感じ。1分足だけ見てるとノイズで判断がコロコロ変わるからやめたほうがいいよ。"},{"name": "ユーザー6171","text": "私も最初は5分足で振り回されました。上位足に変えてから判断がだいぶ安定しましたよ。"}]},{"kind": "question","name": "ユーザー9752","system": "全般","message": "ゴールドが1時間で30pipsくらいの幅を行ったり来たりしてるんだけど、これはレンジ認定でいい感じ？","answers": [{"name": "ユーザー8740","text": "30pipsあれば十分機能する印象。俺はざっくり20pips以上の往復が2〜3回続いたらレンジ認定にしてる。"},{"name": "ユーザー6960","text": "幅だけじゃなくミッドバンドの向きも見たほうがいいですよ。横ばいならレンジ、斜めになってバンドが開き始めたらトレンド移行を疑うようにしてます。"}]},{"kind": "question","name": "ユーザー9988","system": "全般","message": "両建てのまま置いておいて大丈夫な場面って、具体的にどんな状況か教えてもらえると嬉しいです","answers": [{"name": "ユーザー3710","text": "マニュアルの運用ルールの項だと、基本はレンジ=両建てOK・トレンド=方向限定という整理になってます。私はミッドバンドが横向きでエクスパンションが出てない間は両建てのままです。"},{"name": "ユーザー5955","text": "わかりやすい高値と安値に挟まれてる時は両建て放置が一番仕事する体感ある。ただ指標またぎだけは両建てでも止めてるよ。"}]},{"kind": "question","name": "ユーザー6375","system": "全般","message": "資金10万でロット0.01スタートして2週間目。今週は金がずっと上目線だからSELL止めてBUY限定にしてるんだけど、いつまで限定のままでいいのか基準がわからん。みんな戻すタイミングどうしてる？","answers": [{"name": "ユーザー4672","text": "自分はミッドバンドを終値でしっかり割ってきたら限定解除の合図にしてる。10万で0.01なら維持率に余裕あるはずだし、焦って戻さなくていいと思う。"},{"name": "ユーザー6872","text": "私も先月ほぼ同じ状況でした。上目線のまま2週間BUY限定を続けて、1時間足でレンジ回帰を確認してから両建てに戻しましたが、特に問題なかったです。"}]},{"kind": "question","name": "ユーザー8014","system": "全般","message": "始めて3日目の初心者です。チャートを見てもレンジなのかトレンドなのか全然区別がつかなくて、BBを出してもバンドの向きをどう読めばいいのか自信がありません。最初は皆さんもこんな感じだったんでしょうか…","answers": [{"name": "ユーザー5732","text": "最初はみんなそんなものですよ。私はバンドが横向きか斜めかだけ見るところから始めました。横ばいならレンジ、どちらかに傾いて幅が開いてきたらトレンド、くらいの雑な基準でも入り口としては十分でした。"},{"name": "ユーザー7607","text": "マニュアルの環境認識の項にチャート例つきで載ってるから、それ見ながら1週間チャート眺めるだけでだいぶ変わるよ。焦らなくて大丈夫👍"}]},{"kind": "question","name": "ユーザー1475","system": "全般","message": "初期資金みんないくらで回してる？","answers": [{"name": "ユーザー5579","text": "自分は5万スタートでロット0.01固定。セント口座だから一応回せてるけど、正直10万あると気持ちの余裕が全然違うなとは思う。"}]},{"kind": "question","name": "ユーザー3550","system": "全般","message": "複利で増やすか毎月出金するか迷ってます。皆さんどのバランスでやってるか教えてほしいです","answers": [{"name": "ユーザー8508","text": "最初の3ヶ月は全部複利に回して、いまは月末に増えた分の半分だけ出金してます。原資ぶんを先に回収できてからは精神的にだいぶ楽です🙌"}]},{"kind": "question","name": "ユーザー9448","system": "全般","message": "セント口座推奨って何でなんだろ","answers": [{"name": "ユーザー5796","text": "残高が100倍のセント単位で表示されるから、同じ資金でも0.01の証拠金負担が実質軽くなるんよ。ナンピン系のEAと相性いいから、少額スタートなら実質これ一択かなと。"}]},{"kind": "question","name": "ユーザー2221","system": "全般","message": "証拠金維持率150%で全決済される安全弁があると聞いたんですが、発動するのって相当追い込まれた状況ってことですよね…。普段どのくらいの維持率を保っておけば安心なのか、始めたばかりでわからず困ってます","answers": [{"name": "ユーザー7167","text": "マニュアルの資金管理の項に載ってますが、150%はあくまで最後の砦です。自分は維持率1000%を切ったらロットか稼働を見直すようにしてます。指標前停止と金曜全決済を守ってれば、そこまで下がる場面はそう多くない印象ですよ。"}]},{"kind": "question","name": "ユーザー1533","system": "全般","message": "DooPrimeで追加口座を作った場合、EAのライセンスは新しい口座番号で再発行してもらう流れで合ってますか？","answers": [{"name": "ユーザー6129","text": "合ってますよ。ライセンスは口座番号に紐づくので、新しい番号を伝えて再発行依頼です。自分のときは連絡してわりとすぐ使えるようになりました。"}]},{"kind": "question","name": "ユーザー1459","system": "全般","message": "オートロットって残高どれくらいで上がってく感じ？固定0.01のままの方が安全だったりする？","answers": [{"name": "ユーザー8279","text": "便利だけど、残高が増えた直後にDD来るとロット大きいまま被弾するのは頭に入れといた方がいいよ。資金少ないうちは固定のが無難だと思う。"},{"name": "ユーザー7321","text": "うちは20万超えたあたりでオートロットに切り替えた。残高連動で勝手に調整してくれるから、ロット計算しなくてよくなって楽になった😌"}]},{"kind": "question","name": "ユーザー2923","system": "全般","message": "出金申請から着金まで何日かかった？","answers": [{"name": "ユーザー7737","text": "先月やったときは2営業日で着金。特に引っかかりもなく通常通りって感じだった。"},{"name": "ユーザー9692","text": "自分も2〜3営業日くらいですね。週末を挟むとその分ちょっと延びる印象です。"}]},{"kind": "question","name": "ユーザー1300","system": "Order Flow","message": "運用3週間目です。先日のトレンドが強かった日にDDが20%近くまでいきました。資金30万でOrder Flow Structureを使っています。経験者の方はDD何%までを想定内と見ているのか、目安を聞きたいです","answers": [{"name": "ユーザー1507","text": "トレンドで食らったなら、公式マニュアルの環境認識のページにあるBB期間20/偏差2.0でエクスパンション中は方向限定、をやるだけでだいぶ変わりますよ。私も20%は何度か経験してます。"},{"name": "ユーザー7872","text": "20%は経験ある人けっこういると思う。ただ30%を超えると戻すのに時間かかるから、指標またぎ停止と金曜全決済だけは崩さない方がいいです。"}]},{"kind": "question","name": "ユーザー8632","system": "全般","message": "初めての自動売買でわからないことだらけなんですが、資金10万・ロット0.01でナンピンが推奨上限の10回まで入ったら維持率がもつのか不安です。ゴールドは値動きが大きいと聞くので、ポジションが増えるたびにドキドキしてしまって…","answers": [{"name": "ユーザー9634","text": "セント口座の10万・0.01なら、自分のときは10段目まで入っても維持率にはまだ余裕ありましたよ。ただ相場次第で変わるので、あくまで一例として。"},{"name": "ユーザー2732","text": "不安なら稼働をマニュアル推奨の11時〜18時に絞るのもありです。値動きの荒い時間帯を避けられますし、最悪でも維持率150%で全決済の安全弁があるので、放置でどこまでも削られる作りではないですよ。"}]},{"kind": "question","name": "ユーザー3617","system": "Multi","message": "Multiで複数EAを併用する場合、口座を分けて資金配分するのと1口座にまとめるの、どちらが管理しやすいでしょう","answers": [{"name": "ユーザー8084","text": "自分は分けてる派です。EAごとの成績が見やすいですし、片方がDD食らってももう片方の証拠金に響かないのが大きいです。"},{"name": "ユーザー7842","text": "分けるならライセンスが口座番号ごとだから、その口座数ぶん発行依頼が要る点だけ注意ね。1口座でまとめるなら資金は多めに見といた方がいいよ。"}]},{"kind": "question","name": "ユーザー7787","system": "全般","message": "VPS再起動したらEAって止まる？","answers": [{"name": "ユーザー3571","text": "止まるよ。再起動するとMT5ごと落ちるから、入り直して手動で立ち上げる必要ある。自分はスタートアップフォルダにMT5入れて自動起動にしてる。上がったあとチャートにEA乗ってるかだけは見た方がいい。"}]},{"kind": "question","name": "ユーザー5301","system": "全般","message": "MT5がまた落ちてた…対処ある？","answers": [{"name": "ユーザー2285","text": "うちも先月なった。メモリ圧迫が原因で、気配値の銘柄絞ってチャート減らしたら安定したよ。ログにOut of memory系が出てたら多分それ。"}]},{"kind": "question","name": "ユーザー1055","system": "OFS v2","message": "お名前のVPS、メモリ2GBで足りるか知りたいです","answers": [{"name": "ユーザー1026","text": "OFS v2単体なら2GBで動いてます。MT5ひとつ・チャート2枚で使用率6割前後でした。将来ほかのEAも載せる予定なら最初から4GBにしておく方が無難かもです。"}]},{"kind": "question","name": "ユーザー5074","system": "全般","message": "VPSに入り直したら自動売買のボタンが赤いままでした。直し方を教えてもらえると助かります","answers": [{"name": "ユーザー7723","text": "アルゴ取引のボタンを押して緑にすれば再開しますよ。マニュアルの稼働開始の項に画像つきで載ってます。MT5のアップデート後に勝手にオフへ戻ることがあるので、入り直したら見る癖をつけると安心です。"}]},{"kind": "question","name": "ユーザー6178","system": "全般","message": "金曜に全決済したあとの土日って、VPSの電源落としちゃっていいのかな","answers": [{"name": "ユーザー9341","text": "自分はつけっぱなし派。月額固定だから落としても安くならないし、月曜の起動忘れの方が怖い。金曜に全決済済みならポジション無いわけで、正直好みの世界だと思う。"}]},{"kind": "question","name": "ユーザー3371","system": "OFS v2","message": "OFS v2とTrend Scalpingを1台のVPSで同居させてる方、構成を教えてください","answers": [{"name": "ユーザー1425","text": "同居させてます。口座を2つ用意して、MT5を別フォルダに2本インストールする構成です。メモリは4GBプランにしたら余裕でした。"},{"name": "ユーザー1910","text": "ライセンスが口座番号ごとだから、EA別に口座を分けるのだけ注意ね。複数併用のやり方はマニュアルのMultiの項にも載ってたはず。"}]},{"kind": "question","name": "ユーザー2467","system": "全般","message": "VPSの時計が日本時間じゃないんだけど、稼働時間の8:00〜翌3:00がズレたりしない？","answers": [{"name": "ユーザー7169","text": "結論から言うと大丈夫だったよ、うちは時計ズレたままでも普段どおりの時間帯で動いてた。気になるならWindows設定でタイムゾーンを大阪・札幌・東京にすれば表示も揃う。"},{"name": "ユーザー9168","text": "自分も最初焦ったけど表示だけの問題だった。精神衛生的にはタイムゾーン直しとくのおすすめ。"}]},{"kind": "question","name": "ユーザー7056","system": "全般","message": "機械にすごく疎くて、パソコンを持っておらずスマホしかありません。それでもEAを動かせるのか不安で…。導入代行をお願いしたいのですが、どこから申し込めばいいのかわからず困ってます","answers": [{"name": "ユーザー9792","text": "私もスマホだけで始めましたよ。公式サイトに載ってるお名前.comのVPSを契約して、サポートに導入代行希望と伝えれば案内してもらえます。設定が終わればスマホのリモートデスクトップアプリで様子を見るだけです。"},{"name": "ユーザー1179","text": "わかります、私も最初はちんぷんかんぷんでした😅 代行のあと自分で触るのは稼働確認くらいなので、なんとかなりますよ。"}]},{"kind": "question","name": "ユーザー9314","system": "全般","message": "今まで自宅PCで資金10万・ロット0.01のまま回していたのですが、外出が増えるのでVPSに移そうと考えています。EAをそのままコピーして同じ口座で動かす形で問題ないでしょうか","answers": [{"name": "ユーザー5674","text": "同じ口座ならVPSのMT5に入れ直すだけで大丈夫です。ライセンスは口座番号に紐づいているので、動かすPCが変わっても問題ないですよ。"},{"name": "ユーザー7252","text": "移行後に自宅PC側のMT5を閉じ忘れると注文が二重になるので、そこだけ注意です。私は金曜の全決済のあとに切り替えました。0.01なら傷は浅いですが念のため。"}]},{"kind": "question","name": "ユーザー3955","system": "全般","message": "自宅のWi-Fiがよく切れる環境で、今は自宅PCで動かしているのですが不安で落ち着きません。VPSに入れておけば自宅のネットが切れてもEAは動き続ける、という理解で合ってるか教えてほしいです","answers": [{"name": "ユーザー1519","text": "その理解で合ってますよ。VPSはデータセンター側で24時間動いているので、自宅の回線が切れてもスマホの電源を落としてもEAには影響しません。手元からは様子を見に接続するだけです。"},{"name": "ユーザー9071","text": "うちも回線弱くてVPSに移った組。移行してから接続切れで困ったことは一度もないし、夜ちゃんと眠れるようになったよ👍"}]},{"kind": "question","name": "ユーザー4310","system": "OFS v2","message": "v2の自動損切りって何%で切るの？","answers": [{"name": "ユーザー2699","text": "固定の%っていうより、ポジション全体の含み損を見て判断するタイプだよ。細かい条件はマニュアルの『v2 損切り設定』の項に載ってる。維持率150%の全決済安全弁とはまた別枠ね。"}]},{"kind": "question","name": "ユーザー3294","system": "OFS v2","message": "従来のOrder Flow Structureを資金10万・ロット0.01で3ヶ月回してきたんですが、v2に移行するメリットってどのくらいあるんでしょう。ナンピン中のポジションがある状態で切り替えても平気なのかも気になってます。","answers": [{"name": "ユーザー1400","text": "同じくらいの資金感で先月移行しました。体感ですが、自動損切りが入るぶん放置時の安心感がかなり違います。切り替えはナンピン中のポジを一度決済してからが無難で、自分は金曜の全決済のタイミングで入れ替えました。"}]},{"kind": "question","name": "ユーザー1894","system": "OFS v2","message": "v2ってゴールド以外もいける？","answers": [{"name": "ユーザー8859","text": "動くには動くけど、推奨はあくまでXAUUSD。BTCUSDはリスク高めって案内だから、やるなら口座分けてロット落とすくらい慎重でいいと思う。"}]},{"kind": "question","name": "ユーザー8594","system": "OFS v2","message": "v2のスプレッド連動補正って、指標時にスプレッドが広がる場面でも効くものなんでしょうか。","answers": [{"name": "ユーザー5741","text": "広がった瞬間の不利なエントリーを見送ってくれる機能であって、指標そのものを避けてくれるわけではないです。FOMCやCPIの前は従来どおり停止推奨なので、そこは過信しないほうがいいですよ。"}]},{"kind": "question","name": "ユーザー6819","system": "OFS v2","message": "初心者はOrder Flow Structureからと聞いたのですが、最初からv2にするのは無謀か迷ってます…","answers": [{"name": "ユーザー5318","text": "無謀とまでは言いませんが、公式の初心者推奨はOrder Flow Structureですね。BB期間20・偏差2.0での環境認識に慣れる練習になるので、私は先にそちらを1〜2ヶ月やってからv2に移りました。急がなくていいと思います。"}]},{"kind": "question","name": "ユーザー8833","system": "OFS v2","message": "Trend Scalpingを中級向けって言われて使ってるんだけど、先月DDが20%超えた週があって正直ビビった。v2は自動損切りあるらしいし、短期続けるよりv2一本に絞ったほうが精神的に楽なのかな。両方使った人いたら感想聞きたい。","answers": [{"name": "ユーザー5450","text": "うちはTrend Scalping止めてv2に絞って2ヶ月目。週次のDDはだいたい10%前後で収まってる（相場次第だけどね）。M1に張り付くストレスが消えたのは正直でかい。"},{"name": "ユーザー5061","text": "DD20%は自分も経験あります…。短期は指標またぎで一気に持っていかれがちなので、軸をv2にして、Trendは重要指標のない週だけ動かす、みたいな分け方もありですよ。"}]},{"kind": "question","name": "ユーザー3103","system": "OFS v2","message": "v2とSMC Gridって併用で同時に回せる？同じXAUUSDだとポジション被って両建てっぽくならない？","answers": [{"name": "ユーザー3937","text": "Multi運用自体は公式にもある構成です。ただ同一口座で同じXAUUSDだと、意図しない両建てっぽい形になる場面はあるので、自分は口座を分けて回しています。"},{"name": "ユーザー9694","text": "マニュアルの複数併用の項に組み合わせの注意点がまとまってるよ。維持率150%の安全弁は口座単位で発動するから、1口座に詰め込みすぎないほうがいい。"}]},{"kind": "question","name": "ユーザー6694","system": "OFS v2","message": "v2の推奨時間帯を教えてほしいです。","answers": [{"name": "ユーザー6556","text": "従来と同じで、マニュアル推奨は11:00〜18:00。ただEAの既定は8:00〜翌3:00だから、そのままだと動く時間がだいぶ広い点だけ注意ね。"},{"name": "ユーザー6721","text": "私は既定のまま回してますが、朝方の値動きが荒い日はスプレッド連動の補正で見送りになることが多い印象です。気になるならまず推奨時間帯に絞るのが無難かと。"}]},{"kind": "question","name": "ユーザー6395","system": "OFS v2","message": "先週v2に切り替えたばかりなのですが、昨日自動損切りが発動したあと再エントリーしてこないのがわからず困ってます。維持率は300%くらいで余裕はあるはずなんですが、これって正常な挙動なのか不安で…。","answers": [{"name": "ユーザー3154","text": "正常だと思います。急変（1分で50pips級）を検知すると15分は新規を止める仕様なので、損切り直後は様子見に入ることが多いです。維持率300%あるなら安全弁のほうは無関係ですね。"},{"name": "ユーザー5209","text": "自分も最初ビビったやつだ😅 しばらく放っておいたら普通に再開したよ。焦って手動で建てるほうが事故る。"}]},{"kind": "question","name": "ユーザー6657","system": "OFS v2","message": "v2へ乗り換える場合、ライセンスは再発行になるのか、同じ口座番号のままでいけるのか、手順を含めて教えてもらえると助かります。","answers": [{"name": "ユーザー6111","text": "同じ口座番号ならそのまま動きます。ライセンスは口座番号に紐づいているので、v2のファイルを差し替えるだけで再申請は不要でした。別口座に変える場合だけ申請が要ります。"},{"name": "ユーザー3820","text": "差し替えのとき、VPSのMT5に旧Order Flowが残ってると両方動いちゃうから、旧EAをチャートから外すの忘れずに！うちは金曜の全決済後にやったよ👍"}]},{"kind": "question","name": "ユーザー2529","system": "OFS v2","message": "資金10万でOFS v2を回して3週間目なんですが、今週の下げでDDが20%近くまでいってしまい、画面を見るたび胃が痛いです。先輩方はこのくらい普通に耐えてるものなのか教えてほしいです","answers": [{"name": "ユーザー2103","text": "自分も4月にDD22%までいった時期ありました。結局スクイーズに入ったあたりで少しずつ戻りましたけど、正直生きた心地しなかったです。相場次第なので断定はできないけど、資金10万でロット0.01スタートなら設計の範囲内かなと。どうしてもきつければ一旦方向限定にする手もありますよ。"}]},{"kind": "question","name": "ユーザー6937","system": "OFS v2","message": "SL発動しちゃった…これ普通？","answers": [{"name": "ユーザー2317","text": "OFS v2なら自動損切りが仕様通り働いただけなので正常ですよ。SLなしで深く飲まれるより全然マシです。"}]},{"kind": "question","name": "ユーザー1562","system": "全般","message": "エントリー全然入らないんだけど何で？","answers": [{"name": "ユーザー4598","text": "スプレッドが広い時間帯は補正が効いて見送る仕様。あと稼働時間(既定は日本時間8時〜翌3時)の外じゃないかも見てみて。マニュアルの「エントリー条件」の項に一覧あるよ。"}]},{"kind": "question","name": "ユーザー5331","system": "全般","message": "MT5に「invalid account」ってエラーが出てEAが動かなくなりました。原因わかる方いますか？","answers": [{"name": "ユーザー8752","text": "EAは口座番号ライセンスなので、申請した口座と番号が違うと動きません。DooPrimeで追加口座を作った場合とかにありがちです。申請時の番号とMT5のログイン番号が一致してるか確認してみてください。"}]},{"kind": "question","name": "ユーザー6946","system": "全般","message": "今夜FOMCなんですけど、皆さんEA止めてます？マニュアル通り停止のほうが無難でしょうか","answers": [{"name": "ユーザー7332","text": "自分は指標またぎは毎回止めてます。前のCPIで回しっぱなしにしてナンピンが一気に積まれた人の話も見たので、迷うくらいなら停止が無難かなと。再開は発表後に値動きが落ち着いてからで十分です。"}]},{"kind": "question","name": "ユーザー4899","system": "Order Flow","message": "Order Flow Structureを使い始めて2ヶ月の初心者です。いまナンピンが8回まで積み上がってて、推奨の10回まであと2回しかなくて怖いです。手動で決済すべきかこのまま見守るべきかわからず困ってます","answers": [{"name": "ユーザー6479","text": "まず維持率を見てみてください。300%以上あるなら150%の安全弁まではまだ距離があります。うちは先月9回まで積まれましたが、維持率に余裕があったのでそのまま見守る判断にしました。"},{"name": "ユーザー7745","text": "怖いの、すごくわかります。私は耐えられなくなった時に半分だけ手動決済してメンタルを守りました。正解かはわからないけど、夜眠れるほうを選んでいいと思いますよ。"}]},{"kind": "question","name": "ユーザー5312","system": "全般","message": "お名前のVPS覗いたらMT5固まってた。再起動だけで大丈夫かな","answers": [{"name": "ユーザー2359","text": "再起動でOK。ただ立ち上がったあと、自動売買ボタンがONに戻ってるかとチャートにEAが乗ってるかは忘れずに確認してね。ここ戻し忘れると気づかないまま止まってるよ。"},{"name": "ユーザー1622","text": "自分も前に固まったまま半日放置しちゃって、ポジションが宙ぶらりんになったことある。頻発するならお名前のサポートかAURUMの導入代行に相談してみるといいかも。"}]},{"kind": "question","name": "ユーザー8619","system": "全般","message": "さっき金が1分で50pips動いて新規が止まったっぽいんですが、急変時の停止機能ですかね","answers": [{"name": "ユーザー6628","text": "合ってます。1分で50pipsの急変を検知すると15分間新規を止める仕様なので、それですね。15分経てば勝手に再開します👍"},{"name": "ユーザー3981","text": "マニュアルの「急変時の挙動」の項にその仕様が載ってますよ。知らずに慌ててEAを外しちゃう人が多いので、把握しておくと安心なやつです。"}]},{"kind": "question","name": "ユーザー6364","system": "全般","message": "やらかした。金曜の全決済を忘れて、ポジション持ったまま週末に突入してた。月曜朝の窓開けが怖くて今から憂鬱なんだけど、同じ経験した人いたらどうなったか聞きたい","answers": [{"name": "ユーザー8541","text": "前に一回同じことやったけど、その時は窓がほぼ開かなくて助かった。ただ逆に大きく開くこともあるから、月曜朝は口座を見られる状態にしといたほうがいいよ。"},{"name": "ユーザー6835","text": "窓開け直後はスプレッドも広がりがちなので、慌てて手動決済すると余計に削られることがあります。維持率に余裕があるなら落ち着くまで様子見も選択肢かと。次からは金曜にリマインダーを仕込んでおくと忘れにくいですよ。"}]},{"kind": "question","name": "ユーザー2104","system": "全般","message": "維持率150%の全決済って復帰できます？","answers": [{"name": "ユーザー9952","text": "復帰できます。安全弁が働いて口座が守られた状態なので、資金を入れ直すかロットを下げて再稼働すればOKです。ただ同じ設定のままだと再発しやすいので、ロットの見直しはセットでどうぞ。"},{"name": "ユーザー3116","text": "うちも去年一回発動しました。再開時は初期ロットを0.01に落としてオートロットに切り替えたら、維持率にだいぶ余裕が出ましたよ😌"}]}];
+
+window.AURUM_REMOTE_CONFIG_URL = "content-stock.json";
 
 (function () {
   function keyOf(c) { return (c.name || "") + ":" + (c.message || c.text || "").slice(0, 32); }
@@ -15652,12 +15657,24 @@ window.AURUM_REMOTE_CONFIG_URL = "";
     return picked;
   }
 
-  var resultCache = null, replyCache = null;
+  var resultCache = null, replyCache = null, qaCache = null;
   window.aurumPickResults = function (legacy) {
     if (!resultCache) resultCache = pickDaily(window.AURUM_RESULT_STOCK, legacy, {
-      seenKey: "aurum_seen_results_v1", dayKey: "aurum_day_results_v1", count: 30, salt: 13, gen: genResult
+      seenKey: "aurum_seen_results_v1", dayKey: "aurum_day_results_v1", count: 14, salt: 13, gen: genResult
     });
     return resultCache;
+  };
+  window.aurumPickQA = function () {
+    if (!qaCache) qaCache = pickDaily(window.AURUM_QA_STOCK || [], [], {
+      seenKey: "aurum_seen_qa_v1", dayKey: "aurum_day_qa_v1", count: 18, salt: 37,
+      gen: function (r, seenSet) {
+        var s = window.AURUM_QA_STOCK || [];
+        if (!s.length) return { kind: "question", name: "ユーザー1000", system: "全般", message: "推奨設定のままで運用して問題ないでしょうか？", answers: [] };
+        for (var i = 0; i < 25; i++) { var c = s[Math.floor(r() * s.length)]; if (!seenSet[keyOf(c)]) return c; }
+        return s[Math.floor(r() * s.length)];
+      }
+    });
+    return qaCache;
   };
   window.aurumPickReplyPool = function (legacy) {
     if (!replyCache) replyCache = pickDaily(window.AURUM_REPLY_STOCK, legacy, {
@@ -15671,6 +15688,7 @@ window.AURUM_REMOTE_CONFIG_URL = "";
     if (cached) {
       if (Array.isArray(cached.results) && cached.results.length) window.AURUM_RESULT_STOCK = cached.results.concat(window.AURUM_RESULT_STOCK);
       if (Array.isArray(cached.replies) && cached.replies.length) window.AURUM_REPLY_STOCK = cached.replies.concat(window.AURUM_REPLY_STOCK);
+      if (Array.isArray(cached.qa) && cached.qa.length) window.AURUM_QA_STOCK = cached.qa.concat(window.AURUM_QA_STOCK);
       if (cached.dangerDays) window.AURUM_DANGER_DAYS = cached.dangerDays;
       if (cached.weeklyReport) window.AURUM_WEEKLY_REPORT = cached.weeklyReport;
     }
