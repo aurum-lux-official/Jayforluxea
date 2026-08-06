@@ -5491,6 +5491,22 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
     </div>
   </section>
 
+  
+  <section id="danger-week" class="py-14 px-4 md:px-6 border-t border-white/5 relative z-10">
+    <div class="max-w-3xl mx-auto">
+      <h3 class="text-[10px] text-[#C5A059] tracking-[0.4em] uppercase mb-3 serif text-center reveal-init">Risk Management</h3>
+      <h2 class="text-xl md:text-2xl serif text-white mb-3 tracking-widest text-center reveal-init aurum-fade-text"><span data-text="今週のEA稼働危険日">今週のEA稼働危険日</span></h2>
+      <p class="text-[11px] md:text-xs text-gray-400 text-center mb-8 leading-loose">
+        重要度<span class="text-[#F87171]">★★★</span>の経済指標発表 前後30分は、EAの一時停止を推奨しています。
+      </p>
+      <div id="danger-week-list" class="glass p-5 md:p-6 rounded-sm space-y-3 reveal-init"></div>
+      <div class="text-center mt-6">
+        <button onclick="switchView('view-calendar')" class="border border-[#C5A059]/40 text-[#C5A059] px-8 py-3 text-[10px] tracking-[0.3em] uppercase font-bold hover:bg-[#C5A059]/10 transition rounded-sm btn-cta">全カレンダーを見る →</button>
+      </div>
+      <p class="text-[9px] text-gray-500 text-center mt-4 tracking-widest">※毎週月曜更新・時刻は日本時間</p>
+    </div>
+  </section>
+
   <section id="performance" class="py-16 px-4 border-t border-white/5 relative z-10">
     
     <div class="sp-marquee mb-12" aria-hidden="true">
@@ -13069,8 +13085,58 @@ window.AURUM_ECONOMIC_EVENTS = [
   { date: "2026-08-20", time: "03:00", country: "US", event: "FOMC議事要旨 (7月会合)", impact: 2 },
   { date: "2026-08-21", time: "23:00", country: "US", event: "ジャクソンホール経済シンポジウム", impact: 3 },
   { date: "2026-08-27", time: "21:30", country: "US", event: "GDP改定値 (Q2)", impact: 2 },
-  { date: "2026-08-28", time: "21:30", country: "US", event: "PCEコアデフレーター (7月)", impact: 3 }
+  { date: "2026-08-28", time: "21:30", country: "US", event: "PCEコアデフレーター (7月)", impact: 3 },
+  { date: "2026-09-01", time: "23:00", country: "US", event: "ISM製造業景況指数 (8月)", impact: 3 },
+  { date: "2026-09-04", time: "21:30", country: "US", event: "雇用統計 (非農業部門・8月)", impact: 3 },
+  { date: "2026-09-10", time: "21:30", country: "US", event: "PPI (生産者物価・8月)", impact: 2 },
+  { date: "2026-09-11", time: "21:30", country: "US", event: "CPI (消費者物価指数・8月)", impact: 3 },
+  { date: "2026-09-16", time: "21:30", country: "US", event: "小売売上高 (8月)", impact: 3 },
+  { date: "2026-09-17", time: "03:00", country: "US", event: "FOMC政策金利発表", impact: 3 },
+  { date: "2026-09-18", time: "12:00", country: "JP", event: "日銀金融政策決定会合", impact: 3 },
+  { date: "2026-09-25", time: "21:30", country: "US", event: "PCEコアデフレーター (8月)", impact: 3 }
 ];
+
+window.renderDangerWeek = () => {
+  try {
+    const box = document.getElementById("danger-week-list");
+    if (!box) return;
+    const start = getWeekStart(0);
+    const days = [];
+    for (let i = 0; i < 7; i++) { const d = new Date(start); d.setDate(start.getDate() + i); days.push(isoDate(d)); }
+    const events = (window.AURUM_ECONOMIC_EVENTS || []).filter(e => days.indexOf(e.date) !== -1);
+    const wd = ["日","月","火","水","木","金","土"];
+    const stars = (n) => {
+      let s = "";
+      for (let i = 1; i <= 3; i++) s += (i <= n) ? "★" : '<span style="opacity:0.22">★</span>';
+      return s;
+    };
+    if (!events.length) {
+      box.innerHTML = '<p class="text-[11px] text-gray-400 text-center py-4">今週は重要指標の予定がありません。通常稼働を継続いただけます。</p>';
+      return;
+    }
+    box.innerHTML = events.map((e) => {
+      const d = new Date(e.date + "T00:00:00");
+      const danger = e.impact >= 3;
+      return '<div class="flex items-center gap-3 md:gap-4 border-b border-white/5 pb-3 last:border-0 last:pb-0">' +
+        '<div class="text-center shrink-0 w-14">' +
+          '<div class="text-[9px] text-gray-500">' + (d.getMonth() + 1) + '/' + d.getDate() + ' (' + wd[d.getDay()] + ')</div>' +
+          '<div class="text-[10px] text-gray-300 font-mono">' + e.time + '</div>' +
+        '</div>' +
+        '<div class="shrink-0 text-[10px] tracking-widest ' + (danger ? 'text-[#F87171]' : 'text-[#C5A059]') + '">' + stars(e.impact) + '</div>' +
+        '<div class="min-w-0 flex-1">' +
+          '<div class="text-[11px] md:text-xs text-white">' + e.event + '</div>' +
+          '<div class="text-[9px] text-gray-500">' + e.country + (danger ? ' ・ 発表前後30分の停止推奨' : '') + '</div>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+  } catch(_) {}
+};
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", function(){ try { renderDangerWeek(); } catch(e) { console.error("[AURUM init error]","renderDangerWeek",e); } });
+} else {
+  renderDangerWeek();
+}
+setTimeout(function(){ try { renderDangerWeek(); } catch(_){} }, 1200);
 
 window.calendarWeekOffset = 0;
 
