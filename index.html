@@ -3677,11 +3677,13 @@ textarea.input-field:focus {
   color: #C5A059;
 }
 
-#aurum-instagram-fab {
+#aurum-contact-fab-wrap {
   position: fixed;
   right: 16px;
   bottom: 96px;
   z-index: 45;
+}
+#aurum-contact-fab {
   width: 52px; height: 52px;
   border-radius: 50%;
   background: rgba(10,15,28,0.75);
@@ -3696,37 +3698,65 @@ textarea.input-field:focus {
   box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 12px rgba(197,160,89,0.15), inset 0 1px 1px rgba(255,255,255,0.08);
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   cursor: pointer;
+  padding: 0;
 }
-#aurum-instagram-fab svg {
+#aurum-contact-fab svg {
   width: 22px; height: 22px;
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
-#aurum-instagram-fab:hover {
+#aurum-contact-fab:hover,
+#aurum-contact-fab-wrap.open #aurum-contact-fab {
   background: rgba(10,15,28,0.95);
   border-color: #F3D078;
   color: #F3D078;
   box-shadow: 0 6px 28px rgba(0,0,0,0.6), 0 0 36px rgba(197,160,89,0.45), 0 0 0 4px rgba(197,160,89,0.12), inset 0 1px 1px rgba(255,255,255,0.12);
   transform: translateY(-2px) scale(1.04);
 }
-#aurum-instagram-fab:hover svg { transform: scale(1.08); }
-#aurum-instagram-fab::after {
-  content: "";
+#aurum-contact-fab:hover svg { transform: scale(1.08); }
+#aurum-contact-menu {
   position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(197,160,89,0.18), transparent 70%);
+  right: 0;
+  bottom: calc(100% + 12px);
+  min-width: 224px;
+  background: rgba(7,11,20,0.97);
+  border: 1px solid rgba(197,160,89,0.4);
+  border-radius: 10px;
+  padding: 6px;
   opacity: 0;
-  z-index: -1;
-  transition: opacity 0.4s;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 10px 34px rgba(0,0,0,0.65);
 }
-#aurum-instagram-fab:hover::after { opacity: 1; }
+#aurum-contact-fab-wrap.open #aurum-contact-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.aurum-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 7px;
+  color: #E5E7EB;
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  transition: background 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
+}
+.aurum-contact-item:hover { background: rgba(197,160,89,0.12); color: #F3D078; }
+.aurum-contact-item svg { width: 17px; height: 17px; color: #C5A059; flex-shrink: 0; }
+.aurum-contact-item .sub { display: block; font-size: 9px; color: #6B7280; letter-spacing: 0.1em; margin-top: 1px; }
+.aurum-contact-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 4px 10px; }
 @media (max-width: 768px) {
-  #aurum-instagram-fab {
+  #aurum-contact-fab-wrap {
     right: 12px;
     bottom: 88px;
-    width: 48px; height: 48px;
   }
-  #aurum-instagram-fab svg { width: 20px; height: 20px; }
+  #aurum-contact-fab { width: 48px; height: 48px; }
+  #aurum-contact-fab svg { width: 20px; height: 20px; }
 }
 
 .aurum-scarcity {
@@ -6684,16 +6714,25 @@ input.aurum-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 
   
 
   
-  <a href="https://www.instagram.com/huga_rux?igsh=eGgyNWw0Z3ZuMWpp&utm_source=qr" target="_blank" rel="noopener noreferrer"
-     id="aurum-instagram-fab"
-     aria-label="Instagramで問い合わせ"
-     title="Instagramで問い合わせ">
-    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
-      <rect x="3" y="3" width="18" height="18" rx="5" ry="5" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="12" cy="12" r="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/>
-    </svg>
-  </a>
+  <div id="aurum-contact-fab-wrap">
+    <div id="aurum-contact-menu" role="menu" aria-label="お問い合わせ方法の選択">
+      <a href="mailto:jay.8060.huga@gmail.com?subject=%E3%80%90AURUM%E3%80%91%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B" class="aurum-contact-item" role="menuitem" onclick="aurumCloseContact()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 7l9 6 9-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>メールで問い合わせ<span class="sub">24時間受付・1〜2営業日で返信</span></span>
+      </a>
+      <div class="aurum-contact-divider"></div>
+      <a href="https://www.instagram.com/huga_rux?igsh=eGgyNWw0Z3ZuMWpp&utm_source=qr" target="_blank" rel="noopener noreferrer" class="aurum-contact-item" role="menuitem" onclick="aurumCloseContact()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.5"/><circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg>
+        <span>Instagramで相談<span class="sub">DMでお気軽にどうぞ</span></span>
+      </a>
+    </div>
+    <button type="button" id="aurum-contact-fab" onclick="aurumToggleContact(event)" aria-label="お問い合わせ" title="お問い合わせ" aria-haspopup="menu">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+        <rect x="3" y="5" width="18" height="14" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3 7l9 6 9-6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
 
   <div id="sticky-cta" class="fixed bottom-0 left-0 w-full z-40 bg-[#0A0F1C] border-t border-[#C5A059]/20 py-4 px-6 translate-y-full transition-transform duration-500 flex justify-center">
     <button onclick="scrollToSec('account-setup')" class="btn-pill btn-pill-gold w-full max-w-md mx-auto">START NOW</button>
@@ -9839,6 +9878,26 @@ if (document.readyState === "loading") {
   initOfsOrbit();
 }
 
+window.aurumSetContact = (open) => {
+  const w = document.getElementById("aurum-contact-fab-wrap");
+  const menu = document.getElementById("aurum-contact-menu");
+  if (!w || !menu) return;
+  w.classList.toggle("open", open);
+  menu.style.opacity = open ? "1" : "0";
+  menu.style.pointerEvents = open ? "auto" : "none";
+  menu.style.transform = open ? "translateY(0)" : "translateY(8px)";
+};
+window.aurumToggleContact = (e) => {
+  if (e) e.stopPropagation();
+  const w = document.getElementById("aurum-contact-fab-wrap");
+  if (w) window.aurumSetContact(!w.classList.contains("open"));
+};
+window.aurumCloseContact = () => { window.aurumSetContact(false); };
+document.addEventListener("click", (e) => {
+  const w = document.getElementById("aurum-contact-fab-wrap");
+  if (w && w.classList.contains("open") && !w.contains(e.target)) window.aurumSetContact(false);
+});
+
 window.aurumAcademyNotice = () => {
   let n = document.getElementById("aurum-academy-notice");
   if (n) n.remove();
@@ -11097,7 +11156,7 @@ setTimeout(initAurumAtmosphere, 1500);
     ".step-btn-submit", "#aurum-submit-btn",
     ".system-card", ".aurum-vp-card", ".mobile-link", ".mobile-link-special",
     ".step-pill", ".aurum-voices-arrow", ".activity-row",
-    "#aurum-instagram-fab", "#mobile-menu-btn", ".aurum-guide-link"
+    "#aurum-contact-fab", ".aurum-contact-item", "#mobile-menu-btn", ".aurum-guide-link"
   ].join(",");
 
   if (supportsVibrate) {
@@ -12288,7 +12347,7 @@ setTimeout(initAurumAtmosphere, 1500);
     "[role=button]", ".btn-pill", ".btn-cta", ".step-pill",
     ".aurum-voices-arrow", ".activity-row", ".system-card",
     ".aurum-voices-carousel", "#mobile-menu-btn",
-    "#aurum-instagram-fab", "#reading-mode-toggle",
+    "#aurum-contact-fab", "#aurum-contact-menu", "#reading-mode-toggle",
     ".gallery-item", ".aurum-vp-card", "canvas",
     "input[type=password]", "input[type=text]", "input[type=email]"
   ].join(",");
